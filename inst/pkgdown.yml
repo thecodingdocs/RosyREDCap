@@ -1,0 +1,11 @@
+pandoc: '3.2'
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  REDCapDB: REDCapDB.html
+  Shiny: Shiny.html
+  Tokens: Tokens.html
+last_built: 2025-01-07T18:11Z
+urls:
+  reference: https://brandonerose.github.io/RosyREDCap/reference
+  article: https://brandonerose.github.io/RosyREDCap/articles

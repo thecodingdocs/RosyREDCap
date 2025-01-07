@@ -1,0 +1,54 @@
+Package: RosyREDCap
+Title: RosyREDCap
+Version: 1.0.0.9038
+Authors@R: c(
+    person("Brandon", "Rose", , "thecodingdocs@gmail.com", role = c("cre", "aut"),
+           comment = c(ORCID = "0009-0009-7813-1960")),
+    person("Natalie", "Goulett", role = "aut"),
+    person("Chris", "Hilsinger-Pate", role = "aut"),
+    person("Nikola", "Susic", role = "aut"),
+    person("Sydney", "Stern", role = "ctb",
+           comment = c(ORCID = "0000-0002-1479-605X"))
+  )
+Description: Rosy development for your R package.
+License: MIT + file LICENSE
+URL: https://github.com/brandonerose/RosyREDCap,
+    https://brandonerose.github.io/RosyREDCap/
+BugReports: https://github.com/brandonerose/RosyREDCap/issues
+Depends: 
+    R (>= 2.10)
+Imports: 
+    cli,
+    config (>= 0.3.2),
+    DiagrammeR,
+    dplyr,
+    DT,
+    golem (>= 0.4.1),
+    htmlTable,
+    magrittr,
+    openxlsx,
+    plotly,
+    readxl,
+    rio,
+    RosyApp,
+    shiny (>= 1.8.1.1),
+    shinydashboard,
+    shinydashboardPlus,
+    shinyWidgets,
+    stats,
+    stringr,
+    tools,
+    utils,
+    visNetwork
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
+Remotes: 
+    github::brandonerose/RosyApp
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2

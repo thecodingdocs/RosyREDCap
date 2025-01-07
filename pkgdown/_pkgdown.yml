@@ -1,0 +1,54 @@
+url: https://brandonerose.github.io/RosyREDCap/
+home:
+  title: RosyREDCap
+  description: Unleash R and REDCap
+deploy:
+  install_metadata: true
+template:
+  bootstrap: 5
+  math-rendering: mathjax
+  light-switch: true
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+    danger: "#A6081A"
+  opengraph:
+    image:
+      src: man/figures/logo.png
+      alt: "Brandon Rose"
+    twitter:
+      creator: "@brosemdmph"
+      site: "@thecodingdocs"
+      card: summary_large_image
+
+reference:
+  - title: Shiny Application ✨
+    desc: For very basic users simply launch the app and explore! Uses the REDCapDB package to setup DB objects.
+    contents:
+      - run_RosyREDCap
+
+  - title: Components
+    desc: For users interested in using components of the shiny app without the application.
+    contents:
+      - REDCap_diagram
+
+articles:
+  - title: Using RosyREDCap ✨
+    contents:
+      - Shiny
+  - title: API Tokens
+    contents:
+      - Tokens
+  - title: REDCapDB
+    contents:
+      - REDCapDB
+authors:
+  Brandon Rose:
+    href: https://github.com/brandonerose
+  Natalie Goulett:
+    href: https://github.com/Goulett
+  Chris Hilsinger-Pate:
+    href: https://github.com/chrishilsingerpate
+  Nikola Susic:
+    href: https://github.com/nsusic

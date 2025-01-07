@@ -1,4 +1,3 @@
-#' @import RosyApp
 #' @title Generate REDCap Project Diagram
 #' @description
 #' Generates a diagram of the REDCap project structure based on the `DB` object.
@@ -6,7 +5,7 @@
 #' @details
 #' This function generates a visual diagram of the REDCap project structure, including forms, fields, and choices. It supports various options such as rendering the diagram, including fields and choices, and specifying the direction of the diagram.
 #'
-#' @inheritParams save_DB
+#' @param DB A validated `DB` object from REDCapDB containing REDCap project data and settings. Generated using \link{load_DB} or \link{setup_DB}
 #' @param static Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.
 #' @param render Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.
 #' @param duplicate_forms Logical (TRUE/FALSE). If TRUE, includes duplicate form nodes in the diagram. Default is `TRUE`.

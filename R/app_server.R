@@ -1,4 +1,3 @@
-#' @import RosyApp
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny

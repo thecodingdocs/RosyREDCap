@@ -1,6 +1,6 @@
 Package: RosyREDCap
 Title: RosyREDCap
-Version: 1.0.0.9038
+Version: 0.0.0.9001
 Authors@R: c(
     person("Brandon", "Rose", , "thecodingdocs@gmail.com", role = c("cre", "aut"),
            comment = c(ORCID = "0009-0009-7813-1960")),
@@ -29,8 +29,8 @@ Imports:
     openxlsx,
     plotly,
     readxl,
+    REDCapDB,
     rio,
-    RosyApp,
     shiny (>= 1.8.1.1),
     shinydashboard,
     shinydashboardPlus,
@@ -47,9 +47,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
-    github::brandonerose/RosyApp,
     github::thecodingdocs/REDCapDB
 Config/testthat/edition: 3
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.3.2

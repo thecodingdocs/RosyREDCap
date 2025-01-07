@@ -13,9 +13,9 @@ Rosy development for your R package.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/brandonerose/RosyREDCap}
-  \item \url{https://brandonerose.github.io/RosyREDCap/}
-  \item Report bugs at \url{https://github.com/brandonerose/RosyREDCap/issues}
+  \item \url{https://github.com/thecodingdocs/RosyREDCap}
+  \item \url{https://thecodingdocs.github.io/RosyREDCap/}
+  \item Report bugs at \url{https://github.com/thecodingdocs/RosyREDCap/issues}
 }
 
 }

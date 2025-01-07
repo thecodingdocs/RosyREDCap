@@ -12,6 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/brandonerose/RosyREDCap/graph/badge.svg)](https://app.codecov.io/gh/brandonerose/RosyREDCap)
 [![Codecov test
 coverage](https://codecov.io/gh/thecodingdocs/RosyREDCap/graph/badge.svg)](https://app.codecov.io/gh/thecodingdocs/RosyREDCap)
+[![R-CMD-check](https://github.com/thecodingdocs/RosyREDCap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thecodingdocs/RosyREDCap/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Use your REDCap API tokens to create an updating R list object (DB)

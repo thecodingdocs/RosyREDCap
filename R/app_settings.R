@@ -36,7 +36,7 @@ run_RosyREDCap <- function(
     uiPattern = "/",
     # DB_short_name
     options = list(
-      launch.browser = T
+      launch.browser = TRUE
     ),
     ...
 ) {

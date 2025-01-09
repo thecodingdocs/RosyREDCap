@@ -8,7 +8,7 @@ run_RosyREDCap(
   onStart = NULL,
   enableBookmarking = NULL,
   uiPattern = "/",
-  options = list(launch.browser = T),
+  options = list(launch.browser = TRUE),
   ...
 )
 }

@@ -6,19 +6,17 @@
 \usage{
 REDCap_diagram(
   DB,
-  static = F,
-  render = T,
-  duplicate_forms = T,
-  clean_names = T,
-  include_fields = F,
-  include_choices = F,
-  hierarchical = F,
+  static = FALSE,
+  render = TRUE,
+  duplicate_forms = TRUE,
+  clean_names = TRUE,
+  include_fields = FALSE,
+  include_choices = FALSE,
+  hierarchical = FALSE,
   direction = "LR"
 )
 }
 \arguments{
-\item{DB}{A validated `DB` object from REDCapDB containing REDCap project data and settings. Generated using \link{load_DB} or \link{setup_DB}}
-
 \item{static}{Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.}
 
 \item{render}{Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.}

@@ -47,7 +47,7 @@ app_server <- function(input, output, session) {
   #   dir_path = OUT$dir_path,
   #   token_name = OUT$token_name,
   #   redcap_base = "https://redcap.miami.edu/",
-  #   force = T,
+  #   force = TRUE,
   #   merge_form_name = "merged"
   # )
   # diagrams ----------
@@ -55,8 +55,8 @@ app_server <- function(input, output, session) {
     output$REDCap_diagram_test_vis <- visNetwork::renderVisNetwork({
       REDCap_diagram(
         DB = values$DB,
-        static = F,
-        render = T,
+        static = FALSE,
+        render = TRUE,
         include_fields = input$metadata_graph_include_vars,
         duplicate_forms = input$metadata_graph_duplicate_forms,
         clean_names = input$metadata_graph_clean_name
@@ -67,8 +67,8 @@ app_server <- function(input, output, session) {
         DiagrammeR::generate_dot(
           REDCap_diagram(
             DB = values$DB,
-            static = T,
-            render = F,
+            static = TRUE,
+            render = FALSE,
             include_fields = input$metadata_graph_include_vars,
             duplicate_forms = input$metadata_graph_duplicate_forms,
             clean_names = input$metadata_graph_clean_name
@@ -122,7 +122,7 @@ app_server <- function(input, output, session) {
         ) %>% drop_nas() %>% drop_if("")
       )
       if(length(variables)==0)return()
-      DF <- values$subset_list[[input$choose_form]][,variables,drop = F]
+      DF <- values$subset_list[[input$choose_form]][,variables,drop = FALSE]
       if(is_something(DF)){
         message("input$choose_split: ",input$choose_split)
         message("variables: ",variables %>% as_comma_string())
@@ -175,7 +175,7 @@ app_server <- function(input, output, session) {
           filter_choices = input$choose_record,
           form_names = field_names_to_form_names(values$DB, field_names = input$choose_fields_view),
           field_names = input$choose_fields_view,
-          no_duplicate_cols = T
+          no_duplicate_cols = TRUE
         ) %>% process_df_list()
         # print(values$dt_tables_view_list)
         # values$dt_tables_view_list <- DB %>% filter_DB(records = subset_list$sarcoma$record_id %>% sample1(), data_choice = get_default_data_choice(values$DB),field_names = "sarc_timeline") %>% process_df_list()
@@ -266,7 +266,7 @@ app_server <- function(input, output, session) {
           inputId = "filter_switch",
           onLabel = "Strict",
           offLabel = "Records",
-          value = T
+          value = TRUE
         )
       }
     }
@@ -298,7 +298,7 @@ app_server <- function(input, output, session) {
     selectizeInput(
       inputId = "choose_field",
       label = "Choose Field",
-      multiple = F,
+      multiple = FALSE,
       selected = NULL,
       choices = NULL
     )
@@ -307,7 +307,7 @@ app_server <- function(input, output, session) {
     selectizeInput(
       inputId = "choose_fields_cat",
       label = "Choose Fields",
-      multiple = T,
+      multiple = TRUE,
       choices = NULL
     )
   })
@@ -315,7 +315,7 @@ app_server <- function(input, output, session) {
     selectizeInput(
       inputId = "choose_fields_view",
       label = "Choose Fields",
-      multiple = T,
+      multiple = TRUE,
       choices = NULL
     )
   })
@@ -323,7 +323,7 @@ app_server <- function(input, output, session) {
     selectizeInput(
       inputId = "choose_fields_change",
       label = "Choose Field",
-      multiple = T,
+      multiple = TRUE,
       choices = NULL
     )
   })
@@ -364,7 +364,7 @@ app_server <- function(input, output, session) {
         "choose_record",
         selected = values$subset_records[1],
         choices = values$subset_records,
-        server = T
+        server = TRUE
       )
       values$sbc <- sidebar_choices(values$DB)
       if(!is.null(values$DB$transformation)){
@@ -390,7 +390,7 @@ app_server <- function(input, output, session) {
       updateSelectizeInput(
         session,"choose_group",
         choices = group_choices,
-        server = T
+        server = TRUE
       )
       updateSelectizeInput(
         session = session,
@@ -406,18 +406,18 @@ app_server <- function(input, output, session) {
     if(!is.null(input$choose_project)){
       if(is_something(input$choose_project)){
         values$DB <- tryCatch({
-          load_DB(short_name=input$choose_project) #%>% clean_DB(drop_blanks = F,other_drops = NULL)
+          load_DB(short_name=input$choose_project) #%>% clean_DB(drop_blanks = FALSE,other_drops = NULL)
         },error = function(e) {NULL})
         if(is_something(input$choose_project)){
           if(!is.null(input[[paste0("projects_table_state")]])){
             ROW <- which(values$projects == input$choose_project)
-            skip <- F
+            skip <- FALSE
             if(!is.null(input[[paste0("projects_table_rows_selected")]])){
               skip <- identical(ROW,input[[paste0("projects_rows_selected")]])
             }
             if(!skip){
               DT::selectRows(
-                proxy = DT::dataTableProxy("projects_table", deferUntilFlush = F),
+                proxy = DT::dataTableProxy("projects_table", deferUntilFlush = FALSE),
                 selected = ROW
               )
             }
@@ -426,7 +426,7 @@ app_server <- function(input, output, session) {
       }
     }
   })
-  observeEvent(input$transformation_switch,ignoreNULL = T,ignoreInit = T,{
+  observeEvent(input$transformation_switch,ignoreNULL = TRUE,ignoreInit = TRUE,{
     if(!is.null(values$DB)){
       message("triggered transformation_switch ",input$transformation_switch)
       if(!is.null(values$DB$transformation)){
@@ -441,7 +441,7 @@ app_server <- function(input, output, session) {
       }else{
         message("Nothing to do, no DB$transformation info! ",input$transformation_switch)
         shinyWidgets::updateSwitchInput(
-          inputId = "transformation_switch",value = F, label = "Transformation"
+          inputId = "transformation_switch",value = FALSE, label = "Transformation"
         )
       }
     }
@@ -531,7 +531,7 @@ app_server <- function(input, output, session) {
       "choose_record",
       selected = selected,
       choices = values$subset_records,
-      server = T
+      server = TRUE
     )
   })
   # Update the tabset panel when a new tab is selected in the selectInput
@@ -636,7 +636,7 @@ app_server <- function(input, output, session) {
         if(!identical(selected,expected)){
           selected <- unique(data_col[[selected]])
           message("valid_click: ", selected)
-          updateSelectizeInput(session,"choose_project",selected = selected,choices = data_col,server = T)
+          updateSelectizeInput(session,"choose_project",selected = selected,choices = data_col,server = TRUE)
         }
       }
     })
@@ -663,7 +663,7 @@ app_server <- function(input, output, session) {
               message("form: ",form)
               ROWS <- which(values$subset_list[[form]][[values$DB$redcap$id_col]] == input$choose_record)
               message("ROWS: ",ROWS %>% as_comma_string())
-              skip <- F
+              skip <- FALSE
               if(!is.null(input[[paste0("table___home__", form, "_rows_selected")]])){
                 message("ident ",identical(ROWS,input[[paste0("table___home__", form, "_rows_selected")]]), " ", ROWS, " ", input[[paste0("table___home__", form, "_rows_selected")]])
                 skip <- identical(ROWS,input[[paste0("table___home__", form, "_rows_selected")]])
@@ -672,14 +672,14 @@ app_server <- function(input, output, session) {
               if(!skip){
                 message("triggered proxy Tabs: ", form, " Row ", ROWS)
                 DT::selectRows(
-                  proxy = DT::dataTableProxy(paste0("table___home__", form), deferUntilFlush = F),
+                  proxy = DT::dataTableProxy(paste0("table___home__", form), deferUntilFlush = FALSE),
                   selected = ROWS
                 )
                 if(length(ROWS)>0){
                   page <- as.integer(ROWS[[1]]/state_length)+1
                   message("triggered page: ", page)
                   DT::selectPage(
-                    proxy = DT::dataTableProxy(paste0("table___home__", form), deferUntilFlush = F),
+                    proxy = DT::dataTableProxy(paste0("table___home__", form), deferUntilFlush = FALSE),
                     page = page
                   )
                 }
@@ -709,7 +709,7 @@ app_server <- function(input, output, session) {
                 "choose_record",
                 selected = selected,
                 choices = values$subset_records,
-                server = T
+                server = TRUE
               )
             }
           }
@@ -719,7 +719,7 @@ app_server <- function(input, output, session) {
   })
   observe({
     if(!is.null(values$projects)){
-      updateSelectizeInput(session,"choose_project" ,choices = values$projects$short_name,server = T)
+      updateSelectizeInput(session,"choose_project" ,choices = values$projects$short_name,server = TRUE)
     }
   })
   # record_changes ---------
@@ -744,7 +744,7 @@ app_server <- function(input, output, session) {
         if(is_something(input$choose_form)){
           DF <- values$subset_list[[input$choose_form]]
           rows <-  which(DF[[values$DB$redcap$id_col]]==input$choose_record)
-          values$fields_to_change_input_df <- DF[rows,vec1_in_vec2(vars,colnames(DF)),drop = F]
+          values$fields_to_change_input_df <- DF[rows,vec1_in_vec2(vars,colnames(DF)),drop = FALSE]
         }
       }
     })
@@ -759,7 +759,7 @@ app_server <- function(input, output, session) {
       }
     }
   })
-  observeEvent(input$add_input_instance_ui,ignoreInit = T,{
+  observeEvent(input$add_input_instance_ui,ignoreInit = TRUE,{
     if(is_something(input$choose_fields_change)){
       message("clicked add_input_instance_ui")
       DF <- values$fields_to_change_input_df
@@ -782,7 +782,7 @@ app_server <- function(input, output, session) {
     do_it <- is_something(values$dynamic_input_ids)
     if(do_it){
       DF <- values$fields_to_change_input_df
-      any_changes <- F
+      any_changes <- FALSE
       if(is_something(DF)){
         dynamic_input_ids <- values$dynamic_input_ids
         for(dynamic_input_id in dynamic_input_ids){
@@ -798,7 +798,7 @@ app_server <- function(input, output, session) {
             if(it_changed){
               message("it_changed!")
               DF[i, j] <- OUT
-              any_changes <- T
+              any_changes <- TRUE
             }
           }
         }
@@ -914,7 +914,7 @@ app_server <- function(input, output, session) {
       "choose_record",
       selected = random_record,
       choices = values$subset_records,
-      server = T
+      server = TRUE
     )
   })
   observeEvent(input$ab_next_record,{
@@ -933,7 +933,7 @@ app_server <- function(input, output, session) {
             session,"choose_record",
             selected = next_record,
             choices = values$subset_records,
-            server = T
+            server = TRUE
           )
         }
       }
@@ -1004,12 +1004,12 @@ app_server <- function(input, output, session) {
       DF[,cols, drop = FALSE] %>%
         clean_DF(
           fields = values$DB$metadata,
-          drop_blanks = T,
+          drop_blanks = TRUE,
           other_drops = other_drops(ignore = input$render_missing)
         ) %>%
         plotly_parcats(remove_missing = !input$render_missing) %>%
         return()
-      # mtcars  %>% plotly_parcats(remove_missing = F) %>% return()
+      # mtcars  %>% plotly_parcats(remove_missing = FALSE) %>% return()
     }
   })
 }

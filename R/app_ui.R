@@ -20,7 +20,7 @@ app_ui<- function(request) {
   ")),
     shinydashboardPlus::dashboardPage(
       options = list(
-        sidebarExpandOnHover = F
+        sidebarExpandOnHover = FALSE
       ),
       header = dbHeader(),
       sidebar = dbSidebar(
@@ -50,12 +50,12 @@ app_ui<- function(request) {
           shinyWidgets::awesomeCheckbox(
             inputId = "metadata_graph_include_vars",
             label = "Include Variables?",
-            value = F
+            value = FALSE
           ),
           shinyWidgets::awesomeCheckbox(
             inputId = "metadata_graph_duplicate_forms",
             label = "Duplicate Forms?",
-            value = T
+            value = TRUE
           )
         ),
         menuItem(
@@ -85,12 +85,12 @@ app_ui<- function(request) {
           shinyWidgets::awesomeCheckbox(
             inputId = "render_missing",
             label = "Include Missing/Unkown",
-            value = F
+            value = FALSE
           ),
           shinyWidgets::awesomeCheckbox(
             inputId = "sidebar_choice_radio",
             label = "Dropdown instead of radio",
-            value = F
+            value = FALSE
           )
         ),
         menuItem(
@@ -111,7 +111,7 @@ app_ui<- function(request) {
         #     inputId = "view_switch_text",
         #     onLabel = "Text",
         #     offLabel = "Tables",
-        #     value = T
+        #     value = TRUE
         #   )
         # ),
         menuItem(
@@ -255,7 +255,7 @@ app_ui<- function(request) {
                 inputId = "view_switch_text",
                 onLabel = "Text",
                 offLabel = "Tables",
-                value = T
+                value = TRUE
               ),
               actionButton("ab_random_record","Random Record!"),
               actionButton("ab_next_record","Next Record!"),
@@ -287,12 +287,12 @@ app_ui<- function(request) {
         shinyWidgets::awesomeCheckbox(
           inputId = "metadata_graph_clean_name",
           label = "Clean Variable Names",
-          value = T
+          value = TRUE
         ),
         shinyWidgets::awesomeCheckbox(
           inputId = "allow_multiple_groups",
           label = "Allow Multiple Groups",
-          value = F
+          value = FALSE
         )
       ),
       footer = TCD_NF(),

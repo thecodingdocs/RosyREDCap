@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>RosyREDCap • RosyREDCap</title>
+<title>shinyREDCap • shinyREDCap</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -16,10 +16,10 @@
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><script src="deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="RosyREDCap">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><script src="deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="shinyREDCap">
 <meta name="description" content="Unleash R and REDCap">
 <meta property="og:description" content="Unleash R and REDCap">
-<meta property="og:image" content="https://thecodingdocs.github.io/RosyREDCap/reference/figures/logo.png">
+<meta property="og:image" content="https://thecodingdocs.github.io/shinyREDCap/reference/figures/logo.png">
 <meta property="og:image:alt" content="Brandon Rose">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@brosemdmph">
@@ -31,7 +31,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="index.html">RosyREDCap</a>
+    <a class="navbar-brand me-2" href="index.html">shinyREDCap</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
@@ -50,7 +50,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/thecodingdocs/RosyREDCap/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/thecodingdocs/shinyREDCap/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -68,7 +68,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="rosyredcap-">RosyREDCap <a class="anchor" aria-label="anchor" href="#rosyredcap-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="shinyredcap-">shinyREDCap <a class="anchor" aria-label="anchor" href="#shinyredcap-"></a>
 </h1>
 </div>
 <!-- badges: start -->
@@ -87,29 +87,29 @@
 </div>
 </div>
 <div class="section level1">
-<h1 id="what-is-rosyredcap">What is <code>{RosyREDCap}</code>?<a class="anchor" aria-label="anchor" href="#what-is-rosyredcap"></a>
+<h1 id="what-is-shinyredcap">What is <code>{shinyREDCap}</code>?<a class="anchor" aria-label="anchor" href="#what-is-shinyredcap"></a>
 </h1>
-<p>R and REDCap are both widely utilized in medicine, including basic science, clinical research, and clinal trials. Both have independent strengths, but together they can create powerful data pipelines. While several R packages exist for extracting data using the REDCap API, <a href="https://github.com/thecodingdocs/RosyREDCap" class="external-link">RosyREDCap</a> stands out by offering comprehensive extraction of all metadata and data from any REDCap project into a standardized R list object, facilitating effortless downstream use in exports, imports, transformation, and applications. This is showcased in the exploratory data analysis shiny app included in the package. The three core aims of <a href="https://github.com/thecodingdocs/RosyREDCap" class="external-link">RosyREDCap</a> are to…</p>
+<p>R and REDCap are both widely utilized in medicine, including basic science, clinical research, and clinal trials. Both have independent strengths, but together they can create powerful data pipelines. While several R packages exist for extracting data using the REDCap API, <a href="https://github.com/thecodingdocs/shinyREDCap" class="external-link">shinyREDCap</a> stands out by offering comprehensive extraction of all metadata and data from any REDCap project into a standardized R list object, facilitating effortless downstream use in exports, imports, transformation, and applications. This is showcased in the exploratory data analysis shiny app included in the package. The three core aims of <a href="https://github.com/thecodingdocs/shinyREDCap" class="external-link">shinyREDCap</a> are to…</p>
 <ol style="list-style-type: decimal">
 <li>Maintain a local version of the database (DB) object by only calling recently updated records using the REDCap log.</li>
 <li>Allow imports of non-coded versions of the dataset using R or Excel/CSV.</li>
 <li>Launch a shiny app that allows you to explore all of your REDCap projects.</li>
 </ol>
-<p>By leveraging the combined strengths of R and REDCap, users can maintain strong clinical data pipelines, collected and processed appropriately to improve research and patient care. RosyREDCap can be used as a base data object and data quality tool for most REDCap projects to aid in collection, monitoring, transformation, and analysis.</p>
+<p>By leveraging the combined strengths of R and REDCap, users can maintain strong clinical data pipelines, collected and processed appropriately to improve research and patient care. shinyREDCap can be used as a base data object and data quality tool for most REDCap projects to aid in collection, monitoring, transformation, and analysis.</p>
 <div class="section level2">
-<h2 id="installing-rosyredcap">Installing RosyREDCap<a class="anchor" aria-label="anchor" href="#installing-rosyredcap"></a>
+<h2 id="installing-shinyredcap">Installing shinyREDCap<a class="anchor" aria-label="anchor" href="#installing-shinyredcap"></a>
 </h2>
-<p><em>Note: The current version of <a href="https://github.com/thecodingdocs/RosyREDCap" class="external-link">RosyREDCap</a> used when writing this book is 0.0.0.9001, and some of the features presented in this book might not be available if you are using an older version, or be a little bit different if you have a newer version. Feel free to browse the package NEWS.</em></p>
+<p><em>Note: The current version of <a href="https://github.com/thecodingdocs/shinyREDCap" class="external-link">shinyREDCap</a> used when writing this book is 0.0.0.9001, and some of the features presented in this book might not be available if you are using an older version, or be a little bit different if you have a newer version. Feel free to browse the package NEWS.</em></p>
 <p>The stable release can be found on CRAN and installed with: <strong>PLACEHOLDER NOT SUBMITTED TO CRAN YET</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#install.packages("RosyREDCap") #PLACEHOLDER NOT SUBMITTED TO CRAN YET</span></span></code></pre></div>
-<p>You can install the development version of RosyREDCap from GitHub by using the <a href="https://remotes.r-lib.org" class="external-link">remotes</a> package. Be sure to install <a href="https://remotes.r-lib.org" class="external-link">remotes</a> if you don’t have it already.</p>
+<code class="sourceCode R"><span><span class="co">#install.packages("shinyREDCap") #PLACEHOLDER NOT SUBMITTED TO CRAN YET</span></span></code></pre></div>
+<p>You can install the development version of shinyREDCap from GitHub by using the <a href="https://remotes.r-lib.org" class="external-link">remotes</a> package. Be sure to install <a href="https://remotes.r-lib.org" class="external-link">remotes</a> if you don’t have it already.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#install.packages("remotes)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"brandonerose/RosyREDCap"</span>,build_vignettes <span class="op">=</span> <span class="cn">T</span>,build_manual <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thecodingdocs/shinyREDCap"</span>,build_vignettes <span class="op">=</span> <span class="cn">T</span>,build_manual <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p>Note that the version used at the time of writing this book is 0.0.0.9001. You can check what version you have installed with the following.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"RosyREDCap"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"shinyREDCap"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] '0.0.0.9001'</span></span></code></pre></div>
 <p>If you have any issues, try downloading the most recent version of R at RStudtio and update all packages in RStudio. See <a href="https://www.thecodingdocs.com/r/getting-started" title="R Getting Started" class="external-link">thecodingdocs.com/r/getting-started</a>.</p>
 </div>
@@ -117,7 +117,7 @@
 <h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/thecodingdocs/RosyREDCap" class="external-link">"RosyREDCap"</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thecodingdocs/shinyREDCap" class="external-link">shinyREDCap</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">projects</span> <span class="op">&lt;-</span> <span class="fu">get_projects</span><span class="op">(</span><span class="op">)</span> <span class="co"># get list of cached projects</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.dataframe.html" class="external-link">print.data.frame</a></span><span class="op">(</span><span class="va">projects</span><span class="op">)</span> <span class="co"># show your previously saved projects</span></span>
@@ -140,14 +140,14 @@
 <span><span class="co"># DB &lt;- drop_REDCap_to_directory(DB) # will save IDENTIFIED data (assuming this is set up properly on REDCap)</span></span>
 <span></span>
 <span><span class="co">#run shiny app!</span></span>
-<span><span class="fu"><a href="reference/run_RosyREDCap.html">run_RosyREDCap</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># will work with multiple REDCap projects!</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/run_shinyREDCap.html">run_shinyREDCap</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># will work with multiple REDCap projects!</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="links">Links<a class="anchor" aria-label="anchor" href="#links"></a>
 </h2>
 <ul>
-<li>The RosyREDCap package is at <a href="https://github.com/brandonerose/RosyREDCap" title="RosyREDCap R package" class="external-link">github.com/brandonerose/RosyREDCap</a>. See instructions above.</li>
-<li>Donate if I helped you out and want more development (anything helps)! <a href="https://account.venmo.com/u/brandonerose" title="Venmo Donation" class="external-link">account.venmo.com/u/brandonerose</a>
+<li>The shinyREDCap package is at <a href="https://github.com/thecodingdocs/shinyREDCap" title="shinyREDCap R package" class="external-link">github.com/thecodingdocs/shinyREDCap</a>. See instructions above.</li>
+<li>Donate if I helped you out and want more development (anything helps)! <a href="https://account.venmo.com/u/thecodingdocs" title="Venmo Donation" class="external-link">account.venmo.com/u/thecodingdocs</a>
 </li>
 <li>For more R coding visit <a href="https://www.thecodingdocs.com/" title="TheCodingDocs.com" class="external-link">TheCodingDocs.com</a>
 </li>
@@ -164,8 +164,8 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/thecodingdocs/RosyREDCap/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/thecodingdocs/RosyREDCap/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/thecodingdocs/shinyREDCap/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/thecodingdocs/shinyREDCap/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -187,7 +187,7 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing RosyREDCap</a></li>
+<li><a href="authors.html#citation">Citing shinyREDCap</a></li>
 </ul>
 </div>
 
@@ -210,8 +210,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://app.codecov.io/gh/thecodingdocs/RosyREDCap" class="external-link"><img src="https://codecov.io/gh/thecodingdocs/RosyREDCap/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/thecodingdocs/RosyREDCap/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/thecodingdocs/RosyREDCap/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/thecodingdocs/shinyREDCap" class="external-link"><img src="https://codecov.io/gh/thecodingdocs/shinyREDCap/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/thecodingdocs/shinyREDCap/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/thecodingdocs/shinyREDCap/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 

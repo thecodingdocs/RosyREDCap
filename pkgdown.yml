@@ -5,7 +5,7 @@ articles:
   REDCapDB: REDCapDB.html
   Shiny: Shiny.html
   Tokens: Tokens.html
-last_built: 2025-01-09T17:01Z
+last_built: 2025-01-12T16:44Z
 urls:
-  reference: https://thecodingdocs.github.io/RosyREDCap/reference
-  article: https://thecodingdocs.github.io/RosyREDCap/articles
+  reference: https://thecodingdocs.github.io/shinyREDCap/reference
+  article: https://thecodingdocs.github.io/shinyREDCap/articles

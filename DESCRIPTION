@@ -29,7 +29,7 @@ Imports:
     openxlsx,
     plotly,
     readxl,
-    REDCapDB,
+    REDCapSync,
     rio,
     shiny (>= 1.8.1.1),
     shinydashboard,
@@ -47,7 +47,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
-    github::thecodingdocs/REDCapDB
+    github::thecodingdocs/REDCapSync
 Config/testthat/edition: 3
 Encoding: UTF-8
 RoxygenNote: 7.3.2

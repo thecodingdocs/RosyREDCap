@@ -1,6 +1,6 @@
 default:
   golem_name: RosyDev
-  golem_version: 0.1.0.9028
+  golem_version: 0.1.0.9029
   app_prod: no
 production:
   app_prod: yes

@@ -1,11 +1,11 @@
 #' @title Generate REDCap Project Diagram
 #' @description
-#' Generates a diagram of the REDCap project structure based on the `DB` object.
+#' Generates a diagram of the REDCap project structure based on the `project` object.
 #'
 #' @details
 #' This function generates a visual diagram of the REDCap project structure, including forms, fields, and choices. It supports various options such as rendering the diagram, including fields and choices, and specifying the direction of the diagram.
 #'
-#' @inheritParams save_DB
+#' @inheritParams save_project
 #' @param static Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.
 #' @param render Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.
 #' @param duplicate_forms Logical (TRUE/FALSE). If TRUE, includes duplicate form nodes in the diagram. Default is `TRUE`.
@@ -16,12 +16,12 @@
 #' @param direction Character string specifying the direction of the diagram. Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left), and "BT" (bottom to top). Default is "LR".
 #' @return A diagram object representing the REDCap project structure.
 #' @seealso
-#' \link{setup_DB} for initializing the `DB` object.
+#' \link{setup_project} for initializing the `project` object.
 #' @family Visuals
 #' @export
-REDCap_diagram <- function(DB,static = FALSE,render = TRUE,duplicate_forms = TRUE, clean_names = TRUE,include_fields = FALSE,include_choices = FALSE,hierarchical = FALSE,direction = "LR"){
-  if(is.null(DB$redcap))DB <- update_DB(DB, metadata_only = TRUE,save_to_dir = FALSE)
-  OUT <- create_node_edge_REDCap(DB,duplicate_forms = duplicate_forms,include_fields = include_fields,include_choices = include_choices)
+REDCap_diagram <- function(project,static = FALSE,render = TRUE,duplicate_forms = TRUE, clean_names = TRUE,include_fields = FALSE,include_choices = FALSE,hierarchical = FALSE,direction = "LR"){
+  if(is.null(project$redcap))project <- update_project(project, metadata_only = TRUE,save_to_dir = FALSE)
+  OUT <- create_node_edge_REDCap(project,duplicate_forms = duplicate_forms,include_fields = include_fields,include_choices = include_choices)
   if(!clean_names){OUT$node_df$label <- OUT$node_df$entity_name}
   OUT$node_df$physics <- TRUE
   OUT$node_df$physics[which(OUT$node_df$group =="project")] <- FALSE
@@ -42,7 +42,7 @@ REDCap_diagram <- function(DB,static = FALSE,render = TRUE,duplicate_forms = TRU
     )
     rendered_graph <- DiagrammeR::render_graph(
       graph,
-      title = DB$redcap$project_info$project_title,
+      title = project$redcap$project_info$project_title,
       output = "graph"
     )
   }else{
@@ -50,8 +50,8 @@ REDCap_diagram <- function(DB,static = FALSE,render = TRUE,duplicate_forms = TRU
     rendered_graph <- visNetwork::visNetwork(
       nodes =  OUT$node_df,
       edges = OUT$edge_df,
-      main = DB$redcap$project_info$project_title,
-      submain = DB$redcap$project_info$project_notes %>%
+      main = project$redcap$project_info$project_title,
+      submain = project$redcap$project_info$project_notes %>%
         paste0("<br>Code by Brandon Rose, M.D., M.P.H. at <a href='https://www.thecodingdocs.com/home'>TheCodingDocs.com</a> using <a href='https://github.com/thecodingdocs/RosyREDCap'>RosyREDCap with REDCapSync</a> and <a href='https://github.com/datastorm-open/visNetwork'>VisNetwork</a>")
     ) %>%
       visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
@@ -83,7 +83,7 @@ REDCap_diagram <- function(DB,static = FALSE,render = TRUE,duplicate_forms = TRU
 }
 #' @noRd
 create_node_edge_REDCap <- function(
-    DB,
+    project,
     duplicate_forms = TRUE,
     include_fields = FALSE,
     include_choices = FALSE
@@ -100,12 +100,12 @@ create_node_edge_REDCap <- function(
   attribute_color <- "green"
   choice_color <- "lightblue"
   arrow_type <- "to"
-  arms <- DB$metadata$arms
-  events <- DB$metadata$events
-  event_mapping <- DB$metadata$event_mapping
-  forms <- DB$metadata$forms[order(DB$metadata$forms$repeating),]
-  fields <- DB$metadata$fields
-  choices <- DB$metadata$choices
+  arms <- project$metadata$arms
+  events <- project$metadata$events
+  event_mapping <- project$metadata$event_mapping
+  forms <- project$metadata$forms[order(project$metadata$forms$repeating),]
+  fields <- project$metadata$fields
+  choices <- project$metadata$choices
   # nodes ======================================================================
   # project ---------------------------------------------------------
   level <- 1
@@ -113,8 +113,8 @@ create_node_edge_REDCap <- function(
     data.frame(
       id = NA,
       group = "project",
-      entity_name = DB$short_name,
-      entity_label = DB$redcap$project_info$project_title,
+      entity_name = project$short_name,
+      entity_label = project$redcap$project_info$project_title,
       # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
       level = level,
       shape = "box", # entity
@@ -125,7 +125,7 @@ create_node_edge_REDCap <- function(
     )
   )
   # arms & events -------------------------
-  if(DB$redcap$is_longitudinal){
+  if(project$redcap$is_longitudinal){
     level <- level + 1
     node_df <- node_df %>% dplyr::bind_rows(
       data.frame(
@@ -160,7 +160,7 @@ create_node_edge_REDCap <- function(
     )
   }
   # forms -----------
-  # if(DB$redcap$has_repeating_forms){
+  # if(project$redcap$has_repeating_forms){
   #   level <- level + 1
   #   node_df <- node_df %>% dplyr::bind_rows(
   #     data.frame(
@@ -178,7 +178,7 @@ create_node_edge_REDCap <- function(
   #     )
   #   )
   # }
-  if(duplicate_forms && DB$redcap$is_longitudinal){
+  if(duplicate_forms && project$redcap$is_longitudinal){
     level <- level + 1
     node_df <- node_df %>% dplyr::bind_rows(
       data.frame(
@@ -189,7 +189,7 @@ create_node_edge_REDCap <- function(
         level = level,
         # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         title = event_mapping$form %>% lapply(function(x){
-          paste0("<p><b>",x,"</b><br>",paste0(form_names_to_field_names(x,DB),collapse = "<br>"),"</p>")
+          paste0("<p><b>",x,"</b><br>",paste0(form_names_to_field_names(x,project),collapse = "<br>"),"</p>")
         }) %>% unlist(),
         shape = "box", # entity
         style = "filled",
@@ -209,7 +209,7 @@ create_node_edge_REDCap <- function(
         level = level,
         # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         title = forms$form_name %>% lapply(function(x){
-          paste0("<p><b>",x,"</b><br>",paste0(form_names_to_field_names(x,DB),collapse = "<br>"),"</p>")
+          paste0("<p><b>",x,"</b><br>",paste0(form_names_to_field_names(x,project),collapse = "<br>"),"</p>")
         }) %>% unlist(),
         shape = "box", # entity
         style = "filled",
@@ -229,7 +229,7 @@ create_node_edge_REDCap <- function(
         entity_name = fields$field_name,
         entity_label = fields$field_label,
         level = level,
-        # label = DB$fields$fields$field_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
+        # label = project$fields$fields$field_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         title = paste0("<p><b>",fields$field_name,"</b><br>",paste0("<b>Field Label:</b> ",fields$field_label),"<br>",paste0("<b>Field Type:</b> ",fields$field_type),"</p>"),
         shape = "ellipse",
         style = "filled",
@@ -247,7 +247,7 @@ create_node_edge_REDCap <- function(
           entity_name = choices$name,
           entity_label = choices$name,
           level = level,
-          # label = DB$fields$fields$field_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
+          # label = project$fields$fields$field_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
           title = NA,
           shape = "ellipse",
           style = "filled",
@@ -268,7 +268,7 @@ create_node_edge_REDCap <- function(
   rownames(node_df) <- NULL
   # edges ======================
   # edges not longitudinal ---------------
-  if( ! DB$redcap$is_longitudinal){
+  if( ! project$redcap$is_longitudinal){
     # project to forms-------------------
     edge_df <- edge_df %>% dplyr::bind_rows(
       data.frame(
@@ -282,7 +282,7 @@ create_node_edge_REDCap <- function(
         arrows = arrow_type
       )
     )
-    # if(DB$redcap$has_repeating_forms){
+    # if(project$redcap$has_repeating_forms){
     #   sub_node_df_structure <- node_df[which(node_df$group=="structure"),]
     #   edge_df <- edge_df %>% dplyr::bind_rows(
     #     data.frame(
@@ -299,7 +299,7 @@ create_node_edge_REDCap <- function(
     # }
   }
   # edges is longitudinal ---------------
-  if(DB$redcap$is_longitudinal){
+  if(project$redcap$is_longitudinal){
     # project to arms-------------------
     edge_df <- edge_df %>% dplyr::bind_rows(
       data.frame(

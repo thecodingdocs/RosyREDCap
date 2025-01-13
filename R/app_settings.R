@@ -34,7 +34,7 @@ run_RosyREDCap <- function(
     onStart = NULL,
     enableBookmarking = NULL,
     uiPattern = "/",
-    # DB_short_name
+    # project_short_name
     options = list(
       launch.browser = TRUE
     ),

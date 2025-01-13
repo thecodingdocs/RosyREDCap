@@ -5,7 +5,7 @@
 \title{Generate REDCap Project Diagram}
 \usage{
 REDCap_diagram(
-  DB,
+  project,
   static = FALSE,
   render = TRUE,
   duplicate_forms = TRUE,
@@ -37,12 +37,12 @@ REDCap_diagram(
 A diagram object representing the REDCap project structure.
 }
 \description{
-Generates a diagram of the REDCap project structure based on the `DB` object.
+Generates a diagram of the REDCap project structure based on the `project` object.
 }
 \details{
 This function generates a visual diagram of the REDCap project structure, including forms, fields, and choices. It supports various options such as rendering the diagram, including fields and choices, and specifying the direction of the diagram.
 }
 \seealso{
-\link{setup_DB} for initializing the `DB` object.
+\link{setup_project} for initializing the `project` object.
 }
 \concept{Visuals}

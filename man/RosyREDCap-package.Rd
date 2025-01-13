@@ -4,11 +4,11 @@
 \name{RosyREDCap-package}
 \alias{RosyREDCap}
 \alias{RosyREDCap-package}
-\title{RosyREDCap: RosyREDCap}
+\title{RosyREDCap: Standardized REDCap Shiny Application}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Rosy development for your R package.
+Uses REDCapSync to load or build standardized R list objects for data viewing, quaility, and analysis.
 }
 \seealso{
 Useful links:
@@ -22,15 +22,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Brandon Rose \email{thecodingdocs@gmail.com} (\href{https://orcid.org/0009-0009-7813-1960}{ORCID})
 
-Authors:
-\itemize{
-  \item Natalie Goulett
-  \item Chris Hilsinger-Pate
-  \item Nikola Susic
-}
-
 Other contributors:
 \itemize{
+  \item Natalie Goulett [contributor]
+  \item Chris Hilsinger-Pate [contributor]
+  \item Nikola Susic [contributor]
   \item Sydney Stern (\href{https://orcid.org/0000-0002-1479-605X}{ORCID}) [contributor]
 }
 

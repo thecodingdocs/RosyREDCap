@@ -1,16 +1,17 @@
 Package: RosyREDCap
-Title: RosyREDCap
+Title: Standardized REDCap Shiny Application
 Version: 0.0.0.9001
 Authors@R: c(
     person("Brandon", "Rose", , "thecodingdocs@gmail.com", role = c("cre", "aut"),
            comment = c(ORCID = "0009-0009-7813-1960")),
-    person("Natalie", "Goulett", role = "aut"),
-    person("Chris", "Hilsinger-Pate", role = "aut"),
-    person("Nikola", "Susic", role = "aut"),
+    person("Natalie", "Goulett", role = "ctb"),
+    person("Chris", "Hilsinger-Pate", role = "ctb"),
+    person("Nikola", "Susic", role = "ctb"),
     person("Sydney", "Stern", role = "ctb",
            comment = c(ORCID = "0000-0002-1479-605X"))
   )
-Description: Rosy development for your R package.
+Description: Uses REDCapSync to load or build standardized R list objects
+    for data viewing, quaility, and analysis.
 License: MIT + file LICENSE
 URL: https://github.com/thecodingdocs/RosyREDCap,
     https://thecodingdocs.github.io/RosyREDCap/

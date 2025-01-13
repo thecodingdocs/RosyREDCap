@@ -24,7 +24,7 @@ template:
 
 reference:
   - title: Shiny Application ✨
-    desc: For very basic users simply launch the app and explore! Uses the REDCapDB package to setup DB objects.
+    desc: For very basic users simply launch the app and explore! Uses the REDCapSync package to setup DB objects.
     contents:
       - run_RosyREDCap
 
@@ -40,9 +40,9 @@ articles:
   - title: API Tokens
     contents:
       - Tokens
-  - title: REDCapDB
+  - title: REDCapSync
     contents:
-      - REDCapDB
+      - REDCapSync
 authors:
   Brandon Rose:
     href: https://github.com/brandonerose

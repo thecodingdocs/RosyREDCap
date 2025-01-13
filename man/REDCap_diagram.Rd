@@ -17,6 +17,8 @@ REDCap_diagram(
 )
 }
 \arguments{
+\item{project}{project object from REDCapSync package}
+
 \item{static}{Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.}
 
 \item{render}{Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.}

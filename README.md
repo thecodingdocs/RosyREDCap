@@ -12,18 +12,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/thecodingdocs/RosyREDCap/graph/badge.svg)](https://app.codecov.io/gh/thecodingdocs/RosyREDCap)
 <!-- badges: end -->
 
-Use your REDCap API tokens to create an updating R list object (DB)
-which can used downstream for analysis, data exports, shiny apps, and
-data imports! Rosy with a capital ‘R’ evokes the R statistical
-programming language, the primary developer’s last name, and the idea of
-making something more beautiful and user-friendly. This prefix combined
-with REDCap demonstrates the package’s goal of enhancing the REDCap
-experience by creating data tools that are powerful and pleasant to use,
-combining the best of R with best REDCap.
-
-At this time this package is **not suited for Multi-Arm projects or
-massive REDCap projects yet**. More to come in future versions! The core
-functions are stable but future development and changes are possible.
+At this time this package is **not suited for massive REDCap projects**.
+More to come in future versions! The core functions are stable but
+future development and changes are possible.
 
 ## Minimum Requirements
 
@@ -62,12 +53,6 @@ collection, monitoring, transformation, and analysis.
 
 ## Installing RosyREDCap
 
-*Note: The current version of `{RosyREDCap}` used when writing this book
-is 0.0.0.9001, and some of the features presented in this book might not
-be available if you are using an older version, or be a little bit
-different if you have a newer version. Feel free to browse the package
-NEWS.*
-
 The stable release can be found on CRAN and installed with:
 **PLACEHOLDER NOT SUBMITTED TO CRAN YET**
 
@@ -81,7 +66,7 @@ don’t have it already.
 
 ``` r
 #install.packages("remotes)
-remotes::install_github("brandonerose/RosyREDCap",build_vignettes = T,build_manual = T)
+remotes::install_github("thecodingdocs/RosyREDCap")
 ```
 
 Note that the version used at the time of writing this book is
@@ -101,30 +86,18 @@ RStudtio and update all packages in RStudio. See
 
 ``` r
 library("RosyREDCap")
-
-projects <- get_projects() # get list of cached projects
-print.data.frame(projects) # show your previously saved projects
-
-your_project_path <- getwd()
-print(your_project_path) # confirm this is where you want files saved
-
-DB <- setup_DB(
-  short_name = "TEST_repeating",
-  redcap_base = "https://redcap.yourinstitution.edu/", # change to your institutions link (stop at ".edu/")
-  dir_path = getwd() # or change to your intended file path
-) #defaults will autocheck for valid token or ask you.
-
-#if you had to set a token above you might need to select the code below again for it to run
-DB <- update_DB(DB) # update from redcap by checking log and using saved object 
-
-DB <- DB %>% deidentify_DB(drop_free_text = F) %>% drop_REDCap_to_directory() # will save DEIDENTIFIED data (assuming this is set up properly on REDCap)
-#use drop_free_text = T to be even safer
-
-# DB <- drop_REDCap_to_directory(DB) # will save IDENTIFIED data (assuming this is set up properly on REDCap)
-
 #run shiny app!
 run_RosyREDCap() # will work with multiple REDCap projects!
 ```
+
+## About the Name
+
+Rosy with a capital ‘R’ evokes the R statistical programming language,
+the primary developer’s last name, and the idea of making something more
+beautiful and user-friendly. This prefix combined with REDCap
+demonstrates the package’s goal of enhancing the REDCap experience by
+creating data tools that are powerful and pleasant to use, combining the
+best of R with best REDCap.
 
 ## Links
 

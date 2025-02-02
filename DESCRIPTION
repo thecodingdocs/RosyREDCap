@@ -19,7 +19,6 @@ BugReports: https://github.com/thecodingdocs/RosyREDCap/issues
 Depends: 
     R (>= 2.10)
 Imports: 
-    cli,
     config (>= 0.3.2),
     DiagrammeR,
     dplyr,
@@ -27,11 +26,8 @@ Imports:
     golem (>= 0.4.1),
     htmlTable,
     magrittr,
-    openxlsx,
     plotly,
-    readxl,
     REDCapSync,
-    rio,
     RosyApp,
     RosyUtils,
     shiny (>= 1.8.1.1),
@@ -40,8 +36,6 @@ Imports:
     shinyWidgets,
     stats,
     stringr,
-    tools,
-    utils,
     visNetwork
 Suggests: 
     knitr,
@@ -50,9 +44,9 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
-    github::thecodingdocs/REDCapSync,
     github::brandonerose/RosyApp,
-    github::brandonerose/RosyUtils
+    github::brandonerose/RosyUtils,
+    github::thecodingdocs/REDCapSync
 Config/testthat/edition: 3
 Encoding: UTF-8
 RoxygenNote: 7.3.2

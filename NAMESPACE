@@ -3,6 +3,8 @@
 export(REDCap_diagram)
 export(run_RosyREDCap)
 import(REDCapSync)
+import(RosyApp)
+import(RosyUtils)
 import(shiny)
 import(shinydashboard)
 importFrom(golem,activate_js)

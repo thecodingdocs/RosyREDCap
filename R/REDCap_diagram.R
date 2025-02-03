@@ -131,8 +131,8 @@ create_node_edge_REDCap <- function(
       data.frame(
         id = NA,
         group = "arm",
-        entity_name = arms$arm_number,
-        entity_label = arms$arm_number,
+        entity_name = arms$arm_number %>% as.character(),
+        entity_label = arms$arm_number %>% as.character(),
         # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         level = level,
         shape = "box", # entity
@@ -396,4 +396,27 @@ create_node_edge_REDCap <- function(
     edge_df = edge_df
   )
   return(OUT)
+}
+form_names_to_field_names <- function(form_names, project, original_only = FALSE) {
+  field_names <- NULL
+  if (original_only) {
+    fields <- get_original_fields(project)
+  } else {
+    fields <- project$metadata$fields
+  }
+  for (form_name in form_names) {
+    field_names <- field_names %>% append(fields$field_name[which(fields$form_name == form_name)])
+  }
+  return(unique(field_names))
+}
+#' @noRd
+form_names_to_form_labels <- function(form_names, project) {
+  return(
+    project$metadata$forms$form_label[
+      match(
+        x = form_names,
+        table = project$metadata$forms$form_name
+      )
+    ]
+  )
 }

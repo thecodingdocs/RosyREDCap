@@ -131,8 +131,8 @@ create_node_edge_REDCap <- function(
       data.frame(
         id = NA,
         group = "arm",
-        entity_name = arms$arm_num,
-        entity_label = arms$arm_num,
+        entity_name = arms$arm_number,
+        entity_label = arms$arm_number,
         # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         level = level,
         shape = "box", # entity
@@ -317,7 +317,7 @@ create_node_edge_REDCap <- function(
     edge_df <- edge_df %>% dplyr::bind_rows(
       data.frame(
         id = NA,
-        from = events$arm_num %>% lapply(function(x){node_df$id[which(node_df$group=="arm"&node_df$entity_name==x)]}) %>% unlist(),
+        from = events$arm_number %>% lapply(function(x){node_df$id[which(node_df$group=="arm"&node_df$entity_name==x)]}) %>% unlist(),
         to = events$unique_event_name %>% lapply(function(x){node_df$id[which(node_df$group=="event"&node_df$entity_name==x)]}) %>% unlist(),
         rel = NA,#"Belongs to",
         style = "filled",

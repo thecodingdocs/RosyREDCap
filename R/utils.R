@@ -130,7 +130,7 @@ log_details_that_trigger_refresh <- function(){
 }
 #' @noRd
 sidebar_choices <- function(project,n_threshold=1){
-  choices <- annotate_choices(project)
+  choices <- REDCapSync:::annotate_choices(project)
   choices <- choices[which(choices$n>=n_threshold),]
   sbc <- data.frame(
     form_name = choices$form_name,

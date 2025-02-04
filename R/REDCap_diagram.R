@@ -20,7 +20,7 @@
 #' @family Visuals
 #' @export
 REDCap_diagram <- function(project,static = FALSE,render = TRUE,duplicate_forms = TRUE, clean_names = TRUE,include_fields = FALSE,include_choices = FALSE,hierarchical = FALSE,direction = "LR"){
-  if(is.null(project$redcap))project <- update_project(project, metadata_only = TRUE,save_to_dir = FALSE)
+  if(is.null(project$redcap))return(NULL)
   OUT <- create_node_edge_REDCap(project,duplicate_forms = duplicate_forms,include_fields = include_fields,include_choices = include_choices)
   if(!clean_names){OUT$node_df$label <- OUT$node_df$entity_name}
   OUT$node_df$physics <- TRUE

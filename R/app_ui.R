@@ -29,10 +29,10 @@ app_ui<- function(request) {
           tabName = "home",
           icon =shiny::icon("home")
         ),
-        conditionalPanel(
-          "input.sb1 === 'home'",
-          uiOutput("choose_project_"),
-        ),
+        # conditionalPanel(
+        #   "input.sb1 === 'home'",
+        uiOutput("choose_project_"),
+        # ),
         menuItem(
           text="Project",
           tabName = "project",
@@ -72,6 +72,7 @@ app_ui<- function(request) {
           "input.sb1 === 'data' || input.sb1 === 'group' || input.sb1 === 'record'",
           uiOutput("choose_form_"),
           uiOutput("choose_group_"),
+          uiOutput("deidentify_switch_"),
           uiOutput("transformation_switch_"),
           uiOutput("filter_switch_")
         ),

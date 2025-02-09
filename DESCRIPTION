@@ -19,23 +19,38 @@ BugReports: https://github.com/thecodingdocs/RosyREDCap/issues
 Depends: 
     R (>= 2.10)
 Imports: 
+    admiral,
+    cli,
     config (>= 0.3.2),
     DiagrammeR,
     dplyr,
     DT,
+    easyalluvial,
+    flextable,
+    ggplot2,
     golem (>= 0.4.1),
     htmlTable,
+    listviewer,
+    lubridate,
     magrittr,
+    openxlsx,
+    parcats,
     plotly,
+    RColorBrewer,
+    readxl,
     REDCapSync,
-    RosyApp,
-    RosyUtils,
+    rio,
     shiny (>= 1.8.1.1),
     shinydashboard,
     shinydashboardPlus,
     shinyWidgets,
     stats,
     stringr,
+    survival,
+    survminer,
+    table1,
+    tools,
+    utils,
     visNetwork
 Suggests: 
     knitr,
@@ -44,8 +59,6 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
-    github::brandonerose/RosyApp,
-    github::brandonerose/RosyUtils,
     github::thecodingdocs/REDCapSync
 Config/testthat/edition: 3
 Encoding: UTF-8

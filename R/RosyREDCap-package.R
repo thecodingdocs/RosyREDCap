@@ -2,8 +2,9 @@
 "_PACKAGE"
 ## usethis namespace: start
 #' @import REDCapSync
-#' @import RosyApp
-#' @import RosyUtils
+#' @import golem
+#' @import shiny
+#' @import shinydashboard
 #' @importFrom magrittr %>%
 ## usethis namespace: end
 NULL

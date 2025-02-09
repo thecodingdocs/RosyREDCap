@@ -95,7 +95,7 @@ app_server <- function(input, output, session) {
         table_name_raw <- names(values$subset_list)[i]
         table_id <- paste0("table___home__", table_name_raw)
         tabPanel(
-          title = table_name_raw %>% form_names_to_form_labels(values$project),
+          title = table_name_raw %>% REDCapSync:::form_names_to_form_labels(values$project),
           DT::DTOutput(table_id)
         )
       })
@@ -548,7 +548,7 @@ app_server <- function(input, output, session) {
       if(input$sb1 %in% c("group","record")){
         message("input$sb1:",input$sb1)
         if(is_something(input$choose_form)){
-          updateTabsetPanel(session, "tabs", selected = input$choose_form %>% form_names_to_form_labels(values$project))
+          updateTabsetPanel(session, "tabs", selected = input$choose_form %>% REDCapSync:::form_names_to_form_labels(values$project))
         }
         if(is_something(values$subset_list)){
           DF <- values$project$metadata$fields
@@ -620,7 +620,7 @@ app_server <- function(input, output, session) {
     }
   })
   # observeEvent(input$choose_form,{
-  #   selected <-  input$choose_form %>% form_names_to_form_labels(values$project)
+  #   selected <-  input$choose_form %>% REDCapSync:::form_names_to_form_labels(values$project)
   #   if(is_something(selected)){
   #     # if(!identical(selected,input$tabs)){
   #     message("updating form2: ",selected)

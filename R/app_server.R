@@ -7,6 +7,7 @@ app_server <- function(input, output, session) {
   values <- reactiveValues()
   values$projects <- get_projects() # get list of cached projects
   values$project <- NULL
+  values$project_data <- NULL
   values$selected_form <- NULL
   values$selected_field <- NULL
   values$selected_instance <- NULL
@@ -170,7 +171,7 @@ app_server <- function(input, output, session) {
   observe({
     if (is_something(input$choose_record)&&is_something(input$choose_fields_view)) {
       if(is_something(values$project)){
-        values$dt_tables_view_list <- values$project %>% filter_project(
+        values$dt_tables_view_list <- values$project %>% generate_summary(
           filter_field = values$project$redcap$id_col,
           filter_choices = input$choose_record,
           form_names = REDCapSync:::field_names_to_form_names(values$project, field_names = input$choose_fields_view),
@@ -178,7 +179,7 @@ app_server <- function(input, output, session) {
           no_duplicate_cols = TRUE
         ) %>% process_df_list()
         # print(values$dt_tables_view_list)
-        # values$dt_tables_view_list <- project %>% filter_project(records = subset_list$sarcoma$record_id %>% sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") %>% process_df_list()
+        # values$dt_tables_view_list <- project %>% generate_summary(records = subset_list$sarcoma$record_id %>% sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") %>% process_df_list()
         # values$subset_list$sarcoma %>% dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) %>% make_PSproject_table(project = values$project)
         if(!is_something(values$dt_tables_view_list))return(h3("No tables available to display."))
         lapply(seq_along(values$dt_tables_view_list), function(i) {
@@ -439,10 +440,10 @@ app_server <- function(input, output, session) {
       if(!is.null(values$project$transformation)){
         if(input$transformation_switch !=values$project$internals$is_transformed){
           if(input$transformation_switch){
-            values$project <-transform_project(values$project)
+
           }
           if(!input$transformation_switch){
-            values$project <-untransform_project(values$project)
+
           }
         }
       }else{
@@ -479,7 +480,7 @@ app_server <- function(input, output, session) {
             }
             print(filter_field)
             print(filter_choices)
-            values$subset_list <- filter_project(
+            values$subset_list <- generate_summary(
               project = values$project,
               filter_field = filter_field,
               filter_choices = filter_choices
@@ -509,7 +510,7 @@ app_server <- function(input, output, session) {
         #   }
         #   print(filter_field)
         #   print(filter_choices)
-        #   values$subset_list <- filter_project(
+        #   values$subset_list <- generate_summary(
         #     project = values$project,
         #     filter_field = filter_field,
         #     filter_choices = filter_choices

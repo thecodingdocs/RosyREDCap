@@ -480,11 +480,12 @@ app_server <- function(input, output, session) {
             print(filter_choices)
             values$subset_list <- generate_project_summary(
               project = values$project,
+              transform = input$transformation_switch,
               filter_field = filter_field,
               filter_choices = filter_choices,
               # form_names = values$selected_form,
               # field_names = input$choose_fields_cat
-              exclude_identifiers = input$deidentify_switch_,
+              exclude_identifiers = input$deidentify_switch,
               exclude_free_text = FALSE,
               date_handling = "none",
               upload_compatible = TRUE,

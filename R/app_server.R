@@ -130,7 +130,7 @@ app_server <- function(input, output, session) {
         # DF %>% head() %>% print()
         html_output <- htmlTable::htmlTable(
           align = "l",
-          DF %>% REDCapSync:::clean_DF(values$project$metadata$fields,other_drops = other_drops(ignore = input$render_missing)) %>% make_table1(
+          DF %>% REDCapSync:::clean_form(values$project$metadata$fields,other_drops = other_drops(ignore = input$render_missing)) %>% make_table1(
             group = input$choose_split,
             variables = variables,
             render.missing = input$render_missing
@@ -171,12 +171,27 @@ app_server <- function(input, output, session) {
   observe({
     if (is_something(input$choose_record)&&is_something(input$choose_fields_view)) {
       if(is_something(values$project)){
-        values$dt_tables_view_list <- values$project %>% generate_project_summary(
+        values$dt_tables_view_list <- generate_project_summary(
+          project = values$project,
+          transform = FALSE,
           filter_field = values$project$redcap$id_col,
           filter_choices = input$choose_record,
           form_names = REDCapSync:::field_names_to_form_names(values$project, field_names = input$choose_fields_view),
           field_names = input$choose_fields_view,
-          no_duplicate_cols = TRUE
+          no_duplicate_cols = TRUE,
+          exclude_identifiers = input$deidentify_switch_,
+          exclude_free_text = FALSE,
+          date_handling = "none",
+          upload_compatible = TRUE,
+          clean = TRUE,
+          drop_blanks = TRUE,
+          drop_missings = FALSE,
+          drop_others = NULL,
+          include_metadata = FALSE,
+          annotate_metadata = FALSE,
+          include_record_summary = FALSE,
+          include_users = FALSE,
+          include_log = FALSE
         ) %>% process_df_list()
         # print(values$dt_tables_view_list)
         # values$dt_tables_view_list <- project %>% generate_project_summary(records = subset_list$sarcoma$record_id %>% sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") %>% process_df_list()
@@ -186,7 +201,7 @@ app_server <- function(input, output, session) {
           table_data <- values$dt_tables_view_list[[i]]
           table_id <- paste0("table__dt_view_", i)
           output[[table_id]] <- DT::renderDT({
-            table_data %>% REDCapSync:::clean_DF(fields = values$project$metadata$fields,other_drops = other_drops(ignore = input$render_missing)) %>% make_DT_table()
+            table_data %>% REDCapSync:::clean_form(fields = values$project$metadata$fields,other_drops = other_drops(ignore = input$render_missing)) %>% make_DT_table()
           })
         }) %>% return()
       }
@@ -480,12 +495,12 @@ app_server <- function(input, output, session) {
             print(filter_choices)
             values$subset_list <- generate_project_summary(
               project = values$project,
-              transform = input$transformation_switch,
+              transform = input$transformation_switch_,
               filter_field = filter_field,
               filter_choices = filter_choices,
               # form_names = values$selected_form,
               # field_names = input$choose_fields_cat
-              exclude_identifiers = input$deidentify_switch,
+              exclude_identifiers = input$deidentify_switch_,
               exclude_free_text = FALSE,
               date_handling = "none",
               upload_compatible = TRUE,
@@ -1023,7 +1038,7 @@ app_server <- function(input, output, session) {
     if(length(input$choose_fields_cat)>0){
       cols <- input$choose_fields_cat %>% vec1_in_vec2(colnames(DF))
       DF[,cols, drop = FALSE] %>%
-        REDCapSync:::clean_DF(
+        REDCapSync:::clean_form(
           fields = values$project$metadata,
           drop_blanks = TRUE,
           other_drops = other_drops(ignore = input$render_missing)

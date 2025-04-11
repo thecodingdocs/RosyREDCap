@@ -481,9 +481,22 @@ app_server <- function(input, output, session) {
             values$subset_list <- generate_project_summary(
               project = values$project,
               filter_field = filter_field,
-              filter_choices = filter_choices
+              filter_choices = filter_choices,
               # form_names = values$selected_form,
               # field_names = input$choose_fields_cat
+              exclude_identifiers = input$deidentify_switch_,
+              exclude_free_text = FALSE,
+              date_handling = "none",
+              upload_compatible = TRUE,
+              clean = TRUE,
+              drop_blanks = TRUE,
+              drop_missings = FALSE,
+              drop_others = NULL,
+              include_metadata = FALSE,
+              annotate_metadata = FALSE,
+              include_record_summary = FALSE,
+              include_users = FALSE,
+              include_log = FALSE
             )
           }
         }

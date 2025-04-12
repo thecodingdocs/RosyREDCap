@@ -84,20 +84,6 @@ remove_records_from_list <- function(project,records,silent=FALSE){
   return(data_list)
 }
 #' @noRd
-other_drops <- function(ignore = FALSE){
-  if(ignore)return(NULL)
-  c(
-    "Not applicable",
-    "No information",
-    "Not asked",
-    "Unknown",
-    "Unencoded",
-    "Unknown / Not Reported",
-    "Missing Dates",
-    "Pediatric"
-  ) %>% return()
-}
-#' @noRd
 ignore_redcap_log <- function(collapse = TRUE){
   ignores <- c(
     'export',

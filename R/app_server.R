@@ -130,7 +130,8 @@ app_server <- function(input, output, session) {
         # DF %>% head() %>% print()
         html_output <- htmlTable::htmlTable(
           align = "l",
-          DF %>% REDCapSync:::clean_form(values$project$metadata$fields,other_drops = other_drops(ignore = input$render_missing)) %>% make_table1(
+          #,other_drops = other_drops(ignore = input$render_missing)
+          DF %>% REDCapSync:::clean_form(values$project$metadata$fields) %>% make_table1(
             group = input$choose_split,
             variables = variables,
             render.missing = input$render_missing
@@ -179,7 +180,7 @@ app_server <- function(input, output, session) {
           form_names = REDCapSync:::field_names_to_form_names(values$project, field_names = input$choose_fields_view),
           field_names = input$choose_fields_view,
           no_duplicate_cols = TRUE,
-          exclude_identifiers = input$deidentify_switch_,
+          exclude_identifiers = input$deidentify_switch,
           exclude_free_text = FALSE,
           date_handling = "none",
           upload_compatible = TRUE,
@@ -201,7 +202,7 @@ app_server <- function(input, output, session) {
           table_data <- values$dt_tables_view_list[[i]]
           table_id <- paste0("table__dt_view_", i)
           output[[table_id]] <- DT::renderDT({
-            table_data %>% REDCapSync:::clean_form(fields = values$project$metadata$fields,other_drops = other_drops(ignore = input$render_missing)) %>% make_DT_table()
+            table_data %>% REDCapSync:::clean_form(fields = values$project$metadata$fields) %>% make_DT_table()
           })
         }) %>% return()
       }
@@ -258,7 +259,7 @@ app_server <- function(input, output, session) {
       style="width: 450px; max-width: 100%; height: 650px;"
     )
   })
-  #vb -----------
+  # vb -----------
   # output$vb_choose_record <- shinydashboard::renderValueBox({
   #   shinydashboard::valueBox(
   #     value = values$choose_record,
@@ -429,7 +430,7 @@ app_server <- function(input, output, session) {
     if(!is.null(input$choose_project)){
       if(is_something(input$choose_project)){
         values$project <- tryCatch({
-          load_project(short_name=input$choose_project) #%>% clean_project(drop_blanks = FALSE,other_drops = NULL)
+          load_project(short_name=input$choose_project)
         },error = function(e) {NULL})
         if(is_something(input$choose_project)){
           if(!is.null(input[[paste0("projects_table_state")]])){
@@ -467,13 +468,13 @@ app_server <- function(input, output, session) {
       }
     }
   })
-  # deidentify_switch
-  observeEvent(input$choose_group,{
+  observe({
     if(is_something(input$choose_group)){
       if(length(input$choose_group) == 1){
         if(input$choose_group == "All Records"){
           values$subset_records <- values$all_records
-          values$subset_list <- values$project$data
+          filter_field <- NULL
+          filter_choices <- NULL
         } else {
           # if(input$choose_group == "Custom Records"){
           #   values$subset_records <- values$all_records
@@ -491,60 +492,29 @@ app_server <- function(input, output, session) {
                 filter_choices <- x$name
               }
             }
-            print(filter_field)
-            print(filter_choices)
-            values$subset_list <- generate_project_summary(
-              project = values$project,
-              transform = input$transformation_switch_,
-              filter_field = filter_field,
-              filter_choices = filter_choices,
-              # form_names = values$selected_form,
-              # field_names = input$choose_fields_cat
-              exclude_identifiers = input$deidentify_switch_,
-              exclude_free_text = FALSE,
-              date_handling = "none",
-              upload_compatible = TRUE,
-              clean = TRUE,
-              drop_blanks = TRUE,
-              drop_missings = FALSE,
-              drop_others = NULL,
-              include_metadata = FALSE,
-              annotate_metadata = FALSE,
-              include_record_summary = FALSE,
-              include_users = FALSE,
-              include_log = FALSE
-            )
           }
         }
-      }
-      if(length(input$choose_group) > 1){
-        # if(input$choose_group == "Custom Records"){
-        #   values$subset_records <- values$all_records
-        #   values$subset_list <- values$project$data
-        # }
-        # if(!input$choose_group %in% c("All Records","Custom Records")){
-        x<- values$sbc[which(values$sbc$label%in%input$choose_group),]
-        # add observe to remove all records if new is selected
-        # if(nrow(x)>0){
-        #   DF <- values$project$data[[x$form_name]]
-        #   filter_field <- project$redcap$id_col
-        #   values$subset_records <- filter_choices <- DF[[values$project$redcap$id_col]][which(DF[[x$field_name]]==x$name)] %>% unique()
-        #   if(is_something(input$filter_switch)){
-        #     if(input$filter_switch){
-        #       filter_field <- x$field_name
-        #       filter_choices <- x$name
-        #     }
-        #   }
-        #   print(filter_field)
-        #   print(filter_choices)
-        #   values$subset_list <- generate_project_summary(
-        #     project = values$project,
-        #     filter_field = filter_field,
-        #     filter_choices = filter_choices
-        #     # form_names = values$selected_form,
-        #     # field_names = input$choose_fields_cat
-        #   )
-        # }
+        values$subset_list <- generate_project_summary(
+          project = values$project,
+          transform = input$transformation_switch,
+          filter_field = filter_field,
+          filter_choices = filter_choices,
+          # form_names = values$selected_form,
+          # field_names = input$choose_fields_cat
+          exclude_identifiers = input$deidentify_switch,
+          exclude_free_text = FALSE,
+          date_handling = "none",
+          upload_compatible = TRUE,
+          clean = TRUE,
+          drop_blanks = TRUE,
+          drop_missings = FALSE,
+          drop_others = NULL,
+          include_metadata = FALSE,
+          annotate_metadata = FALSE,
+          include_record_summary = FALSE,
+          include_users = FALSE,
+          include_log = FALSE
+        )
       }
     }
   })
@@ -583,7 +553,7 @@ app_server <- function(input, output, session) {
           field_names_view <- DF$field_name[which(!DF$field_type %in% c("description"))]
           field_names_cat <- DF$field_name[which(DF$field_type_R %in% c("factor", "integer", "numeric"))]
           field_names_cat <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_cat)
-          field_names_view <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
+          # field_names_view <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
           field_labels_cat <- field_names_cat %>% REDCapSync:::field_names_to_field_labels(values$project)
           field_labels_view <- field_names_view %>% REDCapSync:::field_names_to_field_labels(values$project)
           field_names_change <- DF$field_name[which(
@@ -1040,8 +1010,7 @@ app_server <- function(input, output, session) {
       DF[,cols, drop = FALSE] %>%
         REDCapSync:::clean_form(
           fields = values$project$metadata,
-          drop_blanks = TRUE,
-          other_drops = other_drops(ignore = input$render_missing)
+          drop_blanks = TRUE
         ) %>%
         plotly_parcats(remove_missing = !input$render_missing) %>%
         return()

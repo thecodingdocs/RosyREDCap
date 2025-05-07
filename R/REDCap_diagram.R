@@ -29,7 +29,7 @@ REDCap_diagram <- function(project,
                            include_choices = FALSE,
                            hierarchical = FALSE,
                            direction = "LR",
-                           zoomView = FALSE) {
+                           zoomView = TRUE) {
   if(is.null(project$redcap))return(NULL)
   OUT <- create_node_edge_REDCap(project,duplicate_forms = duplicate_forms,include_fields = include_fields,include_choices = include_choices)
   if(!clean_names){OUT$node_df$label <- OUT$node_df$entity_name}

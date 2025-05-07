@@ -32,7 +32,9 @@ REDCap_diagram <- function(project,
                            zoomView = TRUE) {
   if(is.null(project$redcap))return(NULL)
   OUT <- create_node_edge_REDCap(project,duplicate_forms = duplicate_forms,include_fields = include_fields,include_choices = include_choices)
-  if(!clean_names){OUT$node_df$label <- OUT$node_df$entity_name}
+  if (!clean_names) {
+    OUT$node_df$label <- OUT$node_df$entity_name
+  }
   OUT$node_df$physics <- TRUE
   OUT$node_df$physics[which(OUT$node_df$group =="project")] <- FALSE
   if(static){
@@ -138,21 +140,23 @@ REDCap_diagram <- function(project,
     #   if(include_choices) groups <- groups %>% append("choice")
     #   rendered_graph <- rendered_graph %>% visNetwork::visClusteringByGroup(groups = groups)
     # }
-    rendered_graph$x$options$groups <- rendered_graph$x$groups %>% lapply(function(group){
-      list(
-        shape=OUT$node_df$shape[which(OUT$node_df$group==group)[[1]]],
-        font = list(
-          color = OUT$node_df$font.color[which(OUT$node_df$group==group)[[1]]]
-        ),
-        color = list(
-          background = OUT$node_df$color.background[which(OUT$node_df$group==group)[[1]]],
-          border = OUT$node_df$color.border[which(OUT$node_df$group==group)[[1]]]
-        )
-      )
-    }) %>% unlist()
+    # rendered_graph$x$options$groups <- rendered_graph$x$groups %>% lapply(function(group){
+    #   list(
+    #     shape=OUT$node_df$shape[which(OUT$node_df$group==group)[[1]]],
+    #     font = list(
+    #       color = OUT$node_df$font.color[which(OUT$node_df$group==group)[[1]]]
+    #     ),
+    #     color = list(
+    #       background = OUT$node_df$color.background[which(OUT$node_df$group==group)[[1]]],
+    #       border = OUT$node_df$color.border[which(OUT$node_df$group==group)[[1]]]
+    #     )
+    #   )
+    # }) %>% unlist()
   }
-  if(render) return(rendered_graph)
-  return(graph)
+  if (render) {
+    return(rendered_graph)
+  }
+  graph
 }
 #' @noRd
 create_node_edge_REDCap <- function(

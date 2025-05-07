@@ -14,7 +14,7 @@ REDCap_diagram(
   include_choices = FALSE,
   hierarchical = FALSE,
   direction = "LR",
-  zoomView = TRUE
+  zoomView = FALSE
 )
 }
 \arguments{

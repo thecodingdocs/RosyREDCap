@@ -56,6 +56,14 @@ REDCap_diagram <- function(project,
       output = "graph"
     )
   }else{
+    project_color <- "lightblue"
+    arm_color <- "green"
+    event_color <- "orange"
+    form_color <- "#FF474C"
+    field_color <- "yellow"
+    attribute_color <- "green"
+    choice_color <- "lightblue"
+    bordercolor <- "black"
     OUT$node_df$type <- OUT$node_df$group
     rendered_graph <- visNetwork::visNetwork(
       nodes =  OUT$node_df,
@@ -66,6 +74,60 @@ REDCap_diagram <- function(project,
     ) %>%
       visNetwork::visInteraction(zoomView = zoomView) %>%
       visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+      visNetwork::visGroups(
+        groupname = "project",
+        color = list(
+          background = project_color,
+          border = bordercolor,
+          highlight = project_color
+        ),
+        font = list(color = bordercolor)
+      ) %>%
+      visNetwork::visGroups(
+        groupname = "arm",
+        color = list(
+          background = arm_color,
+          border = bordercolor,
+          highlight = arm_color
+        ),
+        font = list(color = bordercolor)
+      ) %>%
+      visNetwork::visGroups(
+        groupname = "event",
+        color = list(
+          background = event_color,
+          border = bordercolor,
+          highlight = event_color
+        ),
+        font = list(color = bordercolor)
+      ) %>%
+      visNetwork::visGroups(
+        groupname = "form",
+        color = list(
+          background = form_color,
+          border = bordercolor,
+          highlight = form_color
+        ),
+        font = list(color = bordercolor)
+      ) %>%
+      visNetwork::visGroups(
+        groupname = "field",
+        color = list(
+          background = field_color,
+          border = bordercolor,
+          highlight = field_color
+        ),
+        font = list(color = bordercolor)
+      ) %>%
+      visNetwork::visGroups(
+        groupname = "choice",
+        color = list(
+          background = choice_color,
+          border = bordercolor,
+          highlight = choice_color
+        ),
+        font = list(color = bordercolor)
+      ) %>%
       visNetwork::visLegend(main = "Legend") %>%
       visNetwork::visLayout(hierarchical = hierarchical)
     if(hierarchical){

@@ -8,6 +8,7 @@
 #' @param project project object from REDCapSync package
 #' @param static Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.
 #' @param render Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.
+#' @param zoomView Logical (TRUE/FALSE). If TRUE, user can zoom. Default is `TRUE`.
 #' @param duplicate_forms Logical (TRUE/FALSE). If TRUE, includes duplicate form nodes in the diagram. Default is `TRUE`.
 #' @param clean_names Logical (TRUE/FALSE). If TRUE, cleans the names of the forms and fields in the diagram. Default is `TRUE`.
 #' @param include_fields Logical (TRUE/FALSE). If TRUE, includes fields in the diagram. Default is `FALSE`.
@@ -19,7 +20,16 @@
 #' \link{setup_project} for initializing the `project` object.
 #' @family Visuals
 #' @export
-REDCap_diagram <- function(project,static = FALSE,render = TRUE,duplicate_forms = TRUE, clean_names = TRUE,include_fields = FALSE,include_choices = FALSE,hierarchical = FALSE,direction = "LR"){
+REDCap_diagram <- function(project,
+                           static = FALSE,
+                           render = TRUE,
+                           duplicate_forms = TRUE,
+                           clean_names = TRUE,
+                           include_fields = FALSE,
+                           include_choices = FALSE,
+                           hierarchical = FALSE,
+                           direction = "LR",
+                           zoomView = TRUE) {
   if(is.null(project$redcap))return(NULL)
   OUT <- create_node_edge_REDCap(project,duplicate_forms = duplicate_forms,include_fields = include_fields,include_choices = include_choices)
   if(!clean_names){OUT$node_df$label <- OUT$node_df$entity_name}
@@ -54,6 +64,7 @@ REDCap_diagram <- function(project,static = FALSE,render = TRUE,duplicate_forms 
       submain = project$redcap$project_info$project_notes %>%
         paste0("<br>Code by Brandon Rose, M.D., M.P.H. at <a href='https://www.thecodingdocs.com/home'>TheCodingDocs.com</a> using <a href='https://github.com/thecodingdocs/RosyREDCap'>RosyREDCap with REDCapSync</a> and <a href='https://github.com/datastorm-open/visNetwork'>VisNetwork</a>")
     ) %>%
+      visNetwork::visInteraction(zoomView = zoomView) %>%
       visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
       visNetwork::visLegend(main = "Legend") %>%
       visNetwork::visLayout(hierarchical = hierarchical)

@@ -33,13 +33,10 @@ Imports:
     listviewer,
     lubridate,
     magrittr,
-    openxlsx,
     parcats,
     plotly,
     RColorBrewer,
-    readxl,
     REDCapSync,
-    rio,
     shiny (>= 1.8.1.1),
     shinydashboard,
     shinydashboardPlus,
@@ -49,8 +46,6 @@ Imports:
     survival,
     survminer,
     table1,
-    tools,
-    utils,
     visNetwork
 Suggests: 
     knitr,

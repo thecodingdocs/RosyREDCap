@@ -273,7 +273,7 @@ app_server <- function(input, output, session) {
     shinyWidgets::switchInput(
       inputId = "deidentify_switch",
       label = "Deidentify",
-      value = FALSE
+      value = TRUE
     )
   })
   output$transformation_switch_ <- renderUI({

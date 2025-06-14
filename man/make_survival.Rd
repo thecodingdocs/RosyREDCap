@@ -21,7 +21,8 @@ make_survival(
   conf.int = T,
   xlim = NULL,
   legend.position = "top",
-  tables.height = 0.25
+  tables.height = 0.25,
+  silent = FALSE
 )
 }
 \description{

@@ -30,7 +30,8 @@ make_survival <- function(
     conf.int = T,
     xlim = NULL,
     legend.position = "top",
-    tables.height = 0.25
+    tables.height = 0.25,
+    silent = FALSE
 ){
   if(!is.data.frame(DF))stop("DF has to be a data.frame")
   DF_ori <- DF
@@ -113,6 +114,8 @@ make_survival <- function(
     font.legend = font_maker(11),
     table.theme = ggplot2::theme_classic()
   )
-  print(fit)
+  if(!silent){
+    print(fit)
+  }
   return(plot)
 }

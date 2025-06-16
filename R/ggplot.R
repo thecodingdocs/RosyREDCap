@@ -2,8 +2,14 @@ color_func <- scales::col_numeric(
   palette = c("red", "yellow", "green"),
   domain = c(0, 1)
 )
+#' @title create_gauge_plot
 #' @export
-create_gauge_plot <- function(percentage_done, apply_scale = TRUE) {
+create_gauge_plot <- function(
+    percentage_done,
+    title = NULL,
+    caption = NULL,
+    text_size = 16
+    ) {
   df <- data.frame(
     part = c("Complete", "Incomplete"),
     percentage = c(percentage_done, 1 - percentage_done)
@@ -28,8 +34,15 @@ create_gauge_plot <- function(percentage_done, apply_scale = TRUE) {
       "Complete" = color_func(percentage_done),
       "Incomplete" = "grey80"
     )) +
+    labs(
+      title = title,
+      caption = caption
+    ) +
     theme(
-      legend.position = "none"
+      legend.position = "none",
+      plot.title = element_text(hjust = 0.5, face = "bold", size = text_size),
+      # plot.subtitle = element_text(hjust = 0.5, face = "bold", size = 14),
+      plot.caption = element_text(hjust = 0.5, face = "bold", size = text_size)
     )
   return(gauge_plot)
 }

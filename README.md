@@ -70,12 +70,12 @@ remotes::install_github("thecodingdocs/RosyREDCap")
 ```
 
 Note that the version used at the time of writing this book is
-0.0.0.9001. You can check what version you have installed with the
+0.0.0.9003. You can check what version you have installed with the
 following.
 
 ``` r
 packageVersion("RosyREDCap")
-#> [1] '0.0.0.9001'
+#> [1] '0.0.0.9003'
 ```
 
 If you have any issues, try downloading the most recent version of R at
@@ -102,7 +102,7 @@ best of R with best REDCap.
 ## Links
 
 - The RosyREDCap package is at
-  [github.com/brandonerose/RosyREDCap](https://github.com/brandonerose/RosyREDCap "RosyREDCap R package").
+  [github.com/thecodingdocs/RosyREDCap](https://github.com/thecodingdocs/RosyREDCap "RosyREDCap R package").
   See instructions above.
 - Donate if I helped you out and want more development (anything helps)!
   [account.venmo.com/u/brandonerose](https://account.venmo.com/u/brandonerose "Venmo Donation")

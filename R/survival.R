@@ -31,7 +31,7 @@ make_survival <- function(
     xlim = NULL,
     legend.position = "top",
     tables.height = 0.25,
-    silent = FALSE
+    show_stats = FALSE
 ){
   if(!is.data.frame(DF))stop("DF has to be a data.frame")
   DF_ori <- DF
@@ -71,7 +71,9 @@ make_survival <- function(
   }else{
     fit <- survival::survfit(survival::Surv(time_col,status_col) ~ 1, data = DF)
   }
-  if(is.null(fit))return(NULL)
+  if(is.null(fit)){
+    return(NULL)
+    }
   plot <-  survminer::ggsurvplot(
     fit = fit,
     data = DF,
@@ -114,8 +116,8 @@ make_survival <- function(
     font.legend = font_maker(11),
     table.theme = ggplot2::theme_classic()
   )
-  if(!silent){
+  if(show_stats){
     print(fit)
   }
-  return(plot)
+  plot
 }

@@ -22,7 +22,7 @@ make_survival(
   xlim = NULL,
   legend.position = "top",
   tables.height = 0.25,
-  silent = FALSE
+  show_stats = FALSE
 )
 }
 \description{

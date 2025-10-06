@@ -359,6 +359,47 @@ app_server <- function(input, output, session) {
       choices = NULL
     )
   })
+  output$choose_survival_start_col_ <- renderUI({
+    selectizeInput(
+      inputId = "choose_survival_start_col",
+      label = "Start",
+      multiple = FALSE,
+      selected = NULL,
+      choices = NULL,
+      width = "100%"
+    )
+  })
+  output$choose_survival_end_col_ <- renderUI({
+    selectizeInput(
+      inputId = "choose_survival_end_col",
+      label = "End",
+      multiple = FALSE,
+      selected = NULL,
+      choices = NULL,
+      width = "100%"
+      )
+  })
+  output$choose_survival_status_col_ <- renderUI({
+    selectizeInput(
+      inputId = "choose_survival_status_col",
+      label = "Status",
+      multiple = FALSE,
+      selected = NULL,
+      choices = NULL,
+      width = "100%"
+    )
+  })
+  output$choose_survival_xlim_ <- renderUI({
+    sliderInput(
+      inputId = "choose_survival_xlim",
+      label = "X Limits",
+      min = 0,
+      max = 12,
+      value = c(0,12),
+      step = 1,
+      width = "100%"
+    )
+  })
   output$choose_split_ <- renderUI({
     selectizeInput(
       inputId = "choose_split",
@@ -420,7 +461,7 @@ app_server <- function(input, output, session) {
         session = session,
         inputId = "choose_form",
         choices = stats::setNames(
-          object =values$subset_metadata$forms$form_name,
+          object = values$subset_metadata$forms$form_name,
           nm = values$subset_metadata$forms$form_label
         )
       )
@@ -456,18 +497,11 @@ app_server <- function(input, output, session) {
       if(!is.null(values$project$transformation)){
         if(input$transformation_switch != values$project$internals$is_transformed){
           if(input$transformation_switch){
-            values$subset_metadata <- values$project$transformation$metadata
+            # values$subset_metadata <- values$project$transformation$metadata
+            #do the transforming
           }else{
-            values$subset_metadata <- values$project$metadata
+            # values$subset_metadata <- values$project$metadata
           }
-          updateSelectizeInput(
-            session = session,
-            inputId = "choose_form",
-            choices = stats::setNames(
-              object =values$subset_metadata$forms$form_name,
-              nm = values$subset_metadata$forms$form_label
-            )
-          )
         }
       }else{
         message("Nothing to do, no project$transformation info! ",input$transformation_switch)
@@ -529,6 +563,14 @@ app_server <- function(input, output, session) {
         }else{
           values$subset_metadata <- values$project$metadata
         }
+        updateSelectizeInput(
+          session = session,
+          inputId = "choose_form",
+          choices = stats::setNames(
+            object =values$subset_metadata$forms$form_name,
+            nm = values$subset_metadata$forms$form_label
+          )
+        )
       }
     }
   })
@@ -571,13 +613,17 @@ app_server <- function(input, output, session) {
           )
         }
         if(is_something(values$subset_list)){
-          DF <- values$subset_metadata
+          DF <- values$subset_metadata$fields
           field_names_view <- DF$field_name[which(!DF$field_type %in% c("description"))]
           field_names_cat <- DF$field_name[which(DF$field_type_R %in% c("factor", "integer", "numeric"))]
           field_names_cat <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_cat)
-          # field_names_view <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
+          field_names_dates <- DF$field_name[which(DF$field_type_R %in% c("date"))]
+          field_names_dates <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_dates)
+           # field_names_view <- colnames(values$subset_list[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
           field_labels_cat <- field_names_cat %>% field_names_to_field_labels_alt(values$subset_metadata)
           field_labels_view <- field_names_view %>% field_names_to_field_labels_alt(values$subset_metadata)
+          field_labels_dates <- field_names_dates %>% field_names_to_field_labels_alt(values$subset_metadata)
+
           field_names_change <- DF$field_name[which(
             (!DF$field_type %in% c("description","file")) &
               DF$in_original_redcap &
@@ -610,6 +656,12 @@ app_server <- function(input, output, session) {
               selected = selected,
               choices = field_choices_cat
             )
+            updateSelectizeInput(
+              session = session,
+              inputId = "choose_survival_status_col",
+              selected = selected,
+              choices = field_choices_cat
+            )
           }
           if(is_something(field_names_view)){
             selected <- NULL
@@ -635,6 +687,51 @@ app_server <- function(input, output, session) {
               choices =  stats::setNames(field_names_change,field_labels_change)
             )
           }
+          if(is_something(field_names_dates)){
+            field_names_dates <- c(
+              stats::setNames("no_choice","None"),
+              stats::setNames(field_names_dates,field_labels_dates)
+            )
+            selected <- "no_choice"
+            if(is_something(input$choose_split)){
+              if(input$choose_split %in% field_names_cat)selected <- input$choose_split
+            }
+            updateSelectizeInput(
+              session = session,
+              inputId = "choose_split",
+              selected = selected,
+              choices = field_choices_cat
+            )
+            selected <- NULL
+            if(is_something(input$choose_fields_cat)){
+              if(all(input$choose_fields_cat %in% field_names_cat))selected <- input$choose_fields_cat
+            }
+            updateSelectizeInput(
+              session = session,
+              inputId = "choose_fields_cat",
+              selected = selected,
+              choices = field_choices_cat
+            )
+            updateSelectizeInput(
+              session = session,
+              inputId = "choose_survival_start_col",
+              selected = selected,
+              choices = field_choices_cat
+            )
+            updateSelectizeInput(
+              session = session,
+              inputId = "choose_survival_end_col",
+              selected = selected,
+              choices = field_choices_cat
+            )
+            updateSelectizeInput(
+              session = session,
+              inputId = "choose_survival_status_col",
+              selected = selected,
+              choices = field_choices_cat
+            )
+          }
+
         }
       }
     }
@@ -1035,6 +1132,34 @@ app_server <- function(input, output, session) {
           drop_blanks = TRUE
         ) %>%
         plotly_parcats(remove_missing = !input$render_missing) %>%
+        return()
+      # mtcars  %>% plotly_parcats(remove_missing = FALSE) %>% return()
+    }
+  })
+  output$survival <- renderPlot({
+    if(is_something(input$choose_form))
+      DF <- values$subset_list[[input$choose_form]]
+    # print(input$choose_fields_cat)
+    # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
+    # print(cols)
+    # # fields_to_forms
+    if(length(input$choose_fields_cat)>0){
+      # cols <- input$choose_fields_cat %>% vec1_in_vec2(colnames(DF))
+      # DF[,cols, drop = FALSE] %>%
+      #   REDCapSync:::clean_form(
+      #     fields = values$subset_metadata,
+      #     drop_blanks = TRUE
+      #   ) %>%
+        DF <- survival::lung
+      DF$time_months <- DF$time/28
+      DF$deceased_date
+      make_survival(
+        DF,
+        time_col = "time_months",
+        status_col = "status",
+        units = "months",
+        strat_col = "sex"
+      ) %>%
         return()
       # mtcars  %>% plotly_parcats(remove_missing = FALSE) %>% return()
     }

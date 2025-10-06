@@ -8,7 +8,8 @@ run_RosyREDCap(
   onStart = NULL,
   enableBookmarking = NULL,
   uiPattern = "/",
-  options = list(launch.browser = TRUE),
+  options = NULL,
+  launch_type = c("browser", "rstudop_pane", "rstudio_window"),
   ...
 )
 }

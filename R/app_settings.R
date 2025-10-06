@@ -34,11 +34,20 @@ run_RosyREDCap <- function(
     enableBookmarking = NULL,
     uiPattern = "/",
     # project_short_name
-    options = list(
-      launch.browser = TRUE
-    ),
+    options = NULL,
+    launch_type = c("browser","rstudop_pane","rstudio_window"),
     ...
 ) {
+  launch_type <- match.arg(launch_type,c("browser","rstudio_pane","rstudio_window"))
+  if(launch_type == "browser"){
+    options$launch.browser <- TRUE
+  }
+  if(launch_type == "rstudio_pane"){
+    options$launch.browser <- .rs.invokeShinyPaneViewer
+  }
+  if(launch_type == "rstudio_window"){
+    options$launch.browser <- FALSE
+  }
   with_golem_options(
     app = shinyApp(
       ui = app_ui,

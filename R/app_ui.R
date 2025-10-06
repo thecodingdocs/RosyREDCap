@@ -112,11 +112,6 @@ app_ui<- function(request) {
         #     value = TRUE
         #   )
         # ),
-        menuItem(
-          text="Backend",
-          tabName = "backend",
-          icon =shiny::icon("gear")
-        ),
         uiOutput("redcap_links")
       ),
       body = dbBody(
@@ -213,9 +208,37 @@ app_ui<- function(request) {
             )
           ),
           fluidRow(
+            tabBox(
+              title = h1("Plots"),
+              width = 6,
+              # uiOutput("table1")
+              id = "tabset_plots",
+              tabPanel(
+                "Scatter",
+                "Scatter Plot!"
+                ),
+              tabPanel(
+                "Survival",
+                fluidRow(
+                  column(4, uiOutput("choose_survival_start_col_")),
+                  column(4, uiOutput("choose_survival_end_col_")),
+                  column(4, uiOutput("choose_survival_status_col_"))
+                ),
+                fluidRow(
+                  column(3, selectInput("survival_units", "Units", choices = c("days", "months", "years"), selected = "years")),
+                  column(9, uiOutput("choose_survival_xlim_"))
+                ),
+                plotOutput("survival"),
+                actionButton("survival_save_ab","Save Plot File")
+              ),
+              tabPanel(
+                "Swimmer",
+                "Swimmer Plot!"
+              )
+            ),
             box(
               title = h1("Table1"),
-              width = 12,
+              width = 6,
               uiOutput("table1")
             )
           )

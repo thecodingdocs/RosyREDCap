@@ -33,6 +33,13 @@ reference:
     contents:
       - REDCap_diagram
 
+  - title: REDCapSync Experimental
+  - desc: Add ons to REDCapSync allowing more customization but too niche for CRAN for now
+  - contents:
+      - add_project_field
+      - add_project_transformation
+
+
 articles:
   - title: Using RosyREDCap ✨
     contents:

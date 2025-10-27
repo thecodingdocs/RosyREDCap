@@ -202,7 +202,7 @@ create_node_edge_REDCap <- function(
     )
   )
   # arms & events -------------------------
-  if(project$redcap$is_longitudinal){
+  if(project$metadata$is_longitudinal){
     level <- level + 1
     node_df <- node_df %>% dplyr::bind_rows(
       data.frame(
@@ -237,7 +237,7 @@ create_node_edge_REDCap <- function(
     )
   }
   # forms -----------
-  # if(project$redcap$has_repeating_forms){
+  # if(project$metadata$has_repeating_forms){
   #   level <- level + 1
   #   node_df <- node_df %>% dplyr::bind_rows(
   #     data.frame(
@@ -255,7 +255,7 @@ create_node_edge_REDCap <- function(
   #     )
   #   )
   # }
-  if(duplicate_forms && project$redcap$is_longitudinal){
+  if(duplicate_forms && project$metadata$is_longitudinal){
     level <- level + 1
     node_df <- node_df %>% dplyr::bind_rows(
       data.frame(
@@ -345,7 +345,7 @@ create_node_edge_REDCap <- function(
   rownames(node_df) <- NULL
   # edges ======================
   # edges not longitudinal ---------------
-  if( ! project$redcap$is_longitudinal){
+  if( ! project$metadata$is_longitudinal){
     # project to forms-------------------
     edge_df <- edge_df %>% dplyr::bind_rows(
       data.frame(
@@ -359,7 +359,7 @@ create_node_edge_REDCap <- function(
         arrows = arrow_type
       )
     )
-    # if(project$redcap$has_repeating_forms){
+    # if(project$metadata$has_repeating_forms){
     #   sub_node_df_structure <- node_df[which(node_df$group=="structure"),]
     #   edge_df <- edge_df %>% dplyr::bind_rows(
     #     data.frame(
@@ -376,7 +376,7 @@ create_node_edge_REDCap <- function(
     # }
   }
   # edges is longitudinal ---------------
-  if(project$redcap$is_longitudinal){
+  if(project$metadata$is_longitudinal){
     # project to arms-------------------
     edge_df <- edge_df %>% dplyr::bind_rows(
       data.frame(

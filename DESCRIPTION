@@ -31,6 +31,7 @@ Imports:
     ggplot2,
     golem (>= 0.4.1),
     htmlTable,
+    lifecycle,
     listviewer,
     lubridate,
     magrittr,

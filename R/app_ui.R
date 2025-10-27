@@ -71,6 +71,11 @@ app_ui<- function(request) {
           uiOutput("choose_group_"),
           uiOutput("deidentify_switch_"),
           uiOutput("transformation_switch_"),
+          shinyWidgets::switchInput(
+            inputId = "labelled",
+            label = "Labelled",
+            value = TRUE
+          ),
           uiOutput("filter_switch_")
         ),
         menuItem(

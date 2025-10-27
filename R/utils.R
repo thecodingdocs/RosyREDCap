@@ -1,10 +1,10 @@
 #' @noRd
 add_redcap_links_to_DF <- function(DF,project){# add instance links
-  if(project$redcap$id_col%in%colnames(DF)){
-    DF_structure_cols <- project$redcap$raw_structure_cols[which(project$redcap$raw_structure_cols%in%colnames(DF))]
-    DF_structure_cols <- project$redcap$raw_structure_cols[which(project$redcap$raw_structure_cols%in%colnames(DF)&project$redcap$raw_structure_cols!=project$redcap$id_col)]
+  if(project$metadata$id_col%in%colnames(DF)){
+    DF_structure_cols <- project$metadata$raw_structure_cols[which(project$metadata$raw_structure_cols%in%colnames(DF))]
+    DF_structure_cols <- project$metadata$raw_structure_cols[which(project$metadata$raw_structure_cols%in%colnames(DF)&project$metadata$raw_structure_cols!=project$metadata$id_col)]
     link_head <- project$links$redcap_record_home
-    link_tail <- "&id=" %>% paste0(DF[[project$redcap$id_col]])
+    link_tail <- "&id=" %>% paste0(DF[[project$metadata$id_col]])
     if("redcap_repeat_instrument"%in%DF_structure_cols){
       link_head <- project$links$redcap_record_subpage
       link_tail <- link_tail %>% paste0("&page=",DF[["redcap_repeat_instrument"]])
@@ -27,7 +27,7 @@ count_project_upload_cells <- function(project){
 #' @noRd
 husk_of_form <- function (project,FORM,field_names) {
   DF <- project$data[[FORM]]
-  cols<- colnames(DF)[which(colnames(DF)%in%project$redcap$raw_structure_cols)]
+  cols<- colnames(DF)[which(colnames(DF)%in%project$metadata$raw_structure_cols)]
   DF2 <- NULL
   for(col in cols){
     DF2[[col]] <- DF[[col]]
@@ -44,7 +44,7 @@ all_project_to_char_cols <- function(project){
 #' @noRd
 add_redcap_links_table<-function(DF,project){
   if(nrow(DF)>0){
-    DF[[project$redcap$id_col]] <- paste0("<a href='",paste0("https://redcap.miami.edu/redcap_v",project$redcap$version,"/DataEntry/record_home.php?pid=",project$redcap$project_id,"&id=",DF[[project$redcap$id_col]],"&arm=1"),"' target='_blank'>",DF[[project$redcap$id_col]],"</a>")
+    DF[[project$metadata$id_col]] <- paste0("<a href='",paste0("https://redcap.miami.edu/redcap_v",project$redcap$version,"/DataEntry/record_home.php?pid=",project$redcap$project_id,"&id=",DF[[project$metadata$id_col]],"&arm=1"),"' target='_blank'>",DF[[project$metadata$id_col]],"</a>")
   }
   DF
 }
@@ -78,7 +78,7 @@ remove_records_from_list <- function(project,records,silent=FALSE){
         }) %>% unlist()
     )]
   for(TABLE in forms){
-    data_list[[TABLE]] <- data_list[[TABLE]][which(!data_list[[TABLE]][[project$redcap$id_col]]%in%records),]
+    data_list[[TABLE]] <- data_list[[TABLE]][which(!data_list[[TABLE]][[project$metadata$id_col]]%in%records),]
   }
   if(!silent)message("Removed: ",paste0(records,collapse = ", "))
   return(data_list)
@@ -115,8 +115,8 @@ log_details_that_trigger_refresh <- function(){
   )
 }
 #' @noRd
-sidebar_choices <- function(project,n_threshold=1){
-  choices <- REDCapSync:::annotate_choices(project)
+sidebar_choices <- function(data_list,n_threshold=1){
+  choices <- REDCapSync:::annotate_choices(data_list)
   choices <- choices[which(choices$n>=n_threshold),]
   sbc <- data.frame(
     form_name = choices$form_name,

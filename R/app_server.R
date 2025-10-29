@@ -502,7 +502,7 @@ app_server <- function(input, output, session) {
   #     }
   #   }
   # })
-  observeEvent(input$transformation_switch, ignoreInit = TRUE, ignoreNULL = TRUE, {
+  observe( {
     if(is_something(input$transformation_switch)){
       if(is_something(values$project)){
         values$project_data_list <- generate_project_summary(
@@ -524,7 +524,7 @@ app_server <- function(input, output, session) {
           include_log = FALSE
         )
         values$sbc <- sidebar_choices(values$project_data_list)
-      }
+        }
     }
   })
   observe({
@@ -566,8 +566,8 @@ app_server <- function(input, output, session) {
           # field_names = input$choose_fields_cat
         )
         if (input$deidentify_switch) {
-          data_list$data <- REDCapSync:::deidentify_data_list(
-            data_list = data_list
+          values$project_data_list_filtered$data <- REDCapSync:::deidentify_data_list(
+            data_list = values$project_data_list_filtered
             # exclude_free_text = exclude_free_text,
             # date_handling = date_handling
           )

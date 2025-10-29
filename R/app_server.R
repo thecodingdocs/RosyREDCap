@@ -7,7 +7,6 @@ app_server <- function(input, output, session) {
   values$projects <- get_projects() # get list of cached projects
   values$project <- NULL
   values$project_data_list <- NULL
-  values$project_data_list_filtered <- NULL
   values$project_summaries <- NULL
   values$selected_form <- NULL
   values$selected_field <- NULL
@@ -89,11 +88,11 @@ app_server <- function(input, output, session) {
   })
   # tables --------
   output$dt_tables_view <- renderUI({
-    if(length(values$project_data_list_filtered) == 0) return(h3("No tables available to display."))
+    if(length(values$project_data_list$data) == 0) return(h3("No tables available to display."))
     do.call(tabsetPanel, c(
       id = "tabs",
-      lapply(seq_along(values$project_data_list_filtered), function(i) {
-        table_name_raw <- names(values$project_data_list_filtered)[i]
+      lapply(seq_along(values$project_data_list$data), function(i) {
+        table_name_raw <- names(values$project_data_list$data)[i]
         table_id <- paste0("table___home__", table_name_raw)
         tabPanel(
           title = table_name_raw %>% form_names_to_form_labels_alt(values$project_data_list$metadata),
@@ -123,7 +122,7 @@ app_server <- function(input, output, session) {
         ) %>% drop_nas() %>% drop_if("")
       )
       if(length(variables)==0)return()
-      DF <- values$project_data_list_filtered[[input$choose_form]][,variables,drop = FALSE]
+      DF <- values$project_data_list$data[[input$choose_form]][,variables,drop = FALSE]
       if(is_something(DF)){
         message("input$choose_split: ",input$choose_split)
         message("variables: ",variables %>% as_comma_string())
@@ -195,8 +194,8 @@ app_server <- function(input, output, session) {
           include_log = FALSE
         ) %>% process_df_list()
         # print(values$dt_tables_view_list)
-        # values$dt_tables_view_list <- project %>% generate_project_summary(records = project_data_list_filtered$sarcoma$record_id %>% sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") %>% process_df_list()
-        # values$project_data_list_filtered$sarcoma %>% dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) %>% make_PSproject_table(project = values$project)
+        # values$dt_tables_view_list <- project %>% generate_project_summary(records = project_data_list$data$sarcoma$record_id %>% sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") %>% process_df_list()
+        # values$project_data_list$data$sarcoma %>% dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) %>% make_PSproject_table(project = values$project)
         if(!is_something(values$dt_tables_view_list))return(h3("No tables available to display."))
         lapply(seq_along(values$dt_tables_view_list), function(i) {
           table_data <- values$dt_tables_view_list[[i]]
@@ -232,9 +231,9 @@ app_server <- function(input, output, session) {
   })
   # Render each DT table ------
   observe({
-    if(!is_something(values$project_data_list_filtered))return(h3("No tables available to display."))
-    lapply(names(values$project_data_list_filtered), function(TABLE) {
-      table_data <- values$project_data_list_filtered[[TABLE]]
+    if(!is_something(values$project_data_list$data))return(h3("No tables available to display."))
+    lapply(names(values$project_data_list$data), function(TABLE) {
+      table_data <- values$project_data_list$data[[TABLE]]
       table_id <- paste0("table___home__", TABLE)
       output[[table_id]] <- DT::renderDT({
         table_data %>%
@@ -244,9 +243,9 @@ app_server <- function(input, output, session) {
     }) %>% return()
   })
   observe({
-    if(!is_something(values$project_data_list_filtered))return(h3("No tables available to display."))
-    lapply(names(values$project_data_list_filtered), function(TABLE) {
-      table_data <- values$project_data_list_filtered[[TABLE]]
+    if(!is_something(values$project_data_list$data))return(h3("No tables available to display."))
+    lapply(names(values$project_data_list$data), function(TABLE) {
+      table_data <- values$project_data_list$data[[TABLE]]
       table_id <- paste0("table___home__", TABLE,"_exists")
       values[[table_id]] <- !is.null(input[[paste0("table___home__", TABLE,"_state")]])
     }) %>% return()
@@ -420,7 +419,7 @@ app_server <- function(input, output, session) {
       values$active_table_id <- NULL
       values$all_records <- NULL
       values$subset_records <- NULL
-      values$project_data_list_filtered <- NULL
+      values$project_data_list <- NULL
       values$sbc <- NULL
       values$fields_to_change_input_df <- NULL
       values$dynamic_input_ids <- NULL
@@ -432,6 +431,25 @@ app_server <- function(input, output, session) {
         choices = values$subset_records,
         server = TRUE
       )
+      values$project_data_list <- generate_project_summary(
+        project = values$project,
+        transformation_type = input$transformation_switch,
+        labelled = input$labelled,
+        exclude_identifiers = FALSE,
+        exclude_free_text = FALSE,
+        date_handling = "none",
+        upload_compatible = TRUE,
+        clean = FALSE,
+        drop_blanks = FALSE,
+        drop_missings = FALSE,
+        drop_others = NULL,
+        include_metadata = FALSE,
+        annotate_metadata = FALSE,
+        include_record_summary = FALSE,
+        include_users = FALSE,
+        include_log = FALSE
+      )
+      values$sbc <- sidebar_choices(values$project_data_list)
       if(!is.null(values$project$transformation)){
         values$editable_forms_transformation_table <- values$project$transformation$forms %>% as.data.frame(stringsAsFactors = FALSE)
       }
@@ -537,7 +555,7 @@ app_server <- function(input, output, session) {
         } else {
           # if(input$choose_group == "Custom Records"){
           #   values$subset_records <- values$all_records
-          #   values$project_data_list_filtered <- values$project$data
+          #   values$project_data_list$data <- values$project$data
           # }
           # if(!input$choose_group %in% c("All Records","Custom Records")){
           x<- values$sbc[which(values$sbc$label==input$choose_group),]
@@ -558,7 +576,7 @@ app_server <- function(input, output, session) {
         # # form_names = values$selected_form,
         # # field_names = input$choose_fields_cat
         # exclude_identifiers = input$deidentify_switch,
-        values$project_data_list_filtered <- REDCapSync:::filter_data_list(
+        values$project_data_list$data <- REDCapSync:::filter_data_list(
           data_list = values$project_data_list,
           filter_field = filter_field,
           filter_choices = filter_choices
@@ -566,8 +584,8 @@ app_server <- function(input, output, session) {
           # field_names = input$choose_fields_cat
         )
         if (input$deidentify_switch) {
-          values$project_data_list_filtered$data <- REDCapSync:::deidentify_data_list(
-            data_list = values$project_data_list_filtered
+          values$project_data_list$data$data <- REDCapSync:::deidentify_data_list(
+            data_list = values$project_data_list
             # exclude_free_text = exclude_free_text,
             # date_handling = date_handling
           )
@@ -626,14 +644,14 @@ app_server <- function(input, output, session) {
             selected = input$choose_form %>% form_names_to_form_labels_alt(values$project_data_list$metadata)
           )
         }
-        if(is_something(values$project_data_list_filtered)){
+        if(is_something(values$project_data_list$data)){
           DF <- values$project_data_list$metadata$fields
           field_names_view <- DF$field_name[which(!DF$field_type %in% c("description"))]
           field_names_cat <- DF$field_name[which(DF$field_type_R %in% c("factor", "integer", "numeric"))]
-          field_names_cat <- colnames(values$project_data_list_filtered[[input$choose_form]]) %>% vec1_in_vec2(field_names_cat)
+          field_names_cat <- colnames(values$project_data_list$data[[input$choose_form]]) %>% vec1_in_vec2(field_names_cat)
           field_names_dates <- DF$field_name[which(DF$field_type_R %in% c("date"))]
-          field_names_dates <- colnames(values$project_data_list_filtered[[input$choose_form]]) %>% vec1_in_vec2(field_names_dates)
-           # field_names_view <- colnames(values$project_data_list_filtered[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
+          field_names_dates <- colnames(values$project_data_list$data[[input$choose_form]]) %>% vec1_in_vec2(field_names_dates)
+           # field_names_view <- colnames(values$project_data_list$data[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
           field_labels_cat <- field_names_cat %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
           field_labels_view <- field_names_view %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
           field_labels_dates <- field_names_dates %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
@@ -780,8 +798,8 @@ app_server <- function(input, output, session) {
   })
   observe({
     if(is_something(input$choose_record)){
-      all_forms <- names(values$project_data_list_filtered)
-      values$project_data_list_filtered %>% names() %>% lapply(function(form){
+      all_forms <- names(values$project_data_list$data)
+      values$project_data_list$data %>% names() %>% lapply(function(form){
         values[[paste0("table___home__", form,"_exists")]]
       })
       isolate({
@@ -798,7 +816,7 @@ app_server <- function(input, output, session) {
           for(form in all_forms) {
             if(!is.null(input[[paste0("table___home__", form, "_state")]])){
               message("form: ",form)
-              ROWS <- which(values$project_data_list_filtered[[form]][[values$project$metadata$id_col]] == input$choose_record)
+              ROWS <- which(values$project_data_list$data[[form]][[values$project$metadata$id_col]] == input$choose_record)
               message("ROWS: ",ROWS %>% as_comma_string())
               skip <- FALSE
               if(!is.null(input[[paste0("table___home__", form, "_rows_selected")]])){
@@ -834,7 +852,7 @@ app_server <- function(input, output, session) {
       isolate({
         if(is_something(values$selected_form)){
           expected <- NULL
-          data_col <- values$project_data_list_filtered[[values$selected_form]][[values$project$metadata$id_col]]
+          data_col <- values$project_data_list$data[[values$selected_form]][[values$project$metadata$id_col]]
           expected <- which(data_col==input$choose_record)
           # message("expected: ", expected)
           if(is_something(selected)){
@@ -879,7 +897,7 @@ app_server <- function(input, output, session) {
         )
         DF <- NULL
         if(is_something(input$choose_form)){
-          DF <- values$project_data_list_filtered[[input$choose_form]]
+          DF <- values$project_data_list$data[[input$choose_form]]
           rows <-  which(DF[[values$project$metadata$id_col]]==input$choose_record)
           values$fields_to_change_input_df <- DF[rows,vec1_in_vec2(vars,colnames(DF)),drop = FALSE]
         }
@@ -1130,7 +1148,7 @@ app_server <- function(input, output, session) {
   # plotly -----------
   output$parcats <- plotly::renderPlotly({
     if(is_something(input$choose_form))
-      DF <- values$project_data_list_filtered[[input$choose_form]]
+      DF <- values$project_data_list$data[[input$choose_form]]
     input$shuffle_colors
     # print(input$choose_fields_cat)
     # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
@@ -1150,7 +1168,7 @@ app_server <- function(input, output, session) {
   })
   output$survival <- renderPlot({
     if(is_something(input$choose_form))
-      DF <- values$project_data_list_filtered[[input$choose_form]]
+      DF <- values$project_data_list$data[[input$choose_form]]
     # print(input$choose_fields_cat)
     # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
     # print(cols)

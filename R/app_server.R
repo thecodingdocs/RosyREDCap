@@ -173,7 +173,7 @@ app_server <- function(input, output, session) {
       if(is_something(values$project)){
         values$dt_tables_view_list <- generate_project_summary(
           project = values$project,
-          # transform = FALSE,
+          transformation_type = "none",
           filter_field = values$project$metadata$id_col,
           filter_choices = input$choose_record,
           form_names = REDCapSync:::field_names_to_form_names(values$project, field_names = input$choose_fields_view),
@@ -520,89 +520,110 @@ app_server <- function(input, output, session) {
   #     }
   #   }
   # })
-  observe( {
-    if(is_something(input$transformation_switch)){
-      if(is_something(values$project)){
-        values$project_data_list <- generate_project_summary(
-          project = values$project,
-          transformation_type = input$transformation_switch,
-          labelled = input$labelled,
-          exclude_identifiers = FALSE,
-          exclude_free_text = FALSE,
-          date_handling = "none",
-          upload_compatible = TRUE,
-          clean = FALSE,
-          drop_blanks = FALSE,
-          drop_missings = FALSE,
-          drop_others = NULL,
-          include_metadata = FALSE,
-          annotate_metadata = FALSE,
-          include_record_summary = FALSE,
-          include_users = FALSE,
-          include_log = FALSE
-        )
-        values$sbc <- sidebar_choices(values$project_data_list)
-        }
-    }
-  })
   observe({
+    message("trigger switch")
+    input$deidentify_switch
+    input$transformation_switch
+    isolate({
+      if(is_something(input$transformation_switch)){
+        if(is_something(values$project)){
+          values$project_data_list <- generate_project_summary(
+            project = values$project,
+            transformation_type = input$transformation_switch,
+            labelled = input$labelled,
+            exclude_identifiers = input$deidentify_switch,
+            exclude_free_text = input$deidentify_switch,
+            date_handling = "none",
+            upload_compatible = TRUE,
+            clean = FALSE,
+            drop_blanks = FALSE,
+            drop_missings = FALSE,
+            drop_others = NULL,
+            include_metadata = FALSE,
+            annotate_metadata = FALSE,
+            include_record_summary = FALSE,
+            include_users = FALSE,
+            include_log = FALSE
+          )
+          values$sbc <- sidebar_choices(values$project_data_list)
+          updateSelectizeInput(
+            session = session,
+            inputId = "choose_form",
+            choices = stats::setNames(
+              object = values$project_data_list$metadata$forms$form_name,
+              nm = values$project_data_list$metadata$forms$form_label
+            )
+          )
+          if(!is.null(values$project$transformation)){
+            values$editable_forms_transformation_table <- values$project$transformation$forms %>% as.data.frame(stringsAsFactors = FALSE)
+          }
+          field_names <- values$sbc$field_name %>% unique() %>% vec1_in_vec2(
+            values$project_data_list$metadata$fields$field_name[which(values$project_data_list$metadata$fields$field_type_R %in% c("factor", "integer", "numeric"))]
+          )
+          updateSelectizeInput(
+            session,"choose_group",
+            choices = c(
+              "All Records",
+              # "Custom Records",
+              values$sbc$label[which(values$sbc$field_name %in% field_names)]
+            ),
+            server = TRUE
+          )
+        }
+      }
+
+    })
+  })
+  observeEvent(input$choose_group,{
     if(is_something(input$choose_group)){
       if(length(input$choose_group) == 1){
         if(input$choose_group == "All Records"){
           values$subset_records <- values$all_records
-          filter_field <- NULL
           filter_choices <- NULL
-        } else {
+          filter_field <- NULL
+          } else {
           # if(input$choose_group == "Custom Records"){
           #   values$subset_records <- values$all_records
           #   values$project_data_list$data <- values$project$data
           # }
           # if(!input$choose_group %in% c("All Records","Custom Records")){
           x<- values$sbc[which(values$sbc$label==input$choose_group),]
-          if(nrow(x)>0){
-            DF <- values$project$data[[x$form_name]]
-            filter_field <- values$project$metadata$id_col
-            values$subset_records <- filter_choices <- DF[[values$project$metadata$id_col]][which(DF[[x$field_name]]==x$name)] %>% unique()
-            if(is_something(input$filter_switch)){
-              if(input$filter_switch){
-                filter_field <- x$field_name
-                filter_choices <- x$name
+            if(nrow(x)>0){
+              DF <- values$project_data_list$data[[x$form_name]]
+              filter_field <- values$project$metadata$id_col
+              values$subset_records <- filter_choices <- DF[[values$project$metadata$id_col]][which(DF[[x$field_name]]==x$name)] %>% unique()
+              if(is_something(input$filter_switch)){
+                if(input$filter_switch){
+                  filter_field <- x$field_name
+                  filter_choices <- x$name
+                }
               }
             }
+        }
+        isolate({
+          # filter_field = filter_field,
+          # filter_choices = filter_choices,
+          # # form_names = values$selected_form,
+          # # field_names = input$choose_fields_cat
+          values$project_data_list$data <- REDCapSync:::filter_data_list(
+            data_list = values$project_data_list,
+            filter_field = filter_field,
+            filter_choices = filter_choices
+            # form_names = values$selected_form,
+            # field_names = input$choose_fields_cat
+          )
+          if (input$deidentify_switch) {
+            values$project_data_list$data$data <- REDCapSync:::deidentify_data_list(
+              data_list = values$project_data_list,
+              # date_handling = date_handling
+            )
           }
-        }
-        # filter_field = filter_field,
-        # filter_choices = filter_choices,
-        # # form_names = values$selected_form,
-        # # field_names = input$choose_fields_cat
-        # exclude_identifiers = input$deidentify_switch,
-        values$project_data_list$data <- REDCapSync:::filter_data_list(
-          data_list = values$project_data_list,
-          filter_field = filter_field,
-          filter_choices = filter_choices
-          # form_names = values$selected_form,
-          # field_names = input$choose_fields_cat
-        )
-        if (input$deidentify_switch) {
-          values$project_data_list$data$data <- REDCapSync:::deidentify_data_list(
-            data_list = values$project_data_list
-            # exclude_free_text = exclude_free_text,
-            # date_handling = date_handling
-          )
-        }
-        # if(input$transformation_switch){
-        #   values$project_data_list$metadata <- values$project$transformation$metadata
-        # }else{
-        #   values$project_data_list$metadata <- values$project$metadata
-        # }
-        updateSelectizeInput(
-          session = session,
-          inputId = "choose_form",
-          choices = stats::setNames(
-            object = values$project_data_list$metadata$forms$form_name,
-            nm = values$project_data_list$metadata$forms$form_label
-          )
-        )
+          # if(input$transformation_switch){
+          #   values$project_data_list$metadata <- values$project$transformation$metadata
+          # }else{
+          #   values$project_data_list$metadata <- values$project$metadata
+          # }
+        })
       }
     }
   })
@@ -798,8 +819,8 @@ app_server <- function(input, output, session) {
   })
   observe({
     if(is_something(input$choose_record)){
-      all_forms <- names(values$project_data_list$data)
-      values$project_data_list$data %>% names() %>% lapply(function(form){
+      all_forms <- values$project_data_list$metadata$forms$form_name %>% unique()
+      all_forms %>% lapply(function(form){
         values[[paste0("table___home__", form,"_exists")]]
       })
       isolate({

@@ -42,7 +42,7 @@ run_RosyREDCap <- function(
   if(launch_type == "browser"){
     options$launch.browser <- TRUE
   }
-  if(launch_type == "rstudop_pane"){
+  if(launch_type == "rstudio_pane"){
     options$launch.browser <- .rs.invokeShinyPaneViewer
   }
   if(launch_type == "rstudio_window"){

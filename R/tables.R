@@ -97,7 +97,12 @@ get_labels <- function(DF){
     return(name)
   }) %>% as.character()
 }
-make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY = F,searching = T){
+make_DT_table <- function(DF,
+                          editable = FALSE,
+                          selection = "single",
+                          paging = TRUE,
+                          scrollY = FALSE,
+                          searching = TRUE) {
   if(!is_something(DF)){
     return(
       DT::datatable(
@@ -115,7 +120,7 @@ make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY
   DF %>% DT::datatable(
     selection = selection,
     editable = editable,
-    rownames = F,
+    rownames = FALSE,
     # fillContainer = T,
     # extensions = 'Buttons',
     options = list(
@@ -125,17 +130,17 @@ make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY
       fixedColumns = FALSE,
       ordering = TRUE,
       scrollY = scrollY,
-      scrollX = T,
+      scrollX = TRUE,
       # autoWidth = T,
       searching = searching,
       # dom = 'Bfrtip',
       # buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-      scrollCollapse = F,
-      stateSave = F
+      scrollCollapse = FALSE,
+      stateSave = FALSE
     ),
     class = "cell-border",
-    filter = 'top'
-    # escape = F
+    # filter = 'top',
+    escape = FALSE
   ) %>% DT::formatStyle(
     colnames(DF),
     color = "#000"

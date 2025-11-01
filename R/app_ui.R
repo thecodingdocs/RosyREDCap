@@ -69,7 +69,16 @@ app_ui<- function(request) {
           "input.sb1 === 'data' || input.sb1 === 'group' || input.sb1 === 'record'",
           uiOutput("choose_form_"),
           uiOutput("choose_group_"),
-          uiOutput("deidentify_switch_"),
+          shinyWidgets::switchInput(
+            inputId = "deidentify_switch",
+            label = "Exclude Identifiers",
+            value = TRUE
+          ),
+          shinyWidgets::switchInput(
+            inputId = "exclude_free_text_switch",
+            label = "Exclude Free Text",
+            value = TRUE
+          ),
           uiOutput("transformation_switch_"),
           shinyWidgets::switchInput(
             inputId = "labelled",

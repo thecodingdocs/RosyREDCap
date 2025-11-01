@@ -44,7 +44,8 @@ all_project_to_char_cols <- function(project){
 #' @noRd
 add_redcap_links_table<-function(DF,project){
   if(nrow(DF)>0){
-    DF[[project$metadata$id_col]] <- paste0("<a href='",paste0("https://redcap.miami.edu/redcap_v",project$redcap$version,"/DataEntry/record_home.php?pid=",project$redcap$project_id,"&id=",DF[[project$metadata$id_col]],"&arm=1"),"' target='_blank'>",DF[[project$metadata$id_col]],"</a>")
+    link_vector<- REDCapSync:::add_redcap_links_to_form(DF,project)$redcap_link
+    DF[[project$metadata$id_col]] <- paste0("<a href='",link_vector,"' target='_blank'>",DF[[project$metadata$id_col]],"</a>")
   }
   DF
 }

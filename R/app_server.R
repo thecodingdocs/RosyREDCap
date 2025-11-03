@@ -20,6 +20,8 @@ app_server <- function(input, output, session) {
   values$dt_tables_view_list <- NULL
   values$fields_to_change_input_df <- NULL
   values$dynamic_input_ids <- NULL
+  values$data_list_form_fields_cat <- NULL
+  values$data_list_form_fields_date <- NULL
   # user input project -------
   observeEvent(input$user_adds_project_modal, {
     # display a modal dialog with a header, textinput and action buttons
@@ -310,7 +312,10 @@ app_server <- function(input, output, session) {
       inputId = "choose_form",
       label = "Choose Form",
       selected = NULL,
-      choices = NULL
+      choices = stats::setNames(
+        object = values$project_data_list$metadata$forms$form_name,
+        nm = values$project_data_list$metadata$forms$form_label
+      ) %>% vec1_in_vec2(names(values$project_data_list$data))
     )
   })
   output$choose_field_ <- renderUI({
@@ -327,7 +332,7 @@ app_server <- function(input, output, session) {
       inputId = "choose_fields_cat",
       label = "Choose Fields",
       multiple = TRUE,
-      choices = NULL
+      choices = values$data_list_form_fields_cat
     )
   })
   output$choose_fields_view_ <- renderUI({
@@ -352,7 +357,7 @@ app_server <- function(input, output, session) {
       label = "Choose Group",
       multiple = input$allow_multiple_groups,
       selected = NULL,
-      choices = NULL
+      choices = c("All Records",values$sbc$label)
     )
   })
   output$choose_survival_start_col_ <- renderUI({
@@ -361,7 +366,7 @@ app_server <- function(input, output, session) {
       label = "Start",
       multiple = FALSE,
       selected = NULL,
-      choices = NULL,
+      choices = values$data_list_form_fields_date,
       width = "100%"
     )
   })
@@ -371,7 +376,7 @@ app_server <- function(input, output, session) {
       label = "End",
       multiple = FALSE,
       selected = NULL,
-      choices = NULL,
+      choices = values$data_list_form_fields_date,
       width = "100%"
       )
   })
@@ -381,7 +386,7 @@ app_server <- function(input, output, session) {
       label = "Status",
       multiple = FALSE,
       selected = NULL,
-      choices = NULL,
+      choices = values$data_list_form_fields_cat,
       width = "100%"
     )
   })
@@ -401,7 +406,7 @@ app_server <- function(input, output, session) {
       inputId = "choose_split",
       label = "Choose Split",
       selected = NULL,
-      choices = NULL
+      choices = values$data_list_form_fields_cat
     )
   })
   observeEvent(values$project,{
@@ -417,10 +422,14 @@ app_server <- function(input, output, session) {
       values$sbc <- NULL
       values$fields_to_change_input_df <- NULL
       values$dynamic_input_ids <- NULL
-      values$subset_records <- values$all_records <- values$project$summary$all_records[[values$project$metadata$id_col]]
+      values$data_list_form_fields_cat <- NULL
+      values$data_list_form_fields_date <- NULL
+      values$subset_records <-
+        values$all_records <-
+        values$project$summary$all_records[[values$project$metadata$id_col]]
       updateSelectizeInput(
-        session,
-        "choose_record",
+        session = session,
+        inputId = "choose_record",
         selected = values$subset_records[1],
         choices = values$subset_records,
         server = TRUE
@@ -450,26 +459,74 @@ app_server <- function(input, output, session) {
       field_names <- values$sbc$field_name %>% unique() %>% vec1_in_vec2(
         values$project_data_list$metadata$fields$field_name[which(values$project_data_list$metadata$fields$field_type_R %in% c("factor", "integer", "numeric"))]
       )
-      group_choices <- c(
-        "All Records",
-        # "Custom Records",
-        values$sbc$label[which(values$sbc$field_name %in% field_names)]
-      )
       updateSelectizeInput(
         session,"choose_group",
-        choices = group_choices,
+        choices = c(
+          "All Records",
+          # "Custom Records",
+          values$sbc$label[which(values$sbc$field_name %in% field_names)]
+        ),
         server = TRUE
       )
       choices <- stats::setNames(
         object = values$project_data_list$metadata$forms$form_name,
         nm = values$project_data_list$metadata$forms$form_label
       ) %>% vec1_in_vec2(names(values$project_data_list$data))
+      selected <- choices[1]
+      if("merged" %in% choices){
+        selected <- "merged"
+      }
       updateSelectizeInput(
         session = session,
         inputId = "choose_form",
-        selected = choices[1],
+        selected = selected,
         choices = choices
       )
+      values$data_list_form_fields_cat <- get_field_type_from_data_list(
+        data_list = values$project_data_list,
+        field_type_R = 'factor',
+        form_name = input$choose_form
+      )
+      values$data_list_form_fields_date <- get_field_type_from_data_list(
+        data_list = values$project_data_list,
+        field_type_R = 'date',
+        form_name = input$choose_form
+      )
+      # updateSelectizeInput(
+      #   session = session,
+      #   inputId = "choose_split",
+      #   selected = values$data_list_form_fields_cat[1],
+      #   choices = values$data_list_form_fields_cat,
+      #   server = FALSE
+      # )
+      # updateSelectizeInput(
+      #   session = session,
+      #   inputId = "choose_fields_cat",
+      #   selected = values$data_list_form_fields_cat[1],
+      #   choices = values$data_list_form_fields_cat,
+      #   server = FALSE
+      # )
+      # updateSelectizeInput(
+      #   session = session,
+      #   inputId = "choose_survival_status_col",
+      #   selected = values$data_list_form_fields_cat[1],
+      #   choices = values$data_list_form_fields_cat,
+      #   server = FALSE
+      # )
+      # updateSelectizeInput(
+      #   session = session,
+      #   inputId = "choose_survival_end_col",
+      #   selected = values$data_list_form_fields_date[1],
+      #   choices = values$data_list_form_fields_date,
+      #   server = FALSE
+      # )
+      # updateSelectizeInput(
+      #   session = session,
+      #   inputId = "choose_survival_start_col",
+      #   selected = values$data_list_form_fields_date[1],
+      #   choices = values$data_list_form_fields_date,
+      #   server = FALSE
+      # )
     }
   })
   observeEvent(input$choose_project,{
@@ -496,66 +553,21 @@ app_server <- function(input, output, session) {
       }
     }
   })
-  # observeEvent(input$transformation_switch,ignoreNULL = TRUE,ignoreInit = TRUE,{
-  #   if(!is.null(values$project)){
-  #     message("triggered transformation_switch ",input$transformation_switch)
-  #     if(!is.null(values$project$transformation)){
-  #       if(input$transformation_switch != values$project$internals$is_transformed){
-  #         if(input$transformation_switch){
-  #           # values$project_data_list$metadata <- values$project$transformation$metadata
-  #           #do the transforming
-  #         }else{
-  #           # values$project_data_list$metadata <- values$project$metadata
-  #         }
-  #       }
-  #     }else{
-  #       message("Nothing to do, no project$transformation info! ",input$transformation_switch)
-  #       shinyWidgets::updateSwitchInput(
-  #         inputId = "transformation_switch",value = FALSE, label = "Transformation"
-  #       )
-  #     }
-  #   }
-  # })
   observe({
     input$deidentify_switch
     input$exclude_free_text_switch
     input$transformation_switch
     input$choose_group
-    filter_choices <- NULL
-    filter_field <- NULL
     message("trigger switch")
     isolate({
+      filter_choices <- NULL
+      filter_field <- NULL
       if(is_something(values$project)){
         if(is_something(input$choose_group)){
-          if(length(input$choose_group) == 1){
-            if(input$choose_group == "All Records"){
-              values$subset_records <- values$all_records
-            } else {
-              # if(input$choose_group == "Custom Records"){
-              #   values$subset_records <- values$all_records
-              #   values$project_data_list$data <- values$project$data
-              # }
-              # if(!input$choose_group %in% c("All Records","Custom Records")){
-              x<- values$sbc[which(values$sbc$label==input$choose_group),]
-              if(nrow(x)>0){
-                DF <- values$project_data_list$data[[x$form_name]]
-                filter_field <- values$project$metadata$id_col
-                values$subset_records <- filter_choices <- DF[[values$project$metadata$id_col]][which(DF[[x$field_name]]==x$name)] %>% unique()
-                if(is_something(input$filter_switch)){
-                  if(input$filter_switch){
-                    filter_field <- x$field_name
-                    filter_choices <- x$name
-                  }
-                }
-              }
-            }
-          }
           if(is_something(input$transformation_switch)){
             values$project_data_list <- generate_project_summary(
               project = values$project,
               transformation_type = input$transformation_switch,
-              filter_field = filter_field,
-              filter_choices = filter_choices,
               labelled = input$labelled,
               filter_strict = FALSE,
               exclude_identifiers = input$deidentify_switch,
@@ -572,20 +584,44 @@ app_server <- function(input, output, session) {
               include_users = FALSE,
               include_log = FALSE
             )
-            choices <- stats::setNames(
-              object = values$project_data_list$metadata$forms$form_name,
-              nm = values$project_data_list$metadata$forms$form_label
-            ) %>% vec1_in_vec2(names(values$project_data_list$data))
-            # selected <- choices[1]
-            # if(is_something(input$choose_form)){
-            #   if(input$choose_form %in% choices){
-            #     selected <- input$choose_form
-            #   }
-            # }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_form",
-              choices = choices
+            if(length(input$choose_group) == 1){
+              sbc <- sidebar_choices(values$project_data_list)
+              if(!identical(sbc,values$sbc)){
+                values$sbc <- sbc
+              }
+              if(input$choose_group == "All Records"){
+                values$subset_records <- values$all_records
+              } else {
+                x <- values$sbc[which(values$sbc$label==input$choose_group),]
+                if(nrow(x)>0){
+                  DF <- values$project_data_list$data[[x$form_name]]
+                  filter_field <- values$project$metadata$id_col
+                  values$subset_records <- filter_choices <- DF[[values$project$metadata$id_col]][which(DF[[x$field_name]]==x$name)] %>% unique()
+                  if(is_something(input$filter_switch)){
+                    if(input$filter_switch){
+                      filter_field <- x$field_name
+                      filter_choices <- x$name
+                    }
+                  }
+                }
+                if (!is.null(filter_field) && !is.null(filter_choices)){
+                  values$project_data_list$data <- values$project_data_list %>%
+                    REDCapSync:::filter_data_list(
+                      filter_field = filter_field,
+                      filter_choices = filter_choices
+                    )
+                }
+              }
+            }
+            values$data_list_form_fields_cat <- get_field_type_from_data_list(
+              data_list = values$project_data_list,
+              field_type_R = 'factor',
+              form_name = input$choose_form
+            )
+            values$data_list_form_fields_date <- get_field_type_from_data_list(
+              data_list = values$project_data_list,
+              field_type_R = 'date',
+              form_name = input$choose_form
             )
           }
         }
@@ -594,10 +630,13 @@ app_server <- function(input, output, session) {
   })
   debounced_tabs <- debounce(reactive(input$tabs), 250)  # 250ms delay
   observeEvent(debounced_tabs(), {
+    values$selected_form <-
+      input$tabs %>%
+      form_labels_to_form_names_alt(values$project_data_list$metadata)
     updateSelectizeInput(
-      session,
-      "choose_form",
-      selected = input$tabs %>% form_labels_to_form_names_alt(values$project_data_list$metadata)
+      session = session,
+      inputId = "choose_form",
+      selected = values$selected_form
     )
   }, ignoreInit = TRUE)
   observeEvent(values$subset_records,{
@@ -611,148 +650,152 @@ app_server <- function(input, output, session) {
       }
     }
     updateSelectizeInput(
-      session,
-      "choose_record",
+      session = session,
+      inputId = "choose_record",
       selected = selected,
       choices = values$subset_records,
       server = TRUE
     )
   })
+  # observeEvent(values$data_list_form_fields_cat,{
+  #   message("values$data_list_form_fields_cat changed!")
+  #   selected <- "no_choice"
+  #   if(is_something(input$choose_split)){
+  #     if(input$choose_split %in% values$data_list_form_fields_cat){
+  #       selected <- input$choose_split
+  #     }
+  #   }
+  #   updateSelectizeInput(
+  #     session = session,
+  #     inputId = "choose_split",
+  #     selected = selected,
+  #     choices = values$data_list_form_fields_cat,
+  #     server = TRUE
+  #   )
+  # })
   # Update the tabset panel when a new tab is selected in the selectInput
-  observe({
+  observeEvent(input$sb1,ignoreNULL = TRUE,{
     if(is_something(values$project)){
       if(input$sb1 %in% c("group","record")){
         message("input$sb1:",input$sb1)
         if(is_something(input$choose_form)){
           updateTabsetPanel(
-            session,
-            "tabs",
+            session = session,
+            inputId = "tabs",
             selected = input$choose_form %>% form_names_to_form_labels_alt(values$project_data_list$metadata)
           )
-        }
-        if(is_something(values$project_data_list$data)){
-          DF <- values$project_data_list$metadata$fields
-          field_names_view <- DF$field_name[which(!DF$field_type %in% c("description"))]
-          field_names_cat <- DF$field_name[which(DF$field_type_R %in% c("factor", "integer", "numeric"))]
-          field_names_cat <- colnames(values$project_data_list$data[[input$choose_form]]) %>% vec1_in_vec2(field_names_cat)
-          field_names_dates <- DF$field_name[which(DF$field_type_R %in% c("date"))]
-          field_names_dates <- colnames(values$project_data_list$data[[input$choose_form]]) %>% vec1_in_vec2(field_names_dates)
-           # field_names_view <- colnames(values$project_data_list$data[[input$choose_form]]) %>% vec1_in_vec2(field_names_view)
-          field_labels_cat <- field_names_cat %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
-          field_labels_view <- field_names_view %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
-          field_labels_dates <- field_names_dates %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
-          field_names_change <- DF$field_name[which(
-            (!DF$field_type %in% c("description","file")) &
-              DF$in_original_redcap &
-              DF$form_name == input$choose_form &
-              DF$field_name != values$project$metadata$id_col
-          )]
-          field_labels_change <- field_names_change %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
-          if(is_something(field_names_cat)){
-            field_choices_cat <- c(
-              stats::setNames("no_choice","None"),
-              stats::setNames(field_names_cat,field_labels_cat)
-            )
-            selected <- "no_choice"
-            if(is_something(input$choose_split)){
-              if(input$choose_split %in% field_names_cat)selected <- input$choose_split
-            }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_split",
-              selected = selected,
-              choices = field_choices_cat
-            )
-            selected <- NULL
-            if(is_something(input$choose_fields_cat)){
-              if(all(input$choose_fields_cat %in% field_names_cat))selected <- input$choose_fields_cat
-            }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_fields_cat",
-              selected = selected,
-              choices = field_choices_cat
-            )
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_survival_status_col",
-              selected = selected,
-              choices = field_choices_cat
-            )
-          }
-          if(is_something(field_names_view)){
-            selected <- NULL
-            if(is_something(input$choose_fields_view)){
-              if(all(input$choose_fields_view %in% field_names_view))selected <- input$choose_fields_view
-            }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_fields_view",
-              selected = selected,
-              choices = stats::setNames(field_names_view,field_labels_view)
-            )
-          }
-          if(is_something(field_names_change)){
-            selected <- NULL
-            if(is_something(input$choose_fields_change)){
-              if(all(input$choose_fields_change %in% field_names_change))selected <- input$choose_fields_change
-            }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_fields_change",
-              selected = selected,
-              choices =  stats::setNames(field_names_change,field_labels_change)
-            )
-          }
-          if(is_something(field_names_dates)){
-            field_names_dates <- c(
-              stats::setNames("no_choice","None"),
-              stats::setNames(field_names_dates,field_labels_dates)
-            )
-            selected <- "no_choice"
-            if(is_something(input$choose_split)){
-              if(input$choose_split %in% field_names_cat)selected <- input$choose_split
-            }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_split",
-              selected = selected,
-              choices = field_choices_cat
-            )
-            selected <- NULL
-            if(is_something(input$choose_fields_cat)){
-              if(all(input$choose_fields_cat %in% field_names_cat))selected <- input$choose_fields_cat
-            }
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_fields_cat",
-              selected = selected,
-              choices = field_choices_cat
-            )
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_survival_start_col",
-              selected = selected,
-              choices = field_names_dates
-            )
-            print(field_names_dates)
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_survival_end_col",
-              selected = selected,
-              choices = field_names_dates
-            )
-            updateSelectizeInput(
-              session = session,
-              inputId = "choose_survival_status_col",
-              selected = selected,
-              choices = field_choices_cat
-            )
-          }
         }
       }
     }
   })
+  # observe({
+  #   if(is_something(values$project)){
+  #     if(input$sb1 %in% c("group","record")){
+  #       message("input$sb1:",input$sb1)
+  #       if(is_something(input$choose_form)){
+  #         updateTabsetPanel(
+  #           session,
+  #           "tabs",
+  #           selected = input$choose_form %>% form_names_to_form_labels_alt(values$project_data_list$metadata)
+  #         )
+  #       }
+  #       if(is_something(values$project_data_list$data)){
+  #         field_choices_date <- get_field_type_from_data_list(
+  #           data_list = values$project_data_list,
+  #           field_type_R = 'date',
+  #           form_name = input$choose_form
+  #         )
+  #         field_choices_cat <- get_field_type_from_data_list(
+  #           data_list = values$project_data_list,
+  #           field_type_R = 'factor',
+  #           form_name = input$choose_form
+  #         )
+  #         fields <- values$project_data_list$metadata$fields
+  #         field_names_view <- fields$field_name[which(!fields$field_type %in% c("description"))]
+  #         field_labels_view <- field_names_view %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
+  #         field_names_change <- fields$field_name[which(
+  #           (!fields$field_type %in% c("description","file")) &
+  #             fields$in_original_redcap &
+  #             fields$form_name == input$choose_form &
+  #             fields$field_name != values$project$metadata$id_col
+  #         )]
+  #         field_labels_change <- field_names_change %>% field_names_to_field_labels_alt(values$project_data_list$metadata)
+  #         # if(is_something(field_choices_cat)){
+  #         #   selected <- "no_choice"
+  #         #   if(is_something(input$choose_split)){
+  #         #     if(input$choose_split %in% field_choices_cat){
+  #         #       selected <- input$choose_split
+  #         #     }
+  #         #   }
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_split",
+  #         #     selected = selected,
+  #         #     choices = field_choices_cat
+  #         #   )
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_survival_status_col",
+  #         #     selected = selected,
+  #         #     choices = field_choices_cat
+  #         #   )
+  #         #   selected <- NULL
+  #         #   if(is_something(input$choose_fields_cat)){
+  #         #     if(all(input$choose_fields_cat %in% field_choices_cat)){
+  #         #       selected <- input$choose_fields_cat
+  #         #     }
+  #         #   }
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_fields_cat",
+  #         #     selected = selected,
+  #         #     choices = field_choices_cat
+  #         #   )
+  #         # }
+  #         # if(is_something(field_names_view)){
+  #         #   selected <- NULL
+  #         #   if(is_something(input$choose_fields_view)){
+  #         #     if(all(input$choose_fields_view %in% field_names_view)){
+  #         #       selected <- input$choose_fields_view
+  #         #     }
+  #         #   }
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_fields_view",
+  #         #     selected = selected,
+  #         #     choices = stats::setNames(field_names_view,field_labels_view)
+  #         #   )
+  #         # }
+  #         # if(is_something(field_names_change)){
+  #         #   selected <- NULL
+  #         #   if(is_something(input$choose_fields_change)){
+  #         #     if(all(input$choose_fields_change %in% field_names_change))selected <- input$choose_fields_change
+  #         #   }
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_fields_change",
+  #         #     selected = selected,
+  #         #     choices =  stats::setNames(field_names_change,field_labels_change)
+  #         #   )
+  #         # }
+  #         # if(is_something(field_choices_date)){
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_survival_start_col",
+  #         #     # selected = selected,
+  #         #     choices = field_choices_date
+  #         #   )
+  #         #   updateSelectizeInput(
+  #         #     session = session,
+  #         #     inputId = "choose_survival_end_col",
+  #         #     # selected = selected,
+  #         #     choices = field_choices_date
+  #         #   )
+  #         # }
+  #       }
+  #     }
+  #   }
+  # })
   observeEvent(input$choose_form,{
     selected <-  input$choose_form %>% form_names_to_form_labels_alt(values$project_data_list$metadata)
     if(is_something(selected)){
@@ -778,7 +821,13 @@ app_server <- function(input, output, session) {
         if(!identical(selected,expected)){
           selected <- unique(data_col[[selected]])
           message("valid_click: ", selected)
-          updateSelectizeInput(session,"choose_project",selected = selected,choices = data_col,server = TRUE)
+          updateSelectizeInput(
+            session = session,
+            inputId = "choose_project",
+            selected = selected,
+            choices = data_col,
+            server = TRUE
+          )
         }
       }
     })
@@ -789,9 +838,9 @@ app_server <- function(input, output, session) {
       all_forms %>% lapply(function(form){
         values[[paste0("table___home__", form,"_exists")]]
       })
+      message("input$tabs : ", input$tabs )
+      values$selected_form <- input$tabs %>% form_labels_to_form_names_alt(values$project_data_list$metadata)
       isolate({
-        message("input$tabs : ", input$tabs )
-        values$selected_form <- input$tabs %>% form_labels_to_form_names_alt(values$project_data_list$metadata)
         message("values$selected_form: ",values$selected_form)
         if(is_something(values$selected_form)) {
           values$active_table_id <- paste0("table___home__", values$selected_form)

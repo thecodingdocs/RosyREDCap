@@ -191,3 +191,23 @@ field_names_to_field_labels_alt <- function(field_names, metadata) {
     )
   ]
 }
+#' @noRd
+get_field_type_from_data_list <- function(data_list,
+                                          field_type_R,
+                                          form_name = NULL,
+                                          include_no_choice = TRUE) {
+  fields <- data_list$metadata$fields
+  field_names <- fields$field_name[which(fields$field_type_R %in% field_type_R)]
+  field_labels <- field_names %>% field_names_to_field_labels_alt(data_list$metadata)
+  field_names <- stats::setNames(field_names,field_labels)
+  if(!is.null(form_name)){
+    field_names <- field_names %>% vec1_in_vec2(colnames(data_list$data[[form_name]]))
+  }
+  if(include_no_choice){
+    field_names <- c(
+      stats::setNames("no_choice","None"),
+      field_names
+    )
+  }
+  field_names
+}

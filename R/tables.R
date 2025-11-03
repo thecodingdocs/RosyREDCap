@@ -97,6 +97,14 @@ get_labels <- function(DF){
     return(name)
   }) %>% as.character()
 }
+get_field_names_date <- function(data_list){
+  #assert
+  the_rows <- which(data_list$metadata$fields$field_type_R == "date")
+  if(length(the_rows)==0){
+    return(NULL)
+  }
+  data_list$metadata$fields$field_name[the_rows]
+}
 make_DT_table <- function(DF,
                           editable = FALSE,
                           selection = "single",

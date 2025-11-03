@@ -733,13 +733,14 @@ app_server <- function(input, output, session) {
               session = session,
               inputId = "choose_survival_start_col",
               selected = selected,
-              choices = field_choices_cat
+              choices = field_names_dates
             )
+            print(field_names_dates)
             updateSelectizeInput(
               session = session,
               inputId = "choose_survival_end_col",
               selected = selected,
-              choices = field_choices_cat
+              choices = field_names_dates
             )
             updateSelectizeInput(
               session = session,
@@ -1153,20 +1154,16 @@ app_server <- function(input, output, session) {
     }
   })
   output$survival <- renderPlot({
-    if(is_something(input$choose_form))
+    if(is_something(input$choose_form)){
       DF <- values$project_data_list$data[[input$choose_form]]
+    }
     # print(input$choose_fields_cat)
     # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
     # print(cols)
     # # fields_to_forms
-    if(length(input$choose_fields_cat)>0){
-      # cols <- input$choose_fields_cat %>% vec1_in_vec2(colnames(DF))
-      # DF[,cols, drop = FALSE] %>%
-      #   REDCapSync:::clean_form(
-      #     fields = values$project_data_list$metadata,
-      #     drop_blanks = TRUE
-      #   ) %>%
-        DF <- survival::lung
+    date_fields <- get_field_names_date(values$project_data_list)
+    if(length(date_fields)>0){
+      DF <- survival::lung
       DF$time_months <- DF$time/28
       DF$deceased_date
       make_survival(

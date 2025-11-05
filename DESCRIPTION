@@ -39,6 +39,7 @@ Imports:
     plotly,
     RColorBrewer,
     REDCapSync,
+    rmarkdown,
     scales,
     shiny (>= 1.8.1.1),
     shinydashboard,
@@ -49,10 +50,10 @@ Imports:
     survival,
     survminer,
     table1,
+    utils,
     visNetwork
 Suggests: 
     knitr,
-    rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr

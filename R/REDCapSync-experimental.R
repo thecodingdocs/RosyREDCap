@@ -663,6 +663,8 @@ edit_REDCap_while_viewing <- function(project,
       upload_form_to_REDCap(project)
   }
 }
+#' @title add_fields_to_data_list
+#' @export
 add_fields_to_data_list <- function(data_list,transformation){
   metadata <- data_list$metadata
   named_df_list <- data_list$data

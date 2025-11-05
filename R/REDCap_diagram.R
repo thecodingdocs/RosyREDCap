@@ -266,7 +266,7 @@ create_node_edge_REDCap <- function(
         level = level,
         # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         title = event_mapping$form %>% lapply(function(x){
-          paste0("<p><b>",x,"</b><br>",paste0(REDCapSync:::form_names_to_field_names(x,project),collapse = "<br>"),"</p>")
+          paste0("<p><b>",x,"</b><br>",paste0(form_names_to_field_names(x,project),collapse = "<br>"),"</p>")
         }) %>% unlist(),
         shape = "box", # entity
         style = "filled",
@@ -286,7 +286,7 @@ create_node_edge_REDCap <- function(
         level = level,
         # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
         title = forms$form_name %>% lapply(function(x){
-          paste0("<p><b>",x,"</b><br>",paste0(REDCapSync:::form_names_to_field_names(x,project),collapse = "<br>"),"</p>")
+          paste0("<p><b>",x,"</b><br>",paste0(form_names_to_field_names(x,project),collapse = "<br>"),"</p>")
         }) %>% unlist(),
         shape = "box", # entity
         style = "filled",

@@ -54,7 +54,7 @@ add_project_field <- function(
     identifier = "",
     units = NA,
     data_func = NA) {
-  project <- assert_blank_project(project, silent = TRUE)
+  project <- REDCapSync:::assert_blank_project(project, silent = TRUE)
   # if(!project$data %>% is_something())stop("Must have transformed data to add new vars.")
   fields <- project$metadata$fields
   in_original_redcap <- field_name %in% fields$field_name
@@ -66,7 +66,7 @@ add_project_field <- function(
     if (missing(form_name)) form_name <- original_fields_row$form_name
     if (missing(field_type)) {
       field_type <- original_fields_row$field_type
-      field_type_R <- original_fields_row$field_type_R
+      field_type_R <- REDCapSync:::field_types_to_R(field_type)
     }
     if (is.na(field_label)) field_label <- original_fields_row$field_label
     if (is.na(select_choices_or_calculations)) {
@@ -102,7 +102,7 @@ add_project_field <- function(
     units = as.character(units),
     in_original_redcap = as.logical(in_original_redcap),
     field_label_short = as.character(field_label),
-    field_func = function_to_string(data_func),
+    # field_func = function_to_string(data_func),
     stringsAsFactors = FALSE
   )
   row_match <- which(project$transformation$fields$field_name == field_name)

@@ -693,7 +693,7 @@ add_fields_to_data_list <- function(data_list,transformation){
         ref_cols <- metadata$form_key_cols[[form_name]]
         new <- old <- named_df_list[[form_name]][, c(ref_cols, field_name)]
         new[[field_name]] <- field
-        form <- REDCapSync:::find_form_diff2(
+        form <- find_form_diff2(
           new = new,
           old = old,
           ref_cols = ref_cols,

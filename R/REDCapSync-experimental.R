@@ -184,6 +184,39 @@ add_default_fields <- function(project) {
   invisible(project)
 }
 #' @noRd
+find_match <- function(x, ref, count_only = FALSE) {
+  final_match <- list()
+  final_match[seq_along(x)] <- NA
+  next_match <- match(x, ref)
+  next_match_index <- which(!is.na(next_match))
+  while (length(next_match_index) > 0L) {
+    final_match[next_match_index] <-
+      next_match_index %>% lapply(function(index) {
+        out <- NULL
+        if (all(is.na(final_match[[index]]))) {
+          out <- next_match[index]
+        } else {
+          out <- c(final_match[[index]], next_match[index])
+        }
+        out
+      })
+    ref[next_match[which(!is.na(next_match))]] <- NA
+    next_match <- match(x, ref)
+    next_match_index <- which(!is.na(next_match))
+  }
+  if (count_only) {
+    final_match <- final_match %>%
+      lapply(function(x) {
+        if (is.na(x[1])) {
+          return(NA)
+        }
+        length(x)
+      }) %>%
+      unlist()
+  }
+  final_match
+}
+#' @noRd
 combine_project_fields <- function(project) {
   the_names <- project$transformation$fields$field_name
   fields <- project$metadata$fields

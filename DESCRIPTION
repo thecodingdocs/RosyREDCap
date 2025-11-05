@@ -40,6 +40,7 @@ Imports:
     RColorBrewer,
     REDCapSync,
     rmarkdown,
+    RosyUtils,
     scales,
     shiny (>= 1.8.1.1),
     shinydashboard,

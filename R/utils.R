@@ -152,6 +152,34 @@ split_choices <- function(x){
 redcap_field_types_not_in_data <- c(
   "descriptive", "checkbox"
 )
+#' @noRd
+form_names_to_form_labels <- function(form_names, project) {
+  project$metadata$forms$form_label[
+    match(
+      x = form_names,
+      table = project$metadata$forms$form_name
+    )
+  ]
+}
+#' @noRd
+form_labels_to_form_names <- function(form_labels, project) {
+  project$metadata$forms$form_name[
+    match(
+      x = form_labels,
+      table = project$metadata$forms$form_label
+    )
+  ]
+}
+#' @noRd
+field_names_to_field_labels <- function(field_names, project) {
+  project$metadata$fields$field_label[
+    match(
+      x = field_names,
+      table = project$metadata$fields$field_name
+    )
+  ]
+}
+#' @noRd
 form_names_to_field_names_alt <- function(form_names, project, original_only = FALSE) {
   field_names <- NULL
   if (original_only) {

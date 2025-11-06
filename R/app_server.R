@@ -191,8 +191,8 @@ app_server <- function(input, output, session) {
           drop_missings = FALSE,
           drop_others = NULL,
           include_metadata = FALSE,
-          annotate_metadata = FALSE,
-          include_record_summary = FALSE,
+          annotate_from_log = FALSE,
+          include_records = FALSE,
           include_users = FALSE,
           include_log = FALSE,
           internal_use = TRUE
@@ -448,8 +448,8 @@ app_server <- function(input, output, session) {
         drop_missings = FALSE,
         drop_others = NULL,
         include_metadata = FALSE,
-        annotate_metadata = FALSE,
-        include_record_summary = FALSE,
+        annotate_from_log = FALSE,
+        include_records = FALSE,
         include_users = FALSE,
         include_log = FALSE,
         internal_use = TRUE
@@ -581,8 +581,8 @@ app_server <- function(input, output, session) {
               drop_missings = FALSE,
               drop_others = NULL,
               include_metadata = FALSE,
-              annotate_metadata = FALSE,
-              include_record_summary = FALSE,
+              annotate_from_log = FALSE,
+              include_records = FALSE,
               include_users = FALSE,
               include_log = FALSE,
               internal_use = TRUE

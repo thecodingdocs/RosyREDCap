@@ -239,8 +239,13 @@ app_ui<- function(request) {
                   column(4, uiOutput("choose_survival_status_col_"))
                 ),
                 fluidRow(
-                  column(3, selectInput("survival_units", "Units", choices = c("days", "months", "years"), selected = "years")),
-                  column(9, uiOutput("choose_survival_xlim_"))
+                  column(3,
+                         selectInput(
+                           "survival_units",
+                           "Units",
+                           choices = c("days", "months", "years"),
+                           selected = "years"
+                         )),                   column(9, uiOutput("choose_survival_xlim_"))
                 ),
                 plotOutput("survival"),
                 actionButton("survival_save_ab","Save Plot File")

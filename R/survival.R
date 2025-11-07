@@ -17,7 +17,7 @@ make_survival <- function(
     DF,
     start_col,
     end_col,
-    units = "months" ,
+    units = "months",
     time_col,
     status_col,
     strat_col,
@@ -42,6 +42,7 @@ make_survival <- function(
       floor = F,
       units = units
     )#imputation here?
+    time_col <- "time_col"
   }else{
     DF[["time_col"]] <- DF[[time_col]]
   }

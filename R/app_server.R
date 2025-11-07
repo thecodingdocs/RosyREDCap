@@ -1209,21 +1209,15 @@ app_server <- function(input, output, session) {
     if(is_something(input$choose_form)){
       DF <- values$project_data_list$data[[input$choose_form]]
     }
-    # print(input$choose_fields_cat)
-    # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
-    # print(cols)
-    # # fields_to_forms
     date_fields <- get_field_names_date(values$project_data_list)
     if(length(date_fields)>0){
-      DF <- survival::lung
-      DF$time_months <- DF$time/28
-      DF$deceased_date
       make_survival(
         DF,
-        time_col = "time_months",
-        status_col = "status",
-        units = "months",
-        strat_col = "sex"
+        start_col = input$choose_survival_start_col,
+        end_col = input$choose_survival_end_col,
+        status_col = input$choose_survival_status_col,
+        units = input$survival_units,
+        strat_col = input$choose_split
       ) %>%
         return()
       # mtcars  %>% plotly_parcats(remove_missing = FALSE) %>% return()

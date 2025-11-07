@@ -616,16 +616,6 @@ app_server <- function(input, output, session) {
                 }
               }
             }
-            values$data_list_form_fields_cat <- get_field_type_from_data_list(
-              data_list = values$project_data_list,
-              field_type_R = 'factor',
-              form_name = input$choose_form
-            )
-            values$data_list_form_fields_date <- get_field_type_from_data_list(
-              data_list = values$project_data_list,
-              field_type_R = 'date',
-              form_name = input$choose_form
-            )
           }
         }
       }
@@ -808,6 +798,16 @@ app_server <- function(input, output, session) {
         session = session,
         inputId = "tabs",
         selected = selected
+      )
+      values$data_list_form_fields_cat <- get_field_type_from_data_list(
+        data_list = values$project_data_list,
+        field_type_R = 'factor',
+        form_name = input$choose_form
+      )
+      values$data_list_form_fields_date <- get_field_type_from_data_list(
+        data_list = values$project_data_list,
+        field_type_R = 'date',
+        form_name = input$choose_form
       )
       # }
     }

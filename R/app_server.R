@@ -154,7 +154,7 @@ app_server <- function(input, output, session) {
       return(h3("No tables available to display."))
     } else {
       if(input$view_switch_text){
-        REDCapSync:::form_list_to_text(form_list = values$dt_tables_view_list,project = values$project) %>% HTML()
+        form_list_to_text(form_list = values$dt_tables_view_list,project = values$project) %>% HTML()
       }else{
         # Otherwise, generate the list of tables
         lapply(seq_along(values$dt_tables_view_list), function(i) {

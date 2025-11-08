@@ -489,3 +489,47 @@ find_upload_diff <- function(to_be_uploaded,
   message("No upload updates!")
   invisible(NULL)
 }
+#' @noRd
+form_list_to_text <- function(form_list,
+                              project,
+                              drop_nas = TRUE,
+                              clean_names = TRUE) {
+  output_list <- NULL
+  for (i in seq_along(form_list)) {
+    form <- form_list[[i]]
+    the_raw_name <- names(form_list)[[i]]
+    the_name <- the_raw_name
+    if (clean_names)
+      the_name <- project$metadata$forms$form_label[which(project$metadata$forms$form_name == the_raw_name)]
+    df_name <- paste0("----- ", the_name, " Table -----")
+    output_list <- output_list %>%
+      append(paste0("&nbsp;&nbsp;<strong>", df_name, "</strong><br>"))
+    key_col_names <- project$metadata$form_key_cols[[the_raw_name]]
+    for (j in seq_len(nrow(form))) {
+      for (col_name in colnames(form)) {
+        entry <- form[j, col_name]
+        if (!col_name %in% key_col_names) {
+          if (!is.na(entry) || !drop_nas) {
+            entry <- gsub("\\n", "<br>", entry)
+            col_name_clean <- col_name
+            if (clean_names)
+              col_name_clean <- project$metadata$fields$field_label[which(project$metadata$fields$field_name == col_name)]
+            output_list <- output_list %>%
+              append(
+                paste0(
+                  "&nbsp;&nbsp;<strong>",
+                  col_name_clean,
+                  ":</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;",
+                  entry,
+                  "<br>"
+                )
+              )
+          }
+        }
+      }
+      # output_list <- c(output_list, "<br>")
+    }
+    output_list <- c(output_list, "<br>")
+  }
+  output_list
+}

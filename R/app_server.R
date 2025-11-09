@@ -22,6 +22,7 @@ app_server <- function(input, output, session) {
   values$dynamic_input_ids <- NULL
   values$data_list_form_fields_cat <- NULL
   values$data_list_form_fields_date <- NULL
+  values$data_list_form_fields_int <- NULL
   # user input project -------
   observeEvent(input$user_adds_project_modal, {
     # display a modal dialog with a header, textinput and action buttons
@@ -387,7 +388,7 @@ app_server <- function(input, output, session) {
       label = "Status",
       multiple = FALSE,
       selected = NULL,
-      choices = values$data_list_form_fields_cat,
+      choices = values$data_list_form_fields_int,
       width = "100%"
     )
   })
@@ -425,6 +426,7 @@ app_server <- function(input, output, session) {
       values$dynamic_input_ids <- NULL
       values$data_list_form_fields_cat <- NULL
       values$data_list_form_fields_date <- NULL
+      values$data_list_form_fields_int <- NULL
       values$subset_records <-
         values$all_records <-
         values$project$summary$all_records[[values$project$metadata$id_col]]
@@ -492,6 +494,11 @@ app_server <- function(input, output, session) {
       values$data_list_form_fields_date <- get_field_type_from_data_list(
         data_list = values$project_data_list,
         field_type_R = 'date',
+        form_name = input$choose_form
+      )
+      values$data_list_form_fields_int <- get_field_type_from_data_list(
+        data_list = values$project_data_list,
+        field_type_R = 'integer',
         form_name = input$choose_form
       )
       # updateSelectizeInput(
@@ -807,6 +814,11 @@ app_server <- function(input, output, session) {
       values$data_list_form_fields_date <- get_field_type_from_data_list(
         data_list = values$project_data_list,
         field_type_R = 'date',
+        form_name = input$choose_form
+      )
+      values$data_list_form_fields_int <- get_field_type_from_data_list(
+        data_list = values$project_data_list,
+        field_type_R = 'integer',
         form_name = input$choose_form
       )
       # }

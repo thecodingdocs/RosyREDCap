@@ -58,16 +58,18 @@ make_survival <- function(
   legend.title <- NULL
   legend.labs <- NULL
   if(!missing(strat_col)){
-    legend.title <- strat_col
-    x<- attr(DF[[strat_col]],"label")
-    if(!is.null(x))legend.title <- x
-    DF[["strat_col"]] <- DF[[strat_col]]
-    fit <- survival::survfit(survival::Surv(time_col,status_col) ~ strat_col, data = DF)
-    if(is.factor(DF[[strat_col]])){
-      legend.labs <- levels(DF[[strat_col]])
-      legend.labs <- vec1_in_vec2(legend.labs,unique(DF[[strat_col]]))
-    }else{
-      legend.labs <- unique(DF[[strat_col]])
+    if(!is.null(strat_col)){
+      legend.title <- strat_col
+      x<- attr(DF[[strat_col]],"label")
+      if(!is.null(x))legend.title <- x
+      DF[["strat_col"]] <- DF[[strat_col]]
+      fit <- survival::survfit(survival::Surv(time_col,status_col) ~ strat_col, data = DF)
+      if(is.factor(DF[[strat_col]])){
+        legend.labs <- levels(DF[[strat_col]])
+        legend.labs <- vec1_in_vec2(legend.labs,unique(DF[[strat_col]]))
+      }else{
+        legend.labs <- unique(DF[[strat_col]])
+      }
     }
   }else{
     fit <- survival::survfit(survival::Surv(time_col,status_col) ~ 1, data = DF)

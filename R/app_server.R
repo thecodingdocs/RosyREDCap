@@ -1223,13 +1223,19 @@ app_server <- function(input, output, session) {
     }
     date_fields <- get_field_names_date(values$project_data_list)
     if(length(date_fields)>0){
+      strat_col <- NULL
+      if(!is.null(input$choose_split)){
+        if(input$choose_split!= "no_choice"){
+          strat_col <- input$choose_split
+        }
+      }
       make_survival(
         DF,
         start_col = input$choose_survival_start_col,
         end_col = input$choose_survival_end_col,
         status_col = input$choose_survival_status_col,
         units = input$survival_units,
-        strat_col = input$choose_split
+        strat_col = strat_col
       ) %>%
         return()
       # mtcars  %>% plotly_parcats(remove_missing = FALSE) %>% return()

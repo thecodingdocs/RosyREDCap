@@ -1,4 +1,4 @@
-ggsave_workaround <- function(g){
+ggsave_workaround <- function(g) {
   survminer:::.build_ggsurvplot(
     x = g,
     surv.plot.height = NULL,
@@ -6,93 +6,97 @@ ggsave_workaround <- function(g){
     ncensor.plot.height = NULL
   )
 }
-font_maker<-function(size=12,style="bold",color="black"){
+font_maker <- function(size = 12,
+                       style = "bold",
+                       color = "black") {
   styles <- c("plain", "bold", "italic", "bold.italic")
-  if(!style %in% styles)stop("style must be of type: ", styles %>% paste0(collapse = ", "))
-  c(as.numeric(size),as.character(style),as.character(color))
+  if (!style %in% styles)
+    stop("style must be of type: ", styles %>% paste0(collapse = ", "))
+  c(as.numeric(size), as.character(style), as.character(color))
 }
 #' @title make_survival
 #' @export
-make_survival <- function(
-    DF,
-    start_col,
-    end_col,
-    units = "months",
-    time_col,
-    status_col,
-    strat_col,
-    allowed_levels,
-    pval = T,
-    pval.coord=c(0, 0.25),
-    risk.table = T,
-    title = NULL,
-    palette = NULL,
-    conf.int = T,
-    xlim = NULL,
-    legend.position = "top",
-    tables.height = 0.25,
-    show_stats = FALSE
-){
-  if(!is.data.frame(DF))stop("DF has to be a data.frame")
+make_survival <- function(DF,
+                          start_col,
+                          end_col,
+                          units = "months",
+                          time_col,
+                          status_col,
+                          strat_col,
+                          allowed_levels,
+                          pval = TRUE,
+                          pval.coord = c(0, 0.25),
+                          risk.table = TRUE,
+                          title = NULL,
+                          palette = NULL,
+                          conf.int = TRUE,
+                          xlim = NULL,
+                          legend.position = "top",
+                          tables.height = 0.25,
+                          show_stats = FALSE) {
+  if (!is.data.frame(DF))
+    stop("DF has to be a data.frame")
   DF_ori <- DF
-  if(missing(time_col)){
+  if (missing(time_col)) {
     DF[["time_col"]] <- age(
       dob = DF[[start_col]],
       age.day = DF[[end_col]],
-      floor = F,
+      floor = FALSE,
       units = units
     )#imputation here?
     time_col <- "time_col"
-  }else{
+  } else{
     DF[["time_col"]] <- DF[[time_col]]
   }
   DF[["status_col"]] <- DF[[status_col]]
   vars <-  c("time_col", "status_col")
-  if(!missing(strat_col)){
+  if (!missing(strat_col)) {
     vars <-  append(vars, strat_col)
-    if(!missing(allowed_levels)){
-      DF <- DF[which(DF[[strat_col]] %in% allowed_levels),]
+    if (!missing(allowed_levels)) {
+      DF <- DF[which(DF[[strat_col]] %in% allowed_levels), ]
     }
   }
-  DF <- DF[,vars] %>% stats::na.omit() %>% clone_attr(DF_ori)
+  DF <- DF[, vars] %>% stats::na.omit() %>% clone_attr(DF_ori)
   legend.title <- NULL
   legend.labs <- NULL
-  if(!missing(strat_col)){
-    if(!is.null(strat_col)){
+  if (!missing(strat_col)) {
+    if (!is.null(strat_col)) {
       legend.title <- strat_col
-      x<- attr(DF[[strat_col]],"label")
-      if(!is.null(x))legend.title <- x
+      x <- attr(DF[[strat_col]], "label")
+      if (!is.null(x))
+        legend.title <- x
       DF[["strat_col"]] <- DF[[strat_col]]
-      fit <- survival::survfit(survival::Surv(time_col,status_col) ~ strat_col, data = DF)
-      if(is.factor(DF[[strat_col]])){
+      fit <- survival::survfit(survival::Surv(time_col, status_col) ~ strat_col, data = DF)
+      if (is.factor(DF[[strat_col]])) {
         legend.labs <- levels(DF[[strat_col]])
-        legend.labs <- vec1_in_vec2(legend.labs,unique(DF[[strat_col]]))
-      }else{
+        legend.labs <- vec1_in_vec2(legend.labs, unique(DF[[strat_col]]))
+      } else{
         legend.labs <- unique(DF[[strat_col]])
       }
     }
-  }else{
-    fit <- survival::survfit(survival::Surv(time_col,status_col) ~ 1, data = DF)
+  } else{
+    fit <- survival::survfit(survival::Surv(time_col, status_col) ~ 1, data = DF)
   }
-  if(is.null(fit)){
+  if (is.null(fit)) {
     return(NULL)
-    }
+  }
   plot <-  survminer::ggsurvplot(
     fit = fit,
     data = DF,
-    surv.median.line = "hv", # Add medians survival
+    surv.median.line = "hv",
+    # Add medians survival
     # Change legends: title & labels,
     # size = 1,                   # change line size
     title = title,
-    xlim=xlim,
-    break.x.by=1,
+    xlim = xlim,
+    break.x.by = 1,
     # legend = "bottom",
     legend = legend.position,
     legend.title = legend.title,
     # legend.labs = data[[group]] %>% attr("levels"),
     legend.labs = legend.labs,
     # Add p-value and tervals
-    combine = T,
+    combine = TRUE,
     pval = pval,
     pval.coord = pval.coord,
     conf.int = conf.int,
@@ -119,7 +123,7 @@ make_survival <- function(
     font.legend = font_maker(11),
     table.theme = ggplot2::theme_classic()
   )
-  if(show_stats){
+  if (show_stats) {
     print(fit)
   }
   plot

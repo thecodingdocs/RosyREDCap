@@ -1,5 +1,6 @@
-node_aes_names_DiagrammR <- function(all = F){
-  c(#write conversion
+node_aes_names_DiagrammR <- function(all = FALSE) {
+  c(
+    #write conversion
     "shape",
     "style",
     "penwidth",
@@ -28,8 +29,9 @@ node_aes_names_DiagrammR <- function(all = F){
     "margin"
   )
 }
-edge_aes_names_DiagrammR <- function(all = F){
-  c(#write conversion
+edge_aes_names_DiagrammR <- function(all = FALSE) {
+  c(
+    #write conversion
     "style",
     "penwidth",
     "color",
@@ -64,7 +66,7 @@ edge_aes_names_DiagrammR <- function(all = F){
     "decorate"
   )
 }
-node_aes_names_visNetwork <- function(all = F){
+node_aes_names_visNetwork <- function(all = FALSE) {
   #?visNetwork::visNodes()
   OUT <- c(
     "id",
@@ -81,7 +83,7 @@ node_aes_names_visNetwork <- function(all = F){
     "value",
     "physics"
   )
-  if(all){
+  if (all) {
     OUT <- OUT %>% append(
       c(
         "font",
@@ -112,19 +114,17 @@ node_aes_names_visNetwork <- function(all = F){
   }
   return(OUT)
 }
-edge_aes_names_visNetwork <- function(all = F){
+edge_aes_names_visNetwork <- function(all = FALSE) {
   #?visNetwork::visEdges()
-  OUT <- c(
-    "id",
-    "from",
-    "arrows",
-    "to",
-    "label",
-    "title",
-    "dashes",
-    "physics"
-  )
-  if(all){
+  OUT <- c("id",
+           "from",
+           "arrows",
+           "to",
+           "label",
+           "title",
+           "dashes",
+           "physics")
+  if (all) {
     OUT <- OUT %>% append(
       c(
         "color",

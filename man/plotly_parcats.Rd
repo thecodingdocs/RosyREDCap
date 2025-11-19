@@ -6,11 +6,11 @@
 \usage{
 plotly_parcats(
   DF,
-  remove_missing = T,
-  line_shape_curved = T,
-  numeric_to_factor = T,
+  remove_missing = TRUE,
+  line_shape_curved = TRUE,
+  numeric_to_factor = TRUE,
   quantiles = 5,
-  more_descriptive_label = F
+  more_descriptive_label = FALSE
 )
 }
 \description{

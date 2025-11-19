@@ -1,49 +1,51 @@
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @noRd
-app_ui<- function(request) {
+app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
-    golem_add_external_resources(
-      includeCSS(system.file(package="table1", "table1_defaults_1.0/table1_defaults.css"))
-    ),
-    tags$script(HTML("
+    golem_add_external_resources(includeCSS(
+      system.file(package = "table1", "table1_defaults_1.0/table1_defaults.css")
+    )),
+    tags$script(
+      HTML(
+        "
     $(document).on('keydown', function(e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode == 13) {  // Enter key code is 13
         $('.dataTable input').blur();  // Trigger input blur to save edit
       }
     });
-  ")),
+  "
+      )
+    ),
     shinydashboardPlus::dashboardPage(
-      options = list(
-        sidebarExpandOnHover = FALSE
-      ),
+      options = list(sidebarExpandOnHover = FALSE),
       header = dbHeader(),
       sidebar = dbSidebar(
         menuItem(
-          text="Projects",
+          text = "Projects",
           tabName = "home",
-          icon =shiny::icon("home")
+          icon = shiny::icon("home")
         ),
         # conditionalPanel(
         #   "input.sb1 === 'home'",
         uiOutput("choose_project_"),
         # ),
         menuItem(
-          text="Project",
+          text = "Project",
           tabName = "project",
-          icon =shiny::icon("user-doctor")
+          icon = shiny::icon("user-doctor")
         ),
         conditionalPanel(
           "input.sb1 === 'project'",
           selectizeInput(
             "metadata_graph_type",
             label = "Graph Type",
-            choices = c("visNetwork","DiagrammeR"),
+            choices = c("visNetwork", "DiagrammeR"),
             selected = "DiagrammeR"
           ),
-          actionButton("ab_update_redcap","Update REDCap!"),
+          actionButton("ab_update_redcap", "Update REDCap!"),
           shinyWidgets::awesomeCheckbox(
             inputId = "metadata_graph_include_vars",
             label = "Include Variables?",
@@ -56,14 +58,14 @@ app_ui<- function(request) {
           )
         ),
         menuItem(
-          text="Transformation",
+          text = "Transformation",
           tabName = "transformation",
-          icon =shiny::icon("gear")
+          icon = shiny::icon("gear")
         ),
         menuItem(
-          text="Data",
+          text = "Data",
           tabName = "data",
-          icon =shiny::icon("users")
+          icon = shiny::icon("users")
         ),
         conditionalPanel(
           "input.sb1 === 'data' || input.sb1 === 'group' || input.sb1 === 'record'",
@@ -88,9 +90,9 @@ app_ui<- function(request) {
           uiOutput("filter_switch_")
         ),
         menuItem(
-          text="Group",
+          text = "Group",
           tabName = "group",
-          icon =shiny::icon("users")
+          icon = shiny::icon("users")
         ),
         conditionalPanel(
           "input.sb1 === 'group' || input.sb1 === 'record'",
@@ -106,14 +108,14 @@ app_ui<- function(request) {
           )
         ),
         menuItem(
-          text="Plot",
+          text = "Plot",
           tabName = "plot",
-          icon =shiny::icon("chart-bar")
+          icon = shiny::icon("chart-bar")
         ),
         menuItem(
-          text="Record",
+          text = "Record",
           tabName = "record",
-          icon =shiny::icon("user-large")
+          icon = shiny::icon("user-large")
         ),
         uiOutput("choose_record_"),
         # conditionalPanel(
@@ -130,89 +132,71 @@ app_ui<- function(request) {
       ),
       body = dbBody(
         # home--------
-        tabItem(
-          "home",
-          fluidRow(
-            box(
-              title = h1("Home"),
-              width = 12,
-              DT::DTOutput("projects_table")
-            )
+        tabItem("home", fluidRow(
+          box(
+            title = h1("Home"),
+            width = 12,
+            DT::DTOutput("projects_table")
           )
-        ),
+        )),
         # project--------
-        tabItem(
-          "project",
-          fluidRow(
-            box(
-              title = h1("Project"),
-              width = 12,
-              #more summary stuff
-              uiOutput("REDCap_diagram_ui_test"),
-            ),
-            box(
-              title = h1("Instruments"),
-              width = 12,
-              DT::DTOutput("forms_table")
-            ),
-            box(
-              title = h1("Metadata"),
-              width = 12,
-              DT::DTOutput("metadata_table")
-            ),
-            box(
-              title = h1("Codebook"),
-              width = 12,
-              DT::DTOutput("codebook_table")
-            ),
-            box(
-              title = h1("Users"),
-              width = 12,
-              DT::DTOutput("user_table")
-            ),
-            box(
-              title = h1("Log"),
-              width = 12,
-              DT::DTOutput("log_table")
-            )
+        tabItem("project", fluidRow(
+          box(
+            title = h1("Project"),
+            width = 12,
+            #more summary stuff
+            uiOutput("REDCap_diagram_ui_test"),
+          ),
+          box(
+            title = h1("Instruments"),
+            width = 12,
+            DT::DTOutput("forms_table")
+          ),
+          box(
+            title = h1("Metadata"),
+            width = 12,
+            DT::DTOutput("metadata_table")
+          ),
+          box(
+            title = h1("Codebook"),
+            width = 12,
+            DT::DTOutput("codebook_table")
+          ),
+          box(
+            title = h1("Users"),
+            width = 12,
+            DT::DTOutput("user_table")
+          ),
+          box(
+            title = h1("Log"),
+            width = 12,
+            DT::DTOutput("log_table")
           )
-        ),
+        )),
         # data --------
-        tabItem(
-          "data",
-          fluidRow(
-            box(
-              title = h1("Data Tables"),
-              width = 12,
-              uiOutput("dt_tables_view")
-            )
-          )
-        ),
+        tabItem("data", fluidRow(box(
+          title = h1("Data Tables"),
+          width = 12,
+          uiOutput("dt_tables_view")
+        ))),
         # Transformation--------
-        tabItem(
-          "transformation",
-          fluidRow(
-            box(
-              title = h1("Forms Transformation"),
-              width = 12,
-              DT::DTOutput("forms_transformation"),
-              actionButton("ab_accept_form_transform","Accept Forms Transformation Edit!")
+        tabItem("transformation", fluidRow(
+          box(
+            title = h1("Forms Transformation"),
+            width = 12,
+            DT::DTOutput("forms_transformation"),
+            actionButton(
+              "ab_accept_form_transform",
+              "Accept Forms Transformation Edit!"
             )
           )
-        ),
+        )),
         # group--------
         tabItem(
           "group",
-          fluidRow(
-            box(
-              width = 6,
-              uiOutput("choose_split_")
-            ),
-            box(
-              width = 6,
-              uiOutput("choose_fields_cat_")
-            )
-          ),
+          fluidRow(box(width = 6, uiOutput("choose_split_")), box(
+            width = 6, uiOutput("choose_fields_cat_")
+          )),
           fluidRow(
             box(
               title = h1("Group"),
@@ -227,10 +211,7 @@ app_ui<- function(request) {
               width = 6,
               # uiOutput("table1")
               id = "tabset_plots",
-              tabPanel(
-                "Scatter",
-                "Scatter Plot!"
-                ),
+              tabPanel("Scatter", "Scatter Plot!"),
               tabPanel(
                 "Survival",
                 fluidRow(
@@ -238,22 +219,21 @@ app_ui<- function(request) {
                   column(4, uiOutput("choose_survival_end_col_")),
                   column(4, uiOutput("choose_survival_status_col_"))
                 ),
-                fluidRow(
-                  column(3,
-                         selectInput(
-                           "survival_units",
-                           "Units",
-                           choices = c("days", "months", "years"),
-                           selected = "years"
-                         )),                   column(9, uiOutput("choose_survival_xlim_"))
-                ),
+                fluidRow(column(
+                  3,
+                  selectInput(
+                    "survival_units",
+                    "Units",
+                    choices = c("days", "months", "years"),
+                    selected = "years"
+                  )
+                ), column(9, uiOutput(
+                  "choose_survival_xlim_"
+                ))),
                 plotOutput("survival"),
-                actionButton("survival_save_ab","Save Plot File")
+                actionButton("survival_save_ab", "Save Plot File")
               ),
-              tabPanel(
-                "Swimmer",
-                "Swimmer Plot!"
-              )
+              tabPanel("Swimmer", "Swimmer Plot!")
             ),
             box(
               title = h1("Table1"),
@@ -263,65 +243,52 @@ app_ui<- function(request) {
           )
         ),
         # plot--------
-        tabItem(
-          "plot",
-          fluidRow(
-            box(
-              width = 6
-              # uiOutput("choose_split_")
-            ),
-            box(
-              width = 6
-              # uiOutput("choose_fields_cat_")
-            )
-          ),
-          fluidRow(
-            box(
-              title = h1("Plot"),
-              width = 12,
-              # uiOutput("parcats"),
-              actionButton("shuffle_colors2", "Shuffle Colors")
-            )
+        tabItem("plot", fluidRow(box(
+          width = 6
+          # uiOutput("choose_split_")
+        ), box(
+          width = 6
+          # uiOutput("choose_fields_cat_")
+        )), fluidRow(
+          box(
+            title = h1("Plot"),
+            width = 12,
+            # uiOutput("parcats"),
+            actionButton("shuffle_colors2", "Shuffle Colors")
           )
-        ),
+        )),
         # record--------
-        tabItem(
-          "record",
-          fluidRow(
-            box(
-              title = h1("View"),
-              width = 6,
-              shinyWidgets::switchInput(
-                inputId = "view_switch_text",
-                onLabel = "Text",
-                offLabel = "Tables",
-                value = TRUE
-              ),
-              actionButton("ab_random_record","Random Record!"),
-              actionButton("ab_next_record","Next Record!"),
-              uiOutput("choose_fields_view_"),
-              uiOutput("dt_tables_view_records")
+        tabItem("record", fluidRow(
+          box(
+            title = h1("View"),
+            width = 6,
+            shinyWidgets::switchInput(
+              inputId = "view_switch_text",
+              onLabel = "Text",
+              offLabel = "Tables",
+              value = TRUE
             ),
-            box(
-              width = 6,
-              tabsetPanel(
-                tabPanel(
-                  title = "Change",
-                  uiOutput("choose_fields_change_"),
-                  uiOutput("fields_to_change_dynamic_inputs"),
-                  fluidRow(uiOutput("add_input_instance_ui_")),
-                  fluidRow(actionButton("reset_data_values", "Reset Data")),
-                  fluidRow(actionButton("submit_data_values", "Submit Data"))
-                ),
-                tabPanel(
-                  title = "Upload",
-                  h3("Below is what will be uploaded to REDCap!"),
-                  DT::DTOutput("the_uploading_table")
-                )
-              )
+            actionButton("ab_random_record", "Random Record!"),
+            actionButton("ab_next_record", "Next Record!"),
+            uiOutput("choose_fields_view_"),
+            uiOutput("dt_tables_view_records")
+          ),
+          box(width = 6, tabsetPanel(
+            tabPanel(
+              title = "Change",
+              uiOutput("choose_fields_change_"),
+              uiOutput("fields_to_change_dynamic_inputs"),
+              fluidRow(uiOutput("add_input_instance_ui_")),
+              fluidRow(actionButton("reset_data_values", "Reset Data")),
+              fluidRow(actionButton("submit_data_values", "Submit Data"))
+            ),
+            tabPanel(
+              title = "Upload",
+              h3("Below is what will be uploaded to REDCap!"),
+              DT::DTOutput("the_uploading_table")
             )
-          )
-        )
+          ))
+        ))
       ),
       controlbar = dbControlbar(
         shinyWidgets::awesomeCheckbox(

@@ -1,6 +1,10 @@
-age <- function(dob, age.day = lubridate::today(), units = "years", floor = TRUE) {
+age <- function(dob,
+                age.day = lubridate::today(),
+                units = "years",
+                floor = TRUE) {
   calc.age = lubridate::interval(dob, age.day) / lubridate::duration(num = 1, units = units)
-  if (floor) return(as.integer(floor(calc.age)))
+  if (floor)
+    return(as.integer(floor(calc.age)))
   return(calc.age)
 }
 cli_alert_wrap <- function(text = "",
@@ -26,25 +30,28 @@ cli_alert_wrap <- function(text = "",
       }
       url <- unlist(url)
     }
-    if (is.null(url_names)) url_names <- url
-    if (collapse) url_if <- paste0(url_if, collapse = " and ")
-    url_if <- paste0(
-      " {cli::col_blue(cli::style_hyperlink('",
-      url_names,
-      "', '",
-      url,
-      "'))}"
-    )
+    if (is.null(url_names))
+      url_names <- url
+    if (collapse)
+      url_if <- paste0(url_if, collapse = " and ")
+    url_if <- paste0(" {cli::col_blue(cli::style_hyperlink('",
+                     url_names,
+                     "', '",
+                     url,
+                     "'))}")
   }
   if (length(file) > 0) {
     file_names <- names(file)
     if (is.list(file)) {
       file_names <- unlist(file)
-      if (is_named_list(file)) file_names <- names(file)
+      if (is_named_list(file))
+        file_names <- names(file)
       file <- unlist(file)
     }
-    if (is.null(file_names)) file_names <- file
-    if (collapse) file_if <- paste0(file_if, collapse = " and ")
+    if (is.null(file_names))
+      file_names <- file
+    if (collapse)
+      file_if <- paste0(file_if, collapse = " and ")
     file_if <- paste0(
       " {cli::col_blue(cli::style_hyperlink('",
       sanitize_path(file_names),
@@ -53,17 +60,22 @@ cli_alert_wrap <- function(text = "",
       "'))}"
     )
   }
-  for (i in seq_along(url_if)) text[i] <- paste0(text[i], url_if[i])
-  for (i in seq_along(file_if)) text[i] <- paste0(text[i], file_if[i])
+  for (i in seq_along(url_if))
+    text[i] <- paste0(text[i], url_if[i])
+  for (i in seq_along(file_if))
+    text[i] <- paste0(text[i], file_if[i])
   names(text)[seq_along(text)] <- bullet_type
   cli::cli_bullets(text)
 }
 now_time <- function() {
   return(as.POSIXct(Sys.time(), tz = Sys.timezone()))
 }
-process_df_list <- function(list, drop_empty = TRUE, silent = FALSE) {
+process_df_list <- function(list,
+                            drop_empty = TRUE,
+                            silent = FALSE) {
   if (is_something(list)) {
-    if (!is_df_list(list)) stop("list must be ...... a list :)")
+    if (!is_df_list(list))
+      stop("list must be ...... a list :)")
     if (drop_empty) {
       is_a_df_with_rows <- list %>%
         lapply(function(x) {
@@ -79,10 +91,8 @@ process_df_list <- function(list, drop_empty = TRUE, silent = FALSE) {
       drops <- which(!is_a_df_with_rows)
       if (length(drops) > 0) {
         if (!silent) {
-          cli_alert_wrap(
-            "Dropping non-data.frames and empties... ",
-            toString(names(drops))
-          )
+          cli_alert_wrap("Dropping non-data.frames and empties... ",
+                         toString(names(drops)))
         }
       }
       list <- list[keeps]
@@ -161,7 +171,9 @@ drop_nas <- function(x) {
 is_named_df_list <- function(x, strict = FALSE) {
   is_named_list(x) && is_df_list(x, strict = strict)
 }
-is_named_list <- function(x, silent = TRUE, recursive = FALSE) {
+is_named_list <- function(x,
+                          silent = TRUE,
+                          recursive = FALSE) {
   if (!is.list(x)) {
     return(FALSE)
   }
@@ -174,7 +186,8 @@ is_named_list <- function(x, silent = TRUE, recursive = FALSE) {
       element <- x[[n]]
       if (is.list(element)) {
         named_all <- named_all && is_named_list(element)
-        if (!silent && !named_all) message("'", n, "' is not named")
+        if (!silent && !named_all)
+          message("'", n, "' is not named")
       }
     }
   }
@@ -209,10 +222,22 @@ drop_if <- function(x, drops) {
 sample1 <- function(x) {
   sample(x, 1)
 }
-list.files.real <- function(path, full.names = TRUE, recursive = FALSE) {
-  grep("~$", sanitize_path(list.files(path, full.names = full.names, recursive = recursive)), fixed = TRUE, value = TRUE, invert = TRUE)
+list.files.real <- function(path,
+                            full.names = TRUE,
+                            recursive = FALSE) {
+  grep(
+    "~$",
+    sanitize_path(
+      list.files(path, full.names = full.names, recursive = recursive)
+    ),
+    fixed = TRUE,
+    value = TRUE,
+    invert = TRUE
+  )
 }
-wrap_text <- function(text, max_length = 40, spacer = "\n") {
+wrap_text <- function(text,
+                      max_length = 40,
+                      spacer = "\n") {
   words <- unlist(strsplit(text, " "))
   current_line <- ""
   result <- ""
@@ -231,18 +256,26 @@ wrap_text <- function(text, max_length = 40, spacer = "\n") {
   result <- paste0(result, current_line)
   return(result)
 }
-clean_env_names <- function(env_names, silent = FALSE, lowercase = TRUE) {
+clean_env_names <- function(env_names,
+                            silent = FALSE,
+                            lowercase = TRUE) {
   cleaned_names <- character(length(env_names))
   for (i in seq_along(env_names)) {
     name <- env_names[i]
     is_valid <- is_env_name(name, silent = TRUE)
-    if (is_valid) cleaned_names[i] <- name
+    if (is_valid)
+      cleaned_names[i] <- name
     if (!is_valid) {
-      if (!silent) message("Invalid environment name: '", name)
+      if (!silent)
+        message("Invalid environment name: '", name)
       cleaned_name <- gsub("__", "_", gsub(" ", "_", gsub("-", "", name)))
-      if (lowercase) cleaned_name <- tolower(cleaned_name)
+      if (lowercase)
+        cleaned_name <- tolower(cleaned_name)
       if (cleaned_name %in% cleaned_names) {
-        if (!silent) message("Non-unique environment name: '", name, "', added numbers...")
+        if (!silent)
+          message("Non-unique environment name: '",
+                  name,
+                  "', added numbers...")
         cleaned_name <- cleaned_name %>% paste0("_", max(wl(cleaned_name %in% cleaned_names)) + 1)
       }
       cleaned_names[i] <- cleaned_name
@@ -267,25 +300,24 @@ is_df_list <- function(x, strict = FALSE) {
   return(any(out))
 }
 is_env_name <- function(env_name, silent = FALSE) {
-  result <- tryCatch(
-    {
-      if (is.null(env_name)) stop("env_name is NULL")
-      if (nchar(env_name) == 0) {
-        stop("Short name cannot be empty.")
-      }
-      if (grepl("^\\d", env_name)) {
-        stop("Short name cannot start with a number.")
-      }
-      if (grepl("[^A-Za-z0-9_]", env_name)) {
-        stop("Short name can only contain letters, numbers, and underscores.")
-      }
-      return(TRUE) # Return TRUE if all checks pass
-    },
-    error = function(e) {
-      if (!silent) message(e$message)
-      return(FALSE) # Return FALSE if any error occurs
+  result <- tryCatch({
+    if (is.null(env_name))
+      stop("env_name is NULL")
+    if (nchar(env_name) == 0) {
+      stop("Short name cannot be empty.")
     }
-  )
+    if (grepl("^\\d", env_name)) {
+      stop("Short name cannot start with a number.")
+    }
+    if (grepl("[^A-Za-z0-9_]", env_name)) {
+      stop("Short name can only contain letters, numbers, and underscores.")
+    }
+    return(TRUE) # Return TRUE if all checks pass
+  }, error = function(e) {
+    if (!silent)
+      message(e$message)
+    return(FALSE) # Return FALSE if any error occurs
+  })
   return(result)
 }
 is_nested_list <- function(x) {
@@ -324,7 +356,10 @@ is_date <- function(date) {
     year <- year %>% as.integer()
     month <- OUT2[[2]] %>% as.integer()
     day <- OUT2[[3]] %>% as.integer()
-    OUT <- month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900 && year <= lubridate::year(Sys.Date())
+    OUT <- month >= 1 &&
+      month <= 12 &&
+      day >= 1 &&
+      day <= 31 && year >= 1900 && year <= lubridate::year(Sys.Date())
   }
   OUT
 }
@@ -341,7 +376,8 @@ date_imputation <- function(dates_in, date_imputation) {
     date_out[y] <- NA
   }
   if (length(x) > 0) {
-    if (missing(date_imputation)) date_imputation <- NULL
+    if (missing(date_imputation))
+      date_imputation <- NULL
     if (is.null(date_imputation)) {
       date_out[x] <- NA
     }
@@ -350,7 +386,8 @@ date_imputation <- function(dates_in, date_imputation) {
         lapply(function(date) {
           admiral::impute_dtc_dt(
             date,
-            highest_imputation = "M", # "n" for normal date
+            highest_imputation = "M",
+            # "n" for normal date
             date_imputation = date_imputation
             # min_dates = min_dates %>% lubridate::ymd() %>% as.list(),
             # max_dates = max_dates %>% lubridate::ymd() %>% as.list()

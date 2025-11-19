@@ -4,7 +4,7 @@
 \alias{make_parcats}
 \title{make_parcats}
 \usage{
-make_parcats(DF, remove_missing = F, marginal_histograms = T)
+make_parcats(DF, remove_missing = FALSE, marginal_histograms = TRUE)
 }
 \description{
 make_parcats

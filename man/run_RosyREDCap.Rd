@@ -34,6 +34,8 @@ expression in order for the match to be considered successful.}
 \code{height} parameters which provide a hint to the embedding environment
 about the ideal height/width for the app.}
 
+\item{launch_type}{choice of how to launch}
+
 \item{...}{arguments to pass to golem_opts.
 See `?golem::get_golem_options` for more details.}
 }

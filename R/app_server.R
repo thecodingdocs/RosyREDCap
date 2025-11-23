@@ -563,7 +563,7 @@ app_server <- function(input, output, session) {
     if (!is.null(input$choose_project)) {
       if (is_something(input$choose_project)) {
         values$project <- tryCatch({
-          load_project(short_name = input$choose_project)
+          load_project(short_name = input$choose_project)$use()
         }, error = function(e) {
           NULL
         })
@@ -1188,7 +1188,7 @@ app_server <- function(input, output, session) {
     }
   })
   observeEvent(input$ab_update_redcap, {
-    values$project <- values$project %>% sync_project()
+    # values$project <- values$project %>% sync_project()
   })
   observeEvent(input$ab_accept_form_transform, {
     # values$project$transformation$forms <- values$editable_forms_transformation_table # add check

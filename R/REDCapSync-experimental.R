@@ -774,8 +774,8 @@ edit_REDCap_while_viewing <- function(project,
         }
       }
     }
-    if (record_was_updated)
-      project <- sync_project(project)
+    if (record_was_updated){}
+      # project <- sync_project(project)
   }
   if (!upload_individually) {
     form %>%

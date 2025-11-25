@@ -191,7 +191,7 @@ app_server <- function(input, output, session) {
     if (is_something(input$choose_record) &&
         is_something(input$choose_fields_view)) {
       if (is_something(values$project)) {
-        values$dt_tables_view_list <- generate_project_summary(
+        values$dt_tables_view_list <- REDCapSync:::generate_project_summary(
           project = values$project,
           transformation_type = "none",
           filter_field = values$project$metadata$id_col,
@@ -203,10 +203,9 @@ app_server <- function(input, output, session) {
           exclude_identifiers = input$deidentify_switch,
           exclude_free_text = input$exclude_free_text_switch,
           date_handling = "none",
-          upload_compatible = TRUE,
           clean = TRUE,
           drop_blanks = TRUE,
-          drop_missings = FALSE,
+          drop_missing_codes = FALSE,
           drop_others = NULL,
           include_metadata = FALSE,
           annotate_from_log = FALSE,
@@ -457,17 +456,16 @@ app_server <- function(input, output, session) {
         choices = values$subset_records,
         server = TRUE
       )
-      values$project_data_list <- generate_project_summary(
+      values$project_data_list <- REDCapSync:::generate_project_summary(
         project = values$project,
         transformation_type = input$transformation_switch,
         labelled = input$labelled,
         exclude_identifiers = input$deidentify_switch,
         exclude_free_text = input$exclude_free_text_switch,
         date_handling = "none",
-        upload_compatible = TRUE,
         clean = FALSE,
         drop_blanks = FALSE,
-        drop_missings = FALSE,
+        drop_missing_codes = FALSE,
         drop_others = NULL,
         include_metadata = FALSE,
         annotate_from_log = FALSE,
@@ -597,7 +595,7 @@ app_server <- function(input, output, session) {
       if (is_something(values$project)) {
         if (is_something(input$choose_group)) {
           if (is_something(input$transformation_switch)) {
-            values$project_data_list <- generate_project_summary(
+            values$project_data_list <- REDCapSync:::generate_project_summary(
               project = values$project,
               transformation_type = input$transformation_switch,
               labelled = input$labelled,
@@ -605,10 +603,9 @@ app_server <- function(input, output, session) {
               exclude_identifiers = input$deidentify_switch,
               exclude_free_text = input$exclude_free_text_switch,
               date_handling = "none",
-              upload_compatible = TRUE,
               clean = FALSE,
               drop_blanks = FALSE,
-              drop_missings = FALSE,
+              drop_missing_codes = FALSE,
               drop_others = NULL,
               include_metadata = FALSE,
               annotate_from_log = FALSE,

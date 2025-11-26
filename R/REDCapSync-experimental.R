@@ -436,7 +436,7 @@ rmarkdown_project <- function(project, dir_other) {
   } else {
     dir <- dir_other
   }
-  filename <- paste0(project$short_name,
+  filename <- paste0(project$project_name,
                      "_full_summary_",
                      gsub("-", "_", Sys.Date()),
                      ".pdf")

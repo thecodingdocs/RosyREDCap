@@ -56,7 +56,7 @@ app_server <- function(input, output, session) {
     # l$state <- input$state
   })
   # setup_project(
-  #   short_name = OUT$short_name,
+  #   project_name = OUT$project_name,
   #   dir_path = OUT$dir_path,
   #   token_name = OUT$token_name,
   #   redcap_base = "https://redcap.miami.edu/",
@@ -561,13 +561,13 @@ app_server <- function(input, output, session) {
     if (!is.null(input$choose_project)) {
       if (is_something(input$choose_project)) {
         values$project <- tryCatch({
-          load_project(short_name = input$choose_project)$.internal()
+          load_project(project_name = input$choose_project)$.internal()
         }, error = function(e) {
           NULL
         })
         if (is_something(input$choose_project)) {
           if (!is.null(input[[paste0("projects_table_state")]])) {
-            ROW <- which(values$projects$short_name == input$choose_project)
+            ROW <- which(values$projects$project_name == input$choose_project)
             skip <- FALSE
             if (!is.null(input[[paste0("projects_table_rows_selected")]])) {
               skip <- identical(ROW, input[[paste0("projects_rows_selected")]])
@@ -847,7 +847,7 @@ app_server <- function(input, output, session) {
     # message("selected: ", selected)
     isolate({
       expected <- NULL
-      data_col <- values$projects$short_name
+      data_col <- values$projects$project_name
       expected <- which(data_col == input$choose_project)
       # message("expected: ", expected)
       if (is_something(selected)) {
@@ -957,7 +957,7 @@ app_server <- function(input, output, session) {
       updateSelectizeInput(
         session,
         "choose_project" ,
-        choices = values$projects$short_name,
+        choices = values$projects$project_name,
         server = TRUE
       )
     }

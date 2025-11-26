@@ -194,7 +194,7 @@ create_node_edge_REDCap <- function(project,
     data.frame(
       id = NA,
       group = "project",
-      entity_name = project$short_name,
+      entity_name = project$project_name,
       entity_label = project$redcap$project_info$project_title,
       # label = forms$form_label %>% stringr::str_replace_all( "[^[:alnum:]]", ""),
       level = level,

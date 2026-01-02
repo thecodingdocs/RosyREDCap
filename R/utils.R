@@ -1,4 +1,19 @@
 #' @noRd
+add_ids_to_redcap <- function (project,
+                               needed,
+                               prefix = "",
+                               chosen_length = 6L) {
+  chosen_max <- as.integer(paste0(rep(9, chosen_length), collapse = ""))
+  project <- project$.internal()
+  all <- paste0(
+    prefix,
+    sprintf(paste0("%0", chosen_length, "d"), 0:chosen_max)
+  )
+  used <- project$summary$all_records[[project$metadata$id_col]]
+  unused <- all[which(!all %in% used)]
+  sample(unused, needed, replace = FALSE)
+}
+#' @noRd
 add_redcap_links_to_DF <- function(DF, project) {
   # add instance links
   if (project$metadata$id_col %in% colnames(DF)) {
@@ -9,27 +24,27 @@ add_redcap_links_to_DF <- function(DF, project) {
         project$metadata$raw_structure_cols != project$metadata$id_col
     )]
     link_head <- project$links$redcap_record_home
-    link_tail <- "&id=" %>% paste0(DF[[project$metadata$id_col]])
+    link_tail <- "&id=" |> paste0(DF[[project$metadata$id_col]])
     if ("redcap_repeat_instrument" %in% DF_structure_cols) {
       link_head <- project$links$redcap_record_subpage
-      link_tail <- link_tail %>% paste0("&page=", DF[["redcap_repeat_instrument"]])
+      link_tail <- link_tail |> paste0("&page=", DF[["redcap_repeat_instrument"]])
     }
     if ("redcap_repeat_instance" %in% DF_structure_cols) {
       link_head <- project$links$redcap_record_subpage
-      link_tail <- link_tail %>% paste0("&instance=", DF[["redcap_repeat_instance"]])
+      link_tail <- link_tail |> paste0("&instance=", DF[["redcap_repeat_instance"]])
     }
     DF$redcap_link <- paste0(link_head, link_tail)
     if ("arm_number" %in% colnames(DF)) {
-      DF$redcap_link <- DF$redcap_link %>% paste0("&arm=", DF[["arm_number"]])
+      DF$redcap_link <- DF$redcap_link |> paste0("&arm=", DF[["arm_number"]])
     }
   }
   return(DF)
 }
 #' @noRd
 count_project_upload_cells <- function(project) {
-  project$data_update %>% lapply(function(x) {
+  project$data_update |> lapply(function(x) {
     nrow(x) * ncol(x)
-  }) %>% unlist() %>% sum()
+  }) |> unlist() |> sum()
 }
 #' @noRd
 husk_of_form <- function (project, FORM, field_names) {
@@ -44,8 +59,8 @@ husk_of_form <- function (project, FORM, field_names) {
 }
 #' @noRd
 all_project_to_char_cols <- function(project) {
-  project$data <- project$data %>% all_character_cols_list()
-  project$data_update <- project$data_update %>% all_character_cols_list()
+  project$data <- project$data |> all_character_cols_list()
+  project$data_update <- project$data_update |> all_character_cols_list()
   return(project)
 }
 #' @noRd
@@ -58,21 +73,21 @@ add_redcap_links_table <- function(DF, project) {
 }
 #' @noRd
 clean_RC_col_names <- function(DF, project) {
-  colnames(DF) <- colnames(DF) %>% lapply(function(COL) {
+  colnames(DF) <- colnames(DF) |> lapply(function(COL) {
     x <- project$metadata$fields$field_label[which(project$metadata$fields$field_name ==
                                                      COL)]
     if (length(x) > 1) {
       x <- x[[1]]
     }
     ifelse(length(x) > 0, x, COL)
-  }) %>% unlist() %>% return()
+  }) |> unlist() |> return()
   DF
 }
 #' @noRd
 clean_RC_df_for_DT <- function(DF, project) {
-  DF %>%
-    add_redcap_links_table(project) %>%
-    clean_RC_col_names(project) %>% return()
+  DF |>
+    add_redcap_links_table(project) |>
+    clean_RC_col_names(project) |> return()
 }
 #' @noRd
 remove_records_from_list <- function(project, records, silent = FALSE) {
@@ -83,10 +98,10 @@ remove_records_from_list <- function(project, records, silent = FALSE) {
     stop(
       "no records supplied to remove_records_from_list, but it's used in update which depends on records."
     )
-  forms <- names(data_list)[which(names(data_list) %>%
+  forms <- names(data_list)[which(names(data_list) |>
                                     lapply(function(form) {
                                       nrow(data_list[[form]]) > 0
-                                    }) %>% unlist())]
+                                    }) |> unlist())]
   for (TABLE in forms) {
     data_list[[TABLE]] <- data_list[[TABLE]][which(!data_list[[TABLE]][[project$metadata$id_col]] %in%
                                                      records), ]
@@ -143,14 +158,14 @@ sidebar_choices <- function(data_list, n_threshold = 1) {
 split_choices <- function(x) {
   oops <- x
   x <- gsub("\n", " | ", x)  #added this to account for redcap metadata output if not a number
-  x <- x %>% strsplit(" [:|:] ") %>% unlist()
+  x <- x |> strsplit(" [:|:] ") |> unlist()
   check_length <- length(x)
-  # code <- x %>% stringr::str_extract("^[^,]+(?=, )")
-  # name <- x %>% stringr::str_extract("(?<=, ).*$")
-  result <- x %>% stringr::str_match("([^,]+), (.*)")
+  # code <- x |> stringr::str_extract("^[^,]+(?=, )")
+  # name <- x |> stringr::str_extract("(?<=, ).*$")
+  result <- x |> stringr::str_match("([^,]+), (.*)")
   # x <- data.frame(
-  #   code=x %>% strsplit(", ") %>% lapply(`[`, 1),
-  #   name=x %>% strsplit(", ")%>% lapply(`[`, -1) %>% lapply(function(y){paste0(y,collapse = ", ")})
+  #   code=x |> strsplit(", ") |> lapply(`[`, 1),
+  #   name=x |> strsplit(", ")|> lapply(`[`, -1) |> lapply(function(y){paste0(y,collapse = ", ")})
   # )
   x <- data.frame(code = result[, 2], name = result[, 3])
   rownames(x) <- NULL
@@ -181,7 +196,7 @@ form_names_to_field_names <- function(form_names, project, original_only = FALSE
     fields <- project$metadata$fields
   }
   for (form_name in form_names) {
-    field_names <- field_names %>% append(fields$field_name[which(fields$form_name == form_name)])
+    field_names <- field_names |> append(fields$field_name[which(fields$form_name == form_name)])
   }
   return(unique(field_names))
 }
@@ -194,7 +209,7 @@ form_names_to_field_names_alt <- function(form_names, project, original_only = F
     fields <- project$metadata$fields
   }
   for (form_name in form_names) {
-    field_names <- field_names %>% append(fields$field_name[which(fields$form_name == form_name)])
+    field_names <- field_names |> append(fields$field_name[which(fields$form_name == form_name)])
   }
   return(unique(field_names))
 }
@@ -217,10 +232,10 @@ get_field_type_from_data_list <- function(data_list,
                                           include_no_choice = TRUE) {
   fields <- data_list$metadata$fields
   field_names <- fields$field_name[which(fields$field_type_R %in% field_type_R)]
-  field_labels <- field_names %>% field_names_to_field_labels_alt(data_list$metadata)
+  field_labels <- field_names |> field_names_to_field_labels_alt(data_list$metadata)
   field_names <- stats::setNames(field_names, field_labels)
   if (!is.null(form_name)) {
-    field_names <- field_names %>% vec1_in_vec2(colnames(data_list$data[[form_name]]))
+    field_names <- field_names |> vec1_in_vec2(colnames(data_list$data[[form_name]]))
   }
   if (include_no_choice) {
     field_names <- c(stats::setNames("no_choice", "None"), field_names)

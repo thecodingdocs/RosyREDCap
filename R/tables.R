@@ -10,22 +10,22 @@ make_table1 <- function(DF,
     return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
   # caption  <- "Basic stats"
   # footnote <- "ᵃ Also known as Breslow thickness"
-  BAD <- variables %>% vec1_not_in_vec2(colnames(DF))
+  BAD <- variables |> vec1_not_in_vec2(colnames(DF))
   if (length(BAD) > 0) {
     variables <- variables[which(!variables %in% BAD)]
     warning(
-      "Following variables dropped (not included in DF): " %>% paste0(as_comma_string(BAD)),
+      "Following variables dropped (not included in DF): " |> paste0(as_comma_string(BAD)),
       immediate. = TRUE
     )
   }
   if (!is_something(variables))
     return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
   DF <- DF[, index_na(DF, invert = TRUE), drop = FALSE]
-  BAD <- variables %>% vec1_not_in_vec2(colnames(DF))
+  BAD <- variables |> vec1_not_in_vec2(colnames(DF))
   if (length(BAD) > 0) {
     variables <- variables[which(!variables %in% BAD)]
     warning(
-      "Following variables dropped (only NAs in DF): " %>% paste0(as_comma_string(BAD)),
+      "Following variables dropped (only NAs in DF): " |> paste0(as_comma_string(BAD)),
       immediate. = TRUE
     )
   }
@@ -35,8 +35,8 @@ make_table1 <- function(DF,
     if (!group %in% colnames(DF))
       stop("`group` not included in DF colnames")
     if (!is.factor(DF[[group]]))
-      DF$group <-  DF[[group]] %>% factor()
-    DF <- DF[which(!is.na(DF[[group]])), ] %>% clone_attr(from = DF)
+      DF$group <-  DF[[group]] |> factor()
+    DF <- DF[which(!is.na(DF[[group]])), ] |> clone_attr(from = DF)
     variables <- variables[which(variables != group)]
   }
   if (!is_something(variables))
@@ -69,27 +69,27 @@ index_na <- function(DF, MARGIN = "col", invert = FALSE) {
     MARGIN <- 2
   if (tolower(MARGIN) %in% okrows)
     MARGIN <- 1
-  x <- DF %>% apply(MARGIN = MARGIN, function(IN) {
+  x <- DF |> apply(MARGIN = MARGIN, function(IN) {
     all(is.na(IN))
   })
   if (invert)
     x <- !x
-  x <- x %>% which() %>% unname()
+  x <- x |> which() |> unname()
   return(x)
 }
 save_table1 <- function(table1, filepath) {
-  table1 %>%
-    table1::t1flex() %>%
-    flextable::bg(bg = "white", part = "all") %>%
+  table1 |>
+    table1::t1flex() |>
+    flextable::bg(bg = "white", part = "all") |>
     flextable::save_as_image(path = filepath)
 }
 clone_attr <- function(to, from) {
-  units_vec <- from %>% lapply(function(col) {
+  units_vec <- from |> lapply(function(col) {
     attr(col, "units")
-  }) %>% unlist()
-  label_vec <- from %>% lapply(function(col) {
+  }) |> unlist()
+  label_vec <- from |> lapply(function(col) {
     attr(col, "label")
-  }) %>% unlist()
+  }) |> unlist()
   to_cols <- colnames(to)
   if (is_something(units_vec)) {
     for (i in 1:length(units_vec)) {
@@ -116,12 +116,12 @@ clone_attr <- function(to, from) {
   return(to)
 }
 get_labels <- function(DF) {
-  DF %>% names() %>% sapply(function(name) {
+  DF |> names() |> sapply(function(name) {
     out <- attr(DF[[name]], "label")
     if (!is.null(out))
       return(out)
     return(name)
-  }) %>% as.character()
+  }) |> as.character()
 }
 get_field_names_date <- function(data_list) {
   #assert
@@ -151,7 +151,7 @@ make_DT_table <- function(DF,
       colnames = " "
     ))
   }
-  DF %>% DT::datatable(
+  DF |> DT::datatable(
     selection = selection,
     editable = editable,
     rownames = FALSE,
@@ -177,11 +177,11 @@ make_DT_table <- function(DF,
     class = "cell-border",
     # filter = 'top',
     escape = FALSE
-  ) %>% DT::formatStyle(colnames(DF), color = "#000") %>% return()
+  ) |> DT::formatStyle(colnames(DF), color = "#000") |> return()
 }
 make_DT_table_simple <- function(DF) {
   if (!is_something(DF)) {
     return(h3("No data available to display."))
   }
-  DF %>% DT::datatable() %>% DT::formatStyle(colnames(DF), color = "#000") %>% return()
+  DF |> DT::datatable() |> DT::formatStyle(colnames(DF), color = "#000") |> return()
 }

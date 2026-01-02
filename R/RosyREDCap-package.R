@@ -5,6 +5,5 @@
 #' @import golem
 #' @import shiny
 #' @import shinydashboard
-#' @importFrom magrittr %>%
 ## usethis namespace: end
 NULL

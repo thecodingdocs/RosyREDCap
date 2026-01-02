@@ -84,7 +84,7 @@ node_aes_names_visNetwork <- function(all = FALSE) {
     "physics"
   )
   if (all) {
-    OUT <- OUT %>% append(
+    OUT <- OUT |> append(
       c(
         "font",
         "color",
@@ -125,7 +125,7 @@ edge_aes_names_visNetwork <- function(all = FALSE) {
            "dashes",
            "physics")
   if (all) {
-    OUT <- OUT %>% append(
+    OUT <- OUT |> append(
       c(
         "color",
         "font",

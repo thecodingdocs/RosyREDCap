@@ -11,7 +11,7 @@ plotly_bar <- function(DF, x_col, y_col, name) {
     textposition = "inside",
     insidetextanchor = "middle",
     insidetextfont = list(color = "black")
-  ) %>% plotly::layout(
+  ) |> plotly::layout(
     xaxis = list(
       title = list(
         # text=paste0(name," (",prettyNum(sum(b$n_applicants),","),")"),
@@ -30,14 +30,14 @@ plotly_bar <- function(DF, x_col, y_col, name) {
       xanchor = "left",
       xref = "x",
       yref = "y",
-      text = paste0((x_col / sum(x_col) * 100) %>% round(1), "%"),
+      text = paste0((x_col / sum(x_col) * 100) |> round(1), "%"),
       showarrow = FALSE,
       arrowhead = NULL,
       arrowsize = NULL,
       font = list(size = 12, color = "black"),
       textangle = 0
     )
-  ) %>%
+  ) |>
     plotly::config(
       scrollZoom = FALSE,
       displaylogo = FALSE,
@@ -54,7 +54,7 @@ plotly_bar <- function(DF, x_col, y_col, name) {
         "hoverCompareCartesian",
         "toggleHover"
       )
-    ) %>%
+    ) |>
     plotly::layout(
       showlegend = FALSE,
       xaxis = list(
@@ -67,7 +67,7 @@ plotly_bar <- function(DF, x_col, y_col, name) {
         zeroline = FALSE,
         showticklabels = TRUE
       )
-    ) %>% plotly::style(hoverinfo = 'none')
+    ) |> plotly::style(hoverinfo = 'none')
   fig
 }
 #' @title plotly_parcats
@@ -85,23 +85,23 @@ plotly_parcats <- function(DF,
   if (remove_missing) {
     DF <- stats::na.omit(DF)
   } else{
-    DF <- DF %>% lapply(function(col) {
+    DF <- DF |> lapply(function(col) {
       OUT <- col
       if (is.factor(OUT))
         levels(OUT) <- c(levels(OUT), "*Missing*")
       OUT[which(is.na(OUT))] <- "*Missing*"
       return(OUT)
-    }) %>% as.data.frame()
+    }) |> as.data.frame()
   }
   if (nrow(DF) == 0) {
     return(plotly::plotly_empty())
   }
-  DF <- DF %>% lapply(function(col) {
+  DF <- DF |> lapply(function(col) {
     OUT <- col
     if (!is.factor(OUT)) {
       if (is.numeric(OUT)) {
         if (numeric_to_factor) {
-          OUT <- OUT %>% numeric_to_cats(
+          OUT <- OUT |> numeric_to_cats(
             method = "quantile",
             quantiles = quantiles,
             more_descriptive_label = more_descriptive_label
@@ -112,11 +112,11 @@ plotly_parcats <- function(DF,
       }
     }
     return(OUT)
-  }) %>% as.data.frame()
+  }) |> as.data.frame()
   adj_margins_l <- adjust_margins(max(nchar(as.character(DF[[1]]))))
   adj_margins_r <- adjust_margins(max(nchar(as.character(DF[[ncol(DF)]]))))
   color_palette <- RColorBrewer::brewer.pal(12, "Paired")  # Using 3 colors for "High", "Medium", "Low"
-  color_palette_vec <- color_palette %>% sample(size = length(levels(DF[[1]])), replace =  length(levels(DF[[1]])))
+  color_palette_vec <- color_palette |> sample(size = length(levels(DF[[1]])), replace =  length(levels(DF[[1]])))
   fig <- plotly::plot_ly(
     # data = DF,
     # x = x_col,
@@ -125,13 +125,13 @@ plotly_parcats <- function(DF,
     dimensions = lapply(colnames(DF), function(col) {
       categoryarray <- as.character(unique(DF[[col]]))
       if (is.factor(DF[[col]])) {
-        categoryarray <- categoryarray[match(levels(DF[[col]]), categoryarray)] %>% drop_nas()
+        categoryarray <- categoryarray[match(levels(DF[[col]]), categoryarray)] |> drop_nas()
       }
       out_list <-  list(
         values = DF[[col]],
         label = the_labels[which(colnames(DF) == col)],
         categoryorder = "array",
-        categoryarray = categoryarray %>% rev()
+        categoryarray = categoryarray |> rev()
       )
       return(out_list)
     }),
@@ -150,16 +150,16 @@ plotly_parcats <- function(DF,
     # insidetextfont=list(color="black"),
     labelfont = list(size = 14, color = "black"),
     tickfont = list(size = 12, color = "black")
-  ) %>%
+  ) |>
     plotly::config(
       # scrollZoom=TRUE,
       displaylogo = FALSE
-    ) %>%
+    ) |>
     plotly::layout(
       showlegend = FALSE,
       margin = list(l = adj_margins_l, r = adj_margins_r)
       #l = 100, r = 100)
-    ) %>% plotly::style(hoverinfo = 'none')
+    ) |> plotly::style(hoverinfo = 'none')
   return(fig)
 }
 numeric_to_cats <- function(vec,
@@ -319,7 +319,7 @@ adjust_margins <- function(max_label_length,
 #' @title plotify
 #' @export
 plotify <- function(GG) {
-  GG %>% plotly::ggplotly(tooltip = "text") %>%
+  GG |> plotly::ggplotly(tooltip = "text") |>
     plotly::config(
       scrollZoom = FALSE,
       displaylogo = FALSE,
@@ -335,7 +335,7 @@ plotify <- function(GG) {
         "hoverClosestCartesian",
         "hoverCompareCartesian"
       )
-    ) %>%
+    ) |>
     plotly::layout(
       hoverlabel = list(align = "left"),
       xaxis = list(tickfont = list(
@@ -354,10 +354,10 @@ make_parcats <- function(DF,
   if (remove_missing) {
     DF <- stats::na.omit(DF)
   }
-  colnames(DF) <-  colnames(DF) %>% lapply(function(col) {
+  colnames(DF) <-  colnames(DF) |> lapply(function(col) {
     x <- attr(DF[[col]], "label")
     ifelse(is.null(x), col, x)
-  }) %>% unlist()
+  }) |> unlist()
   parcats::parcats(
     easyalluvial::alluvial_wide(DF, NA_label = "*Missing*"),
     marginal_histograms = marginal_histograms,

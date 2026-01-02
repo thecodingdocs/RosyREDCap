@@ -19,7 +19,7 @@ cli_alert_wrap <- function(text = "",
   url_if <- ""
   file_if <- ""
   if (length(url) > 0) {
-    # url %>% lapply(function(x){assert_web_link(x)})
+    # url |> lapply(function(x){assert_web_link(x)})
     # doesnt work for /subheaders/
     # url_if <- " {.url {url}}"
     url_names <- names(url)
@@ -77,7 +77,7 @@ process_df_list <- function(list,
     if (!is_df_list(list))
       stop("list must be ...... a list :)")
     if (drop_empty) {
-      is_a_df_with_rows <- list %>%
+      is_a_df_with_rows <- list |>
         lapply(function(x) {
           is_df <- is.data.frame(x)
           out <- FALSE
@@ -85,7 +85,7 @@ process_df_list <- function(list,
             out <- nrow(x) > 0
           }
           out
-        }) %>%
+        }) |>
         unlist()
       keeps <- which(is_a_df_with_rows)
       drops <- which(!is_a_df_with_rows)
@@ -276,7 +276,7 @@ clean_env_names <- function(env_names,
           message("Non-unique environment name: '",
                   name,
                   "', added numbers...")
-        cleaned_name <- cleaned_name %>% paste0("_", max(wl(cleaned_name %in% cleaned_names)) + 1)
+        cleaned_name <- cleaned_name |> paste0("_", max(wl(cleaned_name %in% cleaned_names)) + 1)
       }
       cleaned_names[i] <- cleaned_name
     }
@@ -340,22 +340,22 @@ clean_num <- function(num) {
 is_date <- function(date) {
   OUT <- grepl("^\\d{4}-\\d{2}-\\d{2}$|^\\d{4}-\\d{2}$|^\\d{4}$", date)
   if (OUT) {
-    OUT2 <- date %>%
-      strsplit(split = "-") %>%
+    OUT2 <- date |>
+      strsplit(split = "-") |>
       unlist()
     year <- OUT2[[1]]
     check_date <- year
     if (length(OUT2) == 1) {
-      check_date <- check_date %>% paste0("-01")
+      check_date <- check_date |> paste0("-01")
       OUT2[[2]] <- "01"
     }
     if (length(OUT2) == 2) {
-      check_date <- check_date %>% paste0("-01")
+      check_date <- check_date |> paste0("-01")
       OUT2[[3]] <- "01"
     }
-    year <- year %>% as.integer()
-    month <- OUT2[[2]] %>% as.integer()
-    day <- OUT2[[3]] %>% as.integer()
+    year <- year |> as.integer()
+    month <- OUT2[[2]] |> as.integer()
+    day <- OUT2[[3]] |> as.integer()
     OUT <- month >= 1 &&
       month <= 12 &&
       day >= 1 &&
@@ -368,7 +368,7 @@ is_date_full <- function(date) {
 }
 date_imputation <- function(dates_in, date_imputation) {
   # followup add min max
-  z <- lapply(dates_in, is_date) %>% as.logical()
+  z <- lapply(dates_in, is_date) |> as.logical()
   x <- which(z & !is_date_full(dates_in))
   y <- which(!z)
   date_out <- dates_in
@@ -382,17 +382,17 @@ date_imputation <- function(dates_in, date_imputation) {
       date_out[x] <- NA
     }
     if (!is.null(date_imputation)) {
-      date_out[x] <- dates_in[x] %>%
+      date_out[x] <- dates_in[x] |>
         lapply(function(date) {
           admiral::impute_dtc_dt(
             date,
             highest_imputation = "M",
             # "n" for normal date
             date_imputation = date_imputation
-            # min_dates = min_dates %>% lubridate::ymd() %>% as.list(),
-            # max_dates = max_dates %>% lubridate::ymd() %>% as.list()
+            # min_dates = min_dates |> lubridate::ymd() |> as.list(),
+            # max_dates = max_dates |> lubridate::ymd() |> as.list()c
           )
-        }) %>%
+        }) |>
         unlist()
     }
   }

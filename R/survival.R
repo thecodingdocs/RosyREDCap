@@ -11,7 +11,7 @@ font_maker <- function(size = 12,
                        color = "black") {
   styles <- c("plain", "bold", "italic", "bold.italic")
   if (!style %in% styles)
-    stop("style must be of type: ", styles %>% paste0(collapse = ", "))
+    stop("style must be of type: ", styles |> paste0(collapse = ", "))
   c(as.numeric(size), as.character(style), as.character(color))
 }
 #' @title make_survival
@@ -56,7 +56,7 @@ make_survival <- function(DF,
       DF <- DF[which(DF[[strat_col]] %in% allowed_levels), ]
     }
   }
-  DF <- DF[, vars] %>% stats::na.omit() %>% clone_attr(DF_ori)
+  DF <- DF[, vars] |> stats::na.omit() |> clone_attr(DF_ori)
   legend.title <- NULL
   legend.labs <- NULL
   if (!missing(strat_col)) {
@@ -93,7 +93,7 @@ make_survival <- function(DF,
     # legend = "bottom",
     legend = legend.position,
     legend.title = legend.title,
-    # legend.labs = data[[group]] %>% attr("levels"),
+    # legend.labs = data[[group]] |> attr("levels"),
     legend.labs = legend.labs,
     # Add p-value and tervals
     combine = TRUE,

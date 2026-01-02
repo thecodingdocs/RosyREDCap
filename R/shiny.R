@@ -71,7 +71,7 @@ mod_list_server <- function(id, values) {
     output$values_list <- listviewer::renderJsonedit({
       if (!is_something(values))
         return(NULL)
-      values %>% shiny::reactiveValuesToList() %>% listviewer::jsonedit() %>% return()
+      values |> shiny::reactiveValuesToList() |> listviewer::jsonedit() |> return()
     })
   })
 }
@@ -118,8 +118,8 @@ TCD_SBF <- function() {
       href = "https://www.thecodingdocs.com/founder"
     )
   )
-  # p(paste0('Version: ',pkg_version)) %>% shiny::div(style="text-align:center"),
-  # p(paste0('Last Update: ',pkg_date)) %>% shiny::div(style="text-align:center"),
+  # p(paste0('Version: ',pkg_version)) |> shiny::div(style="text-align:center"),
+  # p(paste0('Last Update: ',pkg_date)) |> shiny::div(style="text-align:center"),
 }
 TCD_NF <- function() {
   shinydashboardPlus::dashboardFooter(
@@ -164,7 +164,7 @@ TCD_NF <- function() {
         icon = shiny::icon("user-doctor"),
         onclick = "window.open('https://www.thecodingdocs.com/founder', '_blank')"
       )
-    ) %>% shiny::div(style = "text-align:center"),
+    ) |> shiny::div(style = "text-align:center"),
     right = NULL
   )
 }

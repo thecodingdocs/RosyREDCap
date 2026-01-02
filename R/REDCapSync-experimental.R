@@ -71,7 +71,7 @@ add_project_field <- function(project,
     stringsAsFactors = FALSE
   )
   row_match <- which(project$transformation$fields$field_name == field_name)
-  included_already <- length(row_match) > 0
+  included_already <- length(row_match) > 0L
   if (included_already) {
     compare_this <- project$transformation$fields[row_match, ]
     rownames(compare_this) <- NULL
@@ -90,7 +90,7 @@ add_project_field <- function(project,
   message("added '", field_name, "' column")
   invisible(project)
 }
-clean_function <- function (func) {
+clean_function <- function(func) {
   if (!is.function(func)) {
     stop("Input must be a function")
   }
@@ -103,7 +103,7 @@ add_default_fields <- function(project) {
   last_non_rep <- forms$form_name[which(!forms$repeating)] |> dplyr::last()
   form_names <- forms$form_name[which(forms$repeating)]
   if (!project$metadata$is_longitudinal) {
-    has_non_rep <- length(last_non_rep) > 0
+    has_non_rep <- length(last_non_rep) > 0L
     if (has_non_rep) {
       for (form_name in form_names) {
         form_label <- forms$form_label[which(forms$form_name == form_name)]
@@ -138,13 +138,13 @@ add_default_fields <- function(project) {
       data_func = function(project, field_name, form_name) {
         col_names <- project$metadata$form_key_cols[[form_name]]
         form <- NULL
-        while (length(col_names) > 0) {
+        while (length(col_names) > 0L) {
           if (is.null(form)) {
-            form <- project$data[[form_name]][[col_names[1]]]
+            form <- project$data[[form_name]][[col_names[1L]]]
           } else {
-            form <- form |> paste0("_", project$data[[form_name]][[col_names[1]]])
+            form <- form |> paste0("_", project$data[[form_name]][[col_names[1L]]])
           }
-          col_names <- col_names[-1]
+          col_names <- col_names[-1L]
         }
         form
       }
@@ -176,7 +176,7 @@ find_match <- function(x, ref, count_only = FALSE) {
   if (count_only) {
     final_match <- final_match |>
       lapply(function(x) {
-        if (is.na(x[1])) {
+        if (is.na(x[1L])) {
           return(NA)
         }
         length(x)
@@ -198,36 +198,36 @@ combine_project_fields <- function(data_list, transformation) {
     form_name <- field_row$form_name
     # if(any(fields$field_name==field_name))stop("field_name already included")
     current_row <- which(fields$field_name == field_name)
-    if (length(current_row) > 0) {
+    if (length(current_row) > 0L) {
       fields <- fields[-current_row, ]
       i <- current_row
-      if (i > 1)
-        i <- i - 1
+      if (i > 1L)
+        i <- i - 1L
     } else {
       i <- which(
         fields$form_name == form_name &
           fields$field_name == paste0(form_name, "_complete")
       )
-      if (length(i) > 0) {
-        if (i[[1]] > 1) {
-          i <- i - 1
+      if (length(i) > 0L) {
+        if (i[[1L]] > 1L) {
+          i <- i - 1L
         }
       }
-      if (length(i) == 0) {
+      if (length(i) == 0L) {
         i <- which(fields$form_name == form_name)
       }
-      if (length(i) > 1) {
-        i <- i[[1]]
+      if (length(i) > 1L) {
+        i <- i[[1L]]
       }
-      if (length(i) == 0)
+      if (length(i) == 0L)
         i <- nrow(fields)
     }
-    if (length(i) == 0)
+    if (length(i) == 0L)
       stop("insert_after error")
-    top <- fields[1:i, ]
+    top <- fields[1L:i, ]
     bottom <- NULL
     if (i < nrow(fields))
-      bottom <- fields[(i + 1):nrow(fields), ]
+      bottom <- fields[(i + 1L):nrow(fields), ]
     fields <- top |>
       dplyr::bind_rows(field_row) |>
       dplyr::bind_rows(bottom)
@@ -268,7 +268,7 @@ add_fields_to_data_list <- function(data_list, transformation) {
   # fields$form_name <- forms_transformation_original$form_name_remap[match(fields$form_name, forms_transformation_original$form_name)]
   # fields <- fields[order(match(fields$form_name, forms_transformation$form_name)), ]
   # new function RosyUtils
-  first <- 1:which(colnames(fields) == "form_name")
+  first <- 1L:which(colnames(fields) == "form_name")
   move <- which(colnames(fields) == "original_form_name")
   last <- which(colnames(fields) != "original_form_name")[-first]
   fields <- fields[, c(first, move, last)]
@@ -369,7 +369,7 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
   form <- field_names_to_form_names(project, field_name)
   records <- form[[project$metadata$id_col]] |> unique()
   bad_records <- records[which(!records %in% project$summary$all_records[[project$metadata$id_col]])]
-  if (length(bad_records) > 0)
+  if (length(bad_records) > 0L)
     stop("Records not included in project: ", records |> toString())
   cols_mandatory_structure <- project$metadata$form_key_cols[[form]]
   cols_mandatory <- c(cols_mandatory_structure, field_name)
@@ -380,11 +380,11 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
   col_names <- cols_mandatory[which(cols_mandatory %in% colnames(new))]
   new <- new[, col_names]
   included_records <- records[which(records %in% old[[project$metadata$id_col]])]
-  if (length(missing_structure_cols) > 0) {
+  if (length(missing_structure_cols) > 0L) {
     included_records_many_rows <- included_records[which(unlist(lapply(included_records, function(record) {
-      length(which(old[[project$metadata$id_col]] == record)) > 1
+      length(which(old[[project$metadata$id_col]] == record)) > 1L
     })))]
-    if (length(included_records_many_rows) > 0)
+    if (length(included_records_many_rows) > 0L)
       stop(
         "form is missing structural columns (",
         missing_structure_cols |> toString(),
@@ -413,7 +413,7 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
     colnames(old)[i_of_old_name_change] <- paste0(colnames(old)[i_of_old_name_change], "_old")
     z_old <- z |> merge(old, by = cols_mandatory_structure)
     # add autoallow NA
-    if (nrow(z) > 0) {
+    if (nrow(z) > 0L) {
       # message("fix these in REDCap --> ",paste0(out,collapse = " | "))
       choices <- c("upload new",
                    "keep old",
@@ -434,18 +434,18 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
           print.data.frame(z_old[i, ])
           choice <- utils::menu(choices, title = paste0("What would you like to do?"))
         } else {
-          choice <- 1
+          choice <- 1L
         }
-        if (choice == 1) {
+        if (choice == 1L) {
           form |>
             labelled_to_raw_form(project) |>
             upload_form_to_REDCap(project)
-          message("Uploaded: ", form |> paste0(collapse = " | "))
+          message("Uploaded: ", form |> paste(collapse = " | "))
         }
-        if (choice == 2) {
+        if (choice == 2L) {
           message("Did not change anything")
         }
-        if (choice == 3) {
+        if (choice == 3L) {
           project |> link_REDCap_record(form[[project$metadata$id_col]])
           form[[field_name]] <- readline("What would you like it to be? ")
           print.data.frame(form)
@@ -453,7 +453,7 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
             labelled_to_raw_form(project) |>
             upload_form_to_REDCap(project)
         }
-        if (choice == 4) {
+        if (choice == 4L) {
           # account for repeat? instance
           project |> link_REDCap_record(form[[project$metadata$id_col]], form, instance = form[["redcap_repeat_instance"]])
         }
@@ -483,10 +483,10 @@ edit_REDCap_while_viewing <- function(project,
   if (is.null(field_names_to_view))
     field_names_to_view <- colnames(optional_form)
   # if(!all(ref_cols%in%colnames(form)))stop("form must contain all ref_cols")
-  if (length(records) > 0) {
+  if (length(records) > 0L) {
     # message("fix these in REDCap --> ",paste0(out,collapse = " | "))
     rows_of_choices <- which(project$metadata$choices$field_name == field_name_to_change)
-    has_choices <- length(rows_of_choices) > 0
+    has_choices <- length(rows_of_choices) > 0L
     choices1 <- c("Do Nothing", "Edit", "Launch Redcap Link Only")
     if (has_choices) {
       choices2 <- c("Do Nothing",
@@ -509,10 +509,10 @@ edit_REDCap_while_viewing <- function(project,
       form_view_simp |>
         t() |>
         print()
-      if (nrow(form_change) == 0) {
-        print("Nothing in form_change. If you choose edit it will add an instance...")
+      if (nrow(form_change) == 0L) {
+        message("Nothing in form_change. If you choose edit it will add an instance...")
         blank_row <- data.frame(record)
-        colnames(blank_row)[[1]] <- project$metadata$id_col
+        colnames(blank_row)[[1L]] <- project$metadata$id_col
         if ("redcap_repeat_instance" %in% ref_cols_change) {
           blank_row$redcap_repeat_instance <- "1"
           blank_row$redcap_repeat_instrument <- change_form
@@ -522,11 +522,11 @@ edit_REDCap_while_viewing <- function(project,
         print(form_change)
       }
       choice1 <- utils::menu(choices1, title = paste0("What would you like to do?"))
-      if (choice1 == 3) {
+      if (choice1 == 3L) {
         project |> link_REDCap_record(record = record)
       }
-      if (choice1 == 2) {
-        if (nrow(form_change) == 0)
+      if (choice1 == 2L) {
+        if (nrow(form_change) == 0L)
           form_change <- blank_row
         for (j in seq_len(nrow(form_change))) {
           message("Old answer (",
@@ -547,7 +547,7 @@ edit_REDCap_while_viewing <- function(project,
                   labelled_to_raw_form(project) |>
                   upload_form_to_REDCap(project)
                 message("Uploaded: ",
-                        form_sub |> paste0(collapse = " | "))
+                        form_sub |> paste(collapse = " | "))
                 record_was_updated <- TRUE
               } else {
                 form <- form |> dplyr::bind_rows(form_sub)
@@ -556,8 +556,8 @@ edit_REDCap_while_viewing <- function(project,
             if (choice == "Launch Redcap Link Only") {
               # account for repeat? instance
               project |> link_REDCap_record(record = record,
-                                             page = change_form,
-                                             instance = form_change[j, "redcap_repeat_instance"])
+                                            page = change_form,
+                                            instance = form_change[j, "redcap_repeat_instance"])
             }
           } else {
             form_sub[[field_name_to_change]] <- choice
@@ -565,7 +565,7 @@ edit_REDCap_while_viewing <- function(project,
               form_sub |>
                 labelled_to_raw_form(project) |>
                 upload_form_to_REDCap(project)
-              message("Uploaded: ", form_sub |> paste0(collapse = " | "))
+              message("Uploaded: ", form_sub |> paste(collapse = " | "))
               record_was_updated <- TRUE
             } else {
               form <- form |> dplyr::bind_rows(form_sub)
@@ -573,24 +573,24 @@ edit_REDCap_while_viewing <- function(project,
           }
         }
         if (is_repeating_form) {
-          choice3 <- 2
-          the_max <- 0
-          if (nrow(form_change) > 0) {
+          choice3 <- 2L
+          the_max <- 0L
+          if (nrow(form_change) > 0L) {
             the_max <- form_change$redcap_repeat_instance |>
               as.integer() |>
               max()
           }
-          while (choice3 == 2) {
+          while (choice3 == 2L) {
             choice3 <- utils::menu(c("No", "Yes"),
                                    title = paste0("Would you like to add an additional instance?"))
-            if (choice3 == 2) {
+            if (choice3 == 2L) {
               form_sub <- data.frame(
                 record_id = record,
                 redcap_repeat_instrument = change_form,
-                redcap_repeat_instance = as.character(the_max + 1),
+                redcap_repeat_instance = as.character(the_max + 1L),
                 stringsAsFactors = FALSE
               )
-              colnames(form_sub)[1] <- project$metadata$id_col
+              colnames(form_sub)[1L] <- project$metadata$id_col
               choice2 <- utils::menu(choices2, title = paste0("What would you like to do?"))
               choice <- choices2[choice2]
               if (choice %in% c("Manual Entry",
@@ -606,12 +606,12 @@ edit_REDCap_while_viewing <- function(project,
                       labelled_to_raw_form(project) |>
                       upload_form_to_REDCap(project)
                     message("Uploaded: ",
-                            form_sub |> paste0(collapse = " | "))
+                            form_sub |> paste(collapse = " | "))
                     record_was_updated <- TRUE
                   } else {
                     form <- form |> dplyr::bind_rows(form_sub)
                   }
-                  the_max <- the_max + 1
+                  the_max <- the_max + 1L
                 }
                 if (choice == "Launch Redcap Link Only") {
                   # account for repeat? instance
@@ -628,20 +628,20 @@ edit_REDCap_while_viewing <- function(project,
                     labelled_to_raw_form(project) |>
                     upload_form_to_REDCap(project)
                   message("Uploaded: ",
-                          form_sub |> paste0(collapse = " | "))
+                          form_sub |> paste(collapse = " | "))
                   record_was_updated <- TRUE
                 } else {
                   form <- form |> dplyr::bind_rows(form_sub)
                 }
-                the_max <- the_max + 1
+                the_max <- the_max + 1L
               }
             }
           }
         }
       }
     }
-    if (record_was_updated){}
-      # project <- sync_project(project)
+    if (record_was_updated) {}
+    # project <- sync_project(project)
   }
   if (!upload_individually) {
     form |>
@@ -653,7 +653,7 @@ edit_REDCap_while_viewing <- function(project,
 find_upload_diff <- function(to_be_uploaded,
                              project,
                              view_old = FALSE,
-                             n_row_view = 20) {
+                             n_row_view = 20L) {
   project <- assert_blank_project(project)
   # if (!all(names(new_list) %in% project$metadata$forms$form_name)) warning("All upload names should ideally match the project form names, `project$metadata$forms$form_name`", immediate. = TRUE)
   # already_used <- NULL
@@ -675,7 +675,7 @@ find_upload_diff <- function(to_be_uploaded,
     # if (any(form_names %in% already_used)) {
     #   stop("REDCapSync will not allow you to upload items from same form multiple times in one loop without refreshing.")
     # }
-    if (length(form_names) > 1) {
+    if (length(form_names) > 1L) {
       if (!all(form_names %in% project$metadata$forms$form_name[which(project$metadata$forms$repeating)])) {
         stop(
           "Can't have variables in multiple forms in an upload data.frame unless it is a non-repeating form"
@@ -686,7 +686,7 @@ find_upload_diff <- function(to_be_uploaded,
     relevant_data_cols <- data_cols |> vec1_in_vec2(form_names_to_field_names(form_names = form_names, project = project))
     keep <- c(ref_cols, relevant_data_cols)
     drop <- data_cols |> vec1_not_in_vec2(form_names_to_field_names(form_names = form_names, project = project))
-    if (length(drop) > 0) {
+    if (length(drop) > 0L) {
       message("Dropping field_names that aren't part of REDCap metadata: ",
               toString(drop))
     }

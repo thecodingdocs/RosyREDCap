@@ -135,7 +135,7 @@ app_ui <- function(request) {
         tabItem("home", fluidRow(
           box(
             title = h1("Home"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("projects_table")
           )
         )),
@@ -143,47 +143,47 @@ app_ui <- function(request) {
         tabItem("project", fluidRow(
           box(
             title = h1("Project"),
-            width = 12,
+            width = 12L,
             #more summary stuff
-            uiOutput("REDCap_diagram_ui_test"),
+            uiOutput("REDCap_diagram_ui_test")
           ),
           box(
             title = h1("Instruments"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("forms_table")
           ),
           box(
             title = h1("Metadata"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("metadata_table")
           ),
           box(
             title = h1("Codebook"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("codebook_table")
           ),
           box(
             title = h1("Users"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("user_table")
           ),
           box(
             title = h1("Log"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("log_table")
           )
         )),
         # data --------
         tabItem("data", fluidRow(box(
           title = h1("Data Tables"),
-          width = 12,
+          width = 12L,
           uiOutput("dt_tables_view")
         ))),
         # Transformation--------
         tabItem("transformation", fluidRow(
           box(
             title = h1("Forms Transformation"),
-            width = 12,
+            width = 12L,
             DT::DTOutput("forms_transformation"),
             actionButton(
               "ab_accept_form_transform",
@@ -194,13 +194,13 @@ app_ui <- function(request) {
         # group--------
         tabItem(
           "group",
-          fluidRow(box(width = 6, uiOutput("choose_split_")), box(
-            width = 6, uiOutput("choose_fields_cat_")
+          fluidRow(box(width = 6L, uiOutput("choose_split_")), box(
+            width = 6L, uiOutput("choose_fields_cat_")
           )),
           fluidRow(
             box(
               title = h1("Group"),
-              width = 12,
+              width = 12L,
               plotly::plotlyOutput("parcats"),
               actionButton("shuffle_colors", "Shuffle Colors")
             )
@@ -208,26 +208,26 @@ app_ui <- function(request) {
           fluidRow(
             tabBox(
               title = h1("Plots"),
-              width = 6,
+              width = 6L,
               # uiOutput("table1")
               id = "tabset_plots",
               tabPanel("Scatter", "Scatter Plot!"),
               tabPanel(
                 "Survival",
                 fluidRow(
-                  column(4, uiOutput("choose_survival_start_col_")),
-                  column(4, uiOutput("choose_survival_end_col_")),
-                  column(4, uiOutput("choose_survival_status_col_"))
+                  column(4L, uiOutput("choose_survival_start_col_")),
+                  column(4L, uiOutput("choose_survival_end_col_")),
+                  column(4L, uiOutput("choose_survival_status_col_"))
                 ),
                 fluidRow(column(
-                  3,
+                  3L,
                   selectInput(
                     "survival_units",
                     "Units",
                     choices = c("days", "months", "years"),
                     selected = "years"
                   )
-                ), column(9, uiOutput(
+                ), column(9L, uiOutput(
                   "choose_survival_xlim_"
                 ))),
                 plotOutput("survival"),
@@ -237,22 +237,22 @@ app_ui <- function(request) {
             ),
             box(
               title = h1("Table1"),
-              width = 6,
+              width = 6L,
               uiOutput("table1")
             )
           )
         ),
         # plot--------
         tabItem("plot", fluidRow(box(
-          width = 6
+          width = 6L
           # uiOutput("choose_split_")
         ), box(
-          width = 6
+          width = 6L
           # uiOutput("choose_fields_cat_")
         )), fluidRow(
           box(
             title = h1("Plot"),
-            width = 12,
+            width = 12L,
             # uiOutput("parcats"),
             actionButton("shuffle_colors2", "Shuffle Colors")
           )
@@ -261,7 +261,7 @@ app_ui <- function(request) {
         tabItem("record", fluidRow(
           box(
             title = h1("View"),
-            width = 6,
+            width = 6L,
             shinyWidgets::switchInput(
               inputId = "view_switch_text",
               onLabel = "Text",
@@ -273,7 +273,7 @@ app_ui <- function(request) {
             uiOutput("choose_fields_view_"),
             uiOutput("dt_tables_view_records")
           ),
-          box(width = 6, tabsetPanel(
+          box(width = 6L, tabsetPanel(
             tabPanel(
               title = "Change",
               uiOutput("choose_fields_change_"),

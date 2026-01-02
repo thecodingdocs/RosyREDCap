@@ -6,6 +6,9 @@
 \usage{
 plotify(GG)
 }
+\arguments{
+\item{GG}{ggplot object}
+}
 \description{
 plotify
 }

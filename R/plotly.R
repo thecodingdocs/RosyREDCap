@@ -1,11 +1,16 @@
 #' @title plotly_bar
+#' @param DF data.frame
+#' @param x_col column to be plotted for x
+#' @param y_col column to be plotted for y
+#' @param name title
+#' @return plotly
 #' @export
 plotly_bar <- function(DF, x_col, y_col, name) {
   fig <- plotly::plot_ly(
     DF,
     x = x_col,
     y = y_col,
-    type = 'bar',
+    type = "bar",
     name = name,
     text = x_col,
     textposition = "inside",
@@ -15,27 +20,27 @@ plotly_bar <- function(DF, x_col, y_col, name) {
     xaxis = list(
       title = list(
         # text=paste0(name," (",prettyNum(sum(b$n_applicants),","),")"),
-        font = list(size = 12, color = "black")
+        font = list(size = 12L, color = "black")
       ),
-      tickfont = list(size = 12, color = "black")
+      tickfont = list(size = 12L, color = "black")
     ),
     yaxis = list(
-      title = '',
-      tickfont = list(size = 10, color = "black")
+      title = "",
+      tickfont = list(size = 10L, color = "black")
     ),
-    barmode = 'stack',
+    barmode = "stack",
     annotations = list(
       x = x_col,
       y = y_col,
       xanchor = "left",
       xref = "x",
       yref = "y",
-      text = paste0((x_col / sum(x_col) * 100) |> round(1), "%"),
+      text = paste0((x_col / sum(x_col) * 100L) |> round(1L), "%"),
       showarrow = FALSE,
       arrowhead = NULL,
       arrowsize = NULL,
-      font = list(size = 12, color = "black"),
-      textangle = 0
+      font = list(size = 12L, color = "black"),
+      textangle = 0L
     )
   ) |>
     plotly::config(
@@ -67,16 +72,24 @@ plotly_bar <- function(DF, x_col, y_col, name) {
         zeroline = FALSE,
         showticklabels = TRUE
       )
-    ) |> plotly::style(hoverinfo = 'none')
+    ) |>
+    plotly::style(hoverinfo = "none")
   fig
 }
 #' @title plotly_parcats
+#' @param DF data.frame
+#' @param remove_missing logical for removing missing/NA data
+#' @param line_shape_curved logical for having curved lines
+#' @param numeric_to_factor logical for making numerics factors using quantiles
+#' @param quantiles integer for quantiles
+#' @param more_descriptive_label logical for having more descriptive labes
+#' @return plotly
 #' @export
 plotly_parcats <- function(DF,
                            remove_missing = TRUE,
                            line_shape_curved = TRUE,
                            numeric_to_factor = TRUE,
-                           quantiles = 5,
+                           quantiles = 5L,
                            more_descriptive_label = FALSE) {
   line_shape <- "linear"
   the_labels <- get_labels(DF)
@@ -84,16 +97,17 @@ plotly_parcats <- function(DF,
     line_shape <- "hspline"
   if (remove_missing) {
     DF <- stats::na.omit(DF)
-  } else{
+  } else {
     DF <- DF |> lapply(function(col) {
       OUT <- col
       if (is.factor(OUT))
         levels(OUT) <- c(levels(OUT), "*Missing*")
       OUT[which(is.na(OUT))] <- "*Missing*"
-      return(OUT)
-    }) |> as.data.frame()
+      OUT
+    }) |>
+      as.data.frame()
   }
-  if (nrow(DF) == 0) {
+  if (nrow(DF) == 0L) {
     return(plotly::plotly_empty())
   }
   DF <- DF |> lapply(function(col) {
@@ -107,21 +121,22 @@ plotly_parcats <- function(DF,
             more_descriptive_label = more_descriptive_label
           )
         }
-      } else{
+      } else {
         OUT <- as.factor(OUT)
       }
     }
-    return(OUT)
-  }) |> as.data.frame()
-  adj_margins_l <- adjust_margins(max(nchar(as.character(DF[[1]]))))
+    OUT
+  }) |>
+    as.data.frame()
+  adj_margins_l <- adjust_margins(max(nchar(as.character(DF[[1L]]))))
   adj_margins_r <- adjust_margins(max(nchar(as.character(DF[[ncol(DF)]]))))
-  color_palette <- RColorBrewer::brewer.pal(12, "Paired")  # Using 3 colors for "High", "Medium", "Low"
-  color_palette_vec <- color_palette |> sample(size = length(levels(DF[[1]])), replace =  length(levels(DF[[1]])))
+  color_palette <- RColorBrewer::brewer.pal(12L, "Paired")  # Using 3 colors for "High", "Medium", "Low"
+  color_palette_vec <- color_palette |> sample(size = length(levels(DF[[1L]])), replace =  length(levels(DF[[1L]])))
   fig <- plotly::plot_ly(
     # data = DF,
     # x = x_col,
     # y = y_col,
-    type = 'parcats',
+    type = "parcats",
     dimensions = lapply(colnames(DF), function(col) {
       categoryarray <- as.character(unique(DF[[col]]))
       if (is.factor(DF[[col]])) {
@@ -133,11 +148,11 @@ plotly_parcats <- function(DF,
         categoryorder = "array",
         categoryarray = categoryarray |> rev()
       )
-      return(out_list)
+      out_list
     }),
     line = list(
       shape = line_shape,
-      color = color_palette_vec[as.integer(DF[[1]])]  # Use the numeric representation for colors
+      color = color_palette_vec[as.integer(DF[[1L]])]  # Use the numeric representation for colors
       # colorscale = colorscale,  # Define the new colorscale
       # cmin =min(as.numeric(DF[[1]])),  # Set min for color scaling
       # cmax = max(as.numeric(DF[[1]]))   # Set max for color scaling
@@ -148,8 +163,8 @@ plotly_parcats <- function(DF,
     # textposition="inside",
     # insidetextanchor="middle",
     # insidetextfont=list(color="black"),
-    labelfont = list(size = 14, color = "black"),
-    tickfont = list(size = 12, color = "black")
+    labelfont = list(size = 14L, color = "black"),
+    tickfont = list(size = 12L, color = "black")
   ) |>
     plotly::config(
       # scrollZoom=TRUE,
@@ -159,21 +174,22 @@ plotly_parcats <- function(DF,
       showlegend = FALSE,
       margin = list(l = adj_margins_l, r = adj_margins_r)
       #l = 100, r = 100)
-    ) |> plotly::style(hoverinfo = 'none')
+    ) |>
+    plotly::style(hoverinfo = "none")
   fig
 }
 numeric_to_cats <- function(vec,
                             method = "quantile",
-                            quantiles = 5,
+                            quantiles = 5L,
                             more_descriptive_label = FALSE) {
   if (method == "sd") {
     med <- median(vec)
     sd_val <- sd(vec)
     # Define the actual value ranges rounded to 1 decimal place
-    low_threshold <- round(med - 2 * sd_val, 1)
-    mid_low_threshold <- round(med - 1 * sd_val, 1)
-    mid_high_threshold <- round(med + 1 * sd_val, 1)
-    high_threshold <- round(med + 2 * sd_val, 1)
+    low_threshold <- round(med - 2L * sd_val, 1L)
+    mid_low_threshold <- round(med - 1L * sd_val, 1L)
+    mid_high_threshold <- round(med + 1L * sd_val, 1L)
+    high_threshold <- round(med + 2L * sd_val, 1L)
     # Define the labels with both SD and actual values
     labels <- c("Very Low", "Low", "Moderate", "High", "Very High")
     if (more_descriptive_label) {
@@ -229,10 +245,10 @@ numeric_to_cats <- function(vec,
     med <- median(vec)
     sd_val <- sd(vec)
     # Define the actual value ranges rounded to 1 decimal place
-    low_threshold <- round(med - 1.5 * sd_val, 1)
-    mid_low_threshold <- round(med - 0.5 * sd_val, 1)
-    mid_high_threshold <- round(med + 0.5 * sd_val, 1)
-    high_threshold <- round(med + 1.5 * sd_val, 1)
+    low_threshold <- round(med - 1.5 * sd_val, 1L)
+    mid_low_threshold <- round(med - 0.5 * sd_val, 1L)
+    mid_high_threshold <- round(med + 0.5 * sd_val, 1L)
+    high_threshold <- round(med + 1.5 * sd_val, 1L)
     # Define the labels with both SD and actual values
     labels <- c("Very Low", "Low", "Moderate", "High", "Very High")
     if (more_descriptive_label) {
@@ -279,18 +295,18 @@ numeric_to_cats <- function(vec,
   } else if (method == "quantile") {
     # Quantile-based binning
     quantile_cutoffs <- quantile(vec,
-                                 probs = seq(0, 1, length.out = quantiles + 1),
+                                 probs = seq(0L, 1L, length.out = quantiles + 1L),
                                  na.rm = TRUE)
     # Generate labels for the specified number of quantiles
-    labels <- paste("Q", 1:quantiles, sep = "")
+    labels <- paste0("Q", 1L:quantiles)
     if (more_descriptive_label) {
       labels <- paste0(
         "Quantile ",
-        1:quantiles,
+        1L:quantiles,
         " (",
-        round(quantile_cutoffs[-length(quantile_cutoffs)], 1),
+        round(quantile_cutoffs[-length(quantile_cutoffs)], 1L),
         " to ",
-        round(quantile_cutoffs[-1], 1),
+        round(quantile_cutoffs[-1L], 1L),
         ")"
       )
     }
@@ -310,16 +326,18 @@ numeric_to_cats <- function(vec,
   data_category
 }
 adjust_margins <- function(max_label_length,
-                           tick_font_size = 12,
-                           base_margin = 20) {
+                           tick_font_size = 12L,
+                           base_margin = 20L) {
   extra_margin <- max_label_length * tick_font_size * 0.4  # Adjust multiplier as needed
   out <- base_margin + extra_margin
   out
 }
 #' @title plotify
+#' @param GG ggplot object
 #' @export
 plotify <- function(GG) {
-  GG |> plotly::ggplotly(tooltip = "text") |>
+  GG |>
+    plotly::ggplotly(tooltip = "text") |>
     plotly::config(
       scrollZoom = FALSE,
       displaylogo = FALSE,
@@ -339,14 +357,17 @@ plotify <- function(GG) {
     plotly::layout(
       hoverlabel = list(align = "left"),
       xaxis = list(tickfont = list(
-        size = 10, color = "black"
+        size = 10L, color = "black"
       )),
       yaxis = list(tickfont = list(
-        size = 10, color = "black"
+        size = 10L, color = "black"
       ))
     )
 }
 #' @title make_parcats
+#' @param DF data.frame
+#' @param remove_missing Logical for removing missing/NA data
+#' @param marginal_histograms Logical for including marginal_histograms
 #' @export
 make_parcats <- function(DF,
                          remove_missing = FALSE,
@@ -354,16 +375,18 @@ make_parcats <- function(DF,
   if (remove_missing) {
     DF <- stats::na.omit(DF)
   }
-  colnames(DF) <-  colnames(DF) |> lapply(function(col) {
-    x <- attr(DF[[col]], "label")
-    ifelse(is.null(x), col, x)
-  }) |> unlist()
+  colnames(DF) <-  colnames(DF) |>
+    lapply(function(col) {
+      x <- attr(DF[[col]], "label")
+      ifelse(is.null(x), col, x)
+    }) |>
+    unlist()
   parcats::parcats(
     easyalluvial::alluvial_wide(DF, NA_label = "*Missing*"),
     marginal_histograms = marginal_histograms,
     data_input = DF,
-    labelfont = list(size = 12, color = "black"),
-    tickfont = list(size = 12, color = "black"),
+    labelfont = list(size = 12L, color = "black"),
+    tickfont = list(size = 12L, color = "black"),
     arrangement = "freeform"
   )
 }

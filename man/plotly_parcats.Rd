@@ -9,9 +9,25 @@ plotly_parcats(
   remove_missing = TRUE,
   line_shape_curved = TRUE,
   numeric_to_factor = TRUE,
-  quantiles = 5,
+  quantiles = 5L,
   more_descriptive_label = FALSE
 )
+}
+\arguments{
+\item{DF}{data.frame}
+
+\item{remove_missing}{logical for removing missing/NA data}
+
+\item{line_shape_curved}{logical for having curved lines}
+
+\item{numeric_to_factor}{logical for making numerics factors using quantiles}
+
+\item{quantiles}{integer for quantiles}
+
+\item{more_descriptive_label}{logical for having more descriptive labes}
+}
+\value{
+plotly
 }
 \description{
 plotly_parcats

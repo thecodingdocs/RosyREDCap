@@ -8,13 +8,13 @@ make_survival(
   DF,
   start_col,
   end_col,
-  units = "months",
   time_col,
   status_col,
   strat_col,
-  allowed_levels,
+  units = "months",
+  allowed_levels = NULL,
   pval = TRUE,
-  pval.coord = c(0, 0.25),
+  pval.coord = c(0L, 0.25),
   risk.table = TRUE,
   title = NULL,
   palette = NULL,
@@ -24,6 +24,48 @@ make_survival(
   tables.height = 0.25,
   show_stats = FALSE
 )
+}
+\arguments{
+\item{DF}{data.frame}
+
+\item{start_col}{character string of DF colname for start dates}
+
+\item{end_col}{character string of DF colname for end dates}
+
+\item{time_col}{character string of DF colname for time (will then ignore
+start and end)}
+
+\item{status_col}{character string of DF colname for status (should be factor
+or 0/1 pr T/F)}
+
+\item{strat_col}{character string of DF colname for stratification}
+
+\item{units}{one of "weeks", "months", "years"}
+
+\item{allowed_levels}{character string of allowed levels}
+
+\item{pval}{logical for including pval}
+
+\item{pval.coord}{coordinates of pval}
+
+\item{risk.table}{logical}
+
+\item{title}{character string for title}
+
+\item{palette}{colors}
+
+\item{conf.int}{logical for confidence interval shading}
+
+\item{xlim}{limits for x axis}
+
+\item{legend.position}{ong of top, bottom, left, right}
+
+\item{tables.height}{table high as character}
+
+\item{show_stats}{logcial for stat printing}
+}
+\value{
+survival curve plot
 }
 \description{
 make_survival

@@ -1,22 +1,27 @@
 #' @title generate_redcap_ids
+#' @param project REDCapSync project object
+#' @param needed integer length of new IDs needed
+#' @param prefix character string of ID prefix such as "ID" for "ID001"
+#' @param chosen_length integer length of padding for IDs
+#' @return character string of new REDCap IDs not included in current object
 #' @export
-generate_redcap_ids <- function (project,
-                               needed,
-                               prefix = "",
-                               chosen_length = 6L) {
+generate_redcap_ids <- function(project,
+                                needed,
+                                prefix = "",
+                                chosen_length = 6L) {
   project <- convert_project(project)
-  chosen_max <- as.integer(paste0(rep(9, chosen_length), collapse = ""))
+  chosen_max <- as.integer(paste(rep(9L, chosen_length), collapse = ""))
   project <- project$.internal()
   all <- paste0(
     prefix,
-    sprintf(paste0("%0", chosen_length, "d"), 0:chosen_max)
+    sprintf(paste0("%0", chosen_length, "d"), 0L:chosen_max)
   )
   used <- project$summary$all_records[[project$metadata$id_col]]
   unused <- all[which(!all %in% used)]
   sample(unused, needed, replace = FALSE)
 }
 #' @noRd
-convert_project <- function(project){
+convert_project <- function(project) {
   if (test_class(project, classes = c("REDCapSync_project", "R6"))) {
     project <- project$.internal()
   }
@@ -47,16 +52,18 @@ add_redcap_links_to_DF <- function(DF, project) {
       DF$redcap_link <- DF$redcap_link |> paste0("&arm=", DF[["arm_number"]])
     }
   }
-  return(DF)
+  DF
 }
 #' @noRd
 count_project_upload_cells <- function(project) {
   project$data_update |> lapply(function(x) {
     nrow(x) * ncol(x)
-  }) |> unlist() |> sum()
+  }) |>
+    unlist() |>
+    sum()
 }
 #' @noRd
-husk_of_form <- function (project, FORM, field_names) {
+husk_of_form <- function(project, FORM, field_names) {
   DF <- project$data[[FORM]]
   cols <- colnames(DF)[which(colnames(DF) %in% project$metadata$raw_structure_cols)]
   DF2 <- NULL
@@ -64,17 +71,17 @@ husk_of_form <- function (project, FORM, field_names) {
     DF2[[col]] <- DF[[col]]
   }
   DF2 <- as.data.frame(DF2)
-  return(DF2)
+  DF2
 }
 #' @noRd
 all_project_to_char_cols <- function(project) {
   project$data <- project$data |> all_character_cols_list()
   project$data_update <- project$data_update |> all_character_cols_list()
-  return(project)
+  project
 }
 #' @noRd
 add_redcap_links_table <- function(DF, project) {
-  if (nrow(DF) > 0) {
+  if (nrow(DF) > 0L) {
     link_vector <- REDCapSync:::add_redcap_links_to_form(DF, project)$redcap_link
     DF[[project$metadata$id_col]] <- paste0("<a href='", link_vector, "' target='_blank'>", DF[[project$metadata$id_col]], "</a>")
   }
@@ -85,11 +92,12 @@ clean_RC_col_names <- function(DF, project) {
   colnames(DF) <- colnames(DF) |> lapply(function(COL) {
     x <- project$metadata$fields$field_label[which(project$metadata$fields$field_name ==
                                                      COL)]
-    if (length(x) > 1) {
-      x <- x[[1]]
+    if (length(x) > 1L) {
+      x <- x[[1L]]
     }
-    ifelse(length(x) > 0, x, COL)
-  }) |> unlist()
+    ifelse(length(x) > 0L, x, COL)
+  }) |>
+    unlist()
   DF
 }
 #' @noRd
@@ -103,40 +111,40 @@ remove_records_from_list <- function(project, records, silent = FALSE) {
   data_list <- project$data
   if (!is_df_list(data_list))
     stop("data_list is not a list of data.frames as expected.")
-  if (length(records) == 0)
+  if (length(records) == 0L)
     stop(
       "no records supplied to remove_records_from_list, but it's used in update which depends on records."
     )
-  forms <- names(data_list)[which(names(data_list) |>
-                                    lapply(function(form) {
-                                      nrow(data_list[[form]]) > 0
-                                    }) |> unlist())]
+  true_false_rows <- names(data_list) |>
+    lapply(function(form) {nrow(data_list[[form]]) > 0L}) |>
+    unlist()
+  forms <- names(data_list)[which(true_false_rows)]
   for (TABLE in forms) {
     data_list[[TABLE]] <- data_list[[TABLE]][which(!data_list[[TABLE]][[project$metadata$id_col]] %in%
                                                      records), ]
   }
   if (!silent)
-    message("Removed: ", paste0(records, collapse = ", "))
-  return(data_list)
+    message("Removed: ", toString(records))
+  data_list
 }
 #' @noRd
 ignore_redcap_log <- function(collapse = TRUE) {
   ignores <- c(
-    'export',
-    'download ',
-    'edit report',
-    'Switch DAG',
-    'Copy report',
-    'Multi-Language',
-    'File Repository ',
-    'custom record dashboard',
-    'User regenerate own API token',
-    'Create report',
-    ' external module'
+    "export",
+    "download ",
+    "edit report",
+    "Switch DAG",
+    "Copy report",
+    "Multi-Language",
+    "File Repository ",
+    "custom record dashboard",
+    "User regenerate own API token",
+    "Create report",
+    " external module"
   )
   if (collapse)
-    return(paste0(ignores, collapse = "|"))
-  return(ignores)
+    return(paste(ignores, collapse = "|"))
+  ignores
 }
 #' @noRd
 log_details_that_trigger_refresh <- function() {
@@ -152,7 +160,7 @@ log_details_that_trigger_refresh <- function() {
   )
 }
 #' @noRd
-sidebar_choices <- function(data_list, n_threshold = 1) {
+sidebar_choices <- function(data_list, n_threshold = 1L) {
   choices <- REDCapSync:::annotate_choices(data_list)
   choices <- choices[which(choices$n >= n_threshold), ]
   sbc <- data.frame(
@@ -161,7 +169,7 @@ sidebar_choices <- function(data_list, n_threshold = 1) {
     name = choices$name,
     label = paste0(choices$label, " (n = ", clean_num(choices$n), ")")
   )
-  return(sbc)
+  sbc
 }
 #' @noRd
 split_choices <- function(x) {
@@ -176,7 +184,7 @@ split_choices <- function(x) {
   #   code=x |> strsplit(", ") |> lapply(`[`, 1),
   #   name=x |> strsplit(", ")|> lapply(`[`, -1) |> lapply(function(y){paste0(y,collapse = ", ")})
   # )
-  x <- data.frame(code = result[, 2], name = result[, 3])
+  x <- data.frame(code = result[, 2L], name = result[, 3L])
   rownames(x) <- NULL
   if (nrow(x) != check_length)
     stop("split choice error: ", oops)
@@ -207,7 +215,7 @@ form_names_to_field_names <- function(form_names, project, original_only = FALSE
   for (form_name in form_names) {
     field_names <- field_names |> append(fields$field_name[which(fields$form_name == form_name)])
   }
-  return(unique(field_names))
+  unique(field_names)
 }
 #' @noRd
 form_names_to_field_names_alt <- function(form_names, project, original_only = FALSE) {
@@ -220,7 +228,7 @@ form_names_to_field_names_alt <- function(form_names, project, original_only = F
   for (form_name in form_names) {
     field_names <- field_names |> append(fields$field_name[which(fields$form_name == form_name)])
   }
-  return(unique(field_names))
+  unique(field_names)
 }
 #' @noRd
 form_names_to_form_labels_alt <- function(form_names, metadata) {

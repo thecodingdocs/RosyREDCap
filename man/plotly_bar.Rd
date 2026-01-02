@@ -6,6 +6,18 @@
 \usage{
 plotly_bar(DF, x_col, y_col, name)
 }
+\arguments{
+\item{DF}{data.frame}
+
+\item{x_col}{column to be plotted for x}
+
+\item{y_col}{column to be plotted for y}
+
+\item{name}{title}
+}
+\value{
+plotly
+}
 \description{
 plotly_bar
 }

@@ -2,10 +2,11 @@ age <- function(dob,
                 age.day = lubridate::today(),
                 units = "years",
                 floor = TRUE) {
-  calc.age = lubridate::interval(dob, age.day) / lubridate::duration(num = 1, units = units)
-  if (floor)
-    return(as.integer(floor(calc.age)))
-  return(calc.age)
+  calc_age <- lubridate::interval(dob, age.day) / lubridate::duration(num = 1L, units = units)
+  if (floor){
+    return(as.integer(floor(calc_age)))
+  }
+  calc_age
 }
 cli_alert_wrap <- function(text = "",
                            url = NULL,
@@ -18,7 +19,7 @@ cli_alert_wrap <- function(text = "",
   }
   url_if <- ""
   file_if <- ""
-  if (length(url) > 0) {
+  if (length(url) > 0L) {
     # url |> lapply(function(x){assert_web_link(x)})
     # doesnt work for /subheaders/
     # url_if <- " {.url {url}}"
@@ -33,14 +34,14 @@ cli_alert_wrap <- function(text = "",
     if (is.null(url_names))
       url_names <- url
     if (collapse)
-      url_if <- paste0(url_if, collapse = " and ")
+      url_if <- paste(url_if, collapse = " and ")
     url_if <- paste0(" {cli::col_blue(cli::style_hyperlink('",
                      url_names,
                      "', '",
                      url,
                      "'))}")
   }
-  if (length(file) > 0) {
+  if (length(file) > 0L) {
     file_names <- names(file)
     if (is.list(file)) {
       file_names <- unlist(file)
@@ -51,7 +52,7 @@ cli_alert_wrap <- function(text = "",
     if (is.null(file_names))
       file_names <- file
     if (collapse)
-      file_if <- paste0(file_if, collapse = " and ")
+      file_if <- paste(file_if, collapse = " and ")
     file_if <- paste0(
       " {cli::col_blue(cli::style_hyperlink('",
       sanitize_path(file_names),
@@ -68,7 +69,7 @@ cli_alert_wrap <- function(text = "",
   cli::cli_bullets(text)
 }
 now_time <- function() {
-  return(as.POSIXct(Sys.time(), tz = Sys.timezone()))
+  as.POSIXct(Sys.time(), tz = Sys.timezone())
 }
 process_df_list <- function(list,
                             drop_empty = TRUE,
@@ -82,14 +83,14 @@ process_df_list <- function(list,
           is_df <- is.data.frame(x)
           out <- FALSE
           if (is_df) {
-            out <- nrow(x) > 0
+            out <- nrow(x) > 0L
           }
           out
         }) |>
         unlist()
       keeps <- which(is_a_df_with_rows)
       drops <- which(!is_a_df_with_rows)
-      if (length(drops) > 0) {
+      if (length(drops) > 0L) {
         if (!silent) {
           cli_alert_wrap("Dropping non-data.frames and empties... ",
                          toString(names(drops)))
@@ -97,7 +98,7 @@ process_df_list <- function(list,
       }
       list <- list[keeps]
     }
-    if (length(list) > 0) {
+    if (length(list) > 0L) {
       if (!is_named_df_list(list)) {
         names(list) <- paste0(seq_along(list))
       }
@@ -105,7 +106,7 @@ process_df_list <- function(list,
   }
   list
 }
-is_something <- function(thing, row = 0) {
+is_something <- function(thing, row = 0L) {
   out <- FALSE
   if (is.function(thing)) {
     return(TRUE)
@@ -116,11 +117,11 @@ is_something <- function(thing, row = 0) {
         out <- TRUE
       }
     } else {
-      if (length(thing) > 0) {
+      if (length(thing) > 0L) {
         if (is.list(thing)) {
           out <- TRUE
         } else {
-          if (length(thing) == 1) {
+          if (length(thing) == 1L) {
             if (!is.na(thing)) {
               if (is.character(thing)) {
                 if (thing != "") {
@@ -137,21 +138,18 @@ is_something <- function(thing, row = 0) {
       }
     }
   }
-  return(out)
+  out
 }
 sanitize_path <- function(path) {
   sanitized <- gsub("\\\\", "/", path)
   sanitized <- normalizePath(sanitized, winslash = "/", mustWork = FALSE)
-  return(sanitized)
+  sanitized
 }
 all_character_cols <- function(DF) {
   as.data.frame(lapply(DF, as.character))
 }
 all_character_cols_list <- function(list) {
   lapply(list, all_character_cols)
-}
-as_comma_string <- function(vec) {
-  paste0(vec, collapse = ", ")
 }
 vec1_in_vec2 <- function(vec1, vec2) {
   vec1[which(vec1 %in% vec2)]
@@ -191,36 +189,32 @@ is_named_list <- function(x,
       }
     }
   }
-  return(named_all) # Return the result
+  named_all # Return the result
 }
 dw <- function(x) {
   which(duplicated(x))
 }
 is_consecutive_srt_1 <- function(vec) {
-  if (vec[1] != 1) {
+  if (vec[1L] != 1L) {
     return(FALSE)
   }
-  if (length(vec) > 1) {
-    for (i in 2:length(vec)) {
-      if (vec[i] != vec[i - 1] + 1) {
+  if (length(vec) > 1L) {
+    for (i in 2L:length(vec)) {
+      if (vec[i] != vec[i - 1L] + 1L) {
         return(FALSE)
       }
     }
   }
-  return(TRUE)
+  TRUE
 }
 remove_html_tags <- function(text_vector) {
-  # Regular expression to match HTML tags
-  html_pattern <- "<[^>]+>"
-  # Use gsub to remove the HTML tags from each element in the vector
-  cleaned_vector <- gsub(html_pattern, "", text_vector)
-  return(cleaned_vector)
+  gsub(pattern = "<[^>]+>", replacement = "", text_vector)
 }
 drop_if <- function(x, drops) {
   x[which(!x %in% drops)]
 }
 sample1 <- function(x) {
-  sample(x, 1)
+  sample(x, 1L)
 }
 list.files.real <- function(path,
                             full.names = TRUE,
@@ -236,17 +230,17 @@ list.files.real <- function(path,
   )
 }
 wrap_text <- function(text,
-                      max_length = 40,
+                      max_length = 40L,
                       spacer = "\n") {
   words <- unlist(strsplit(text, " "))
   current_line <- ""
   result <- ""
   for (word in words) {
-    if (nchar(current_line) + nchar(word) + 1 > max_length) {
+    if (nchar(current_line) + nchar(word) + 1L > max_length) {
       result <- paste0(result, current_line, spacer)
       current_line <- word
     } else {
-      if (nchar(current_line) == 0) {
+      if (nchar(current_line) == 0L) {
         current_line <- word
       } else {
         current_line <- paste0(current_line, " ", word)
@@ -254,7 +248,7 @@ wrap_text <- function(text,
     }
   }
   result <- paste0(result, current_line)
-  return(result)
+  result
 }
 clean_env_names <- function(env_names,
                             silent = FALSE,
@@ -276,18 +270,18 @@ clean_env_names <- function(env_names,
           message("Non-unique environment name: '",
                   name,
                   "', added numbers...")
-        cleaned_name <- cleaned_name |> paste0("_", max(wl(cleaned_name %in% cleaned_names)) + 1)
+        cleaned_name <- cleaned_name |> paste0("_", max(wl(cleaned_name %in% cleaned_names)) + 1L)
       }
       cleaned_names[i] <- cleaned_name
     }
   }
-  return(cleaned_names)
+  cleaned_names
 }
 is_df_list <- function(x, strict = FALSE) {
   if (!is.list(x)) {
     return(FALSE)
   }
-  if (length(x) == 0) {
+  if (length(x) == 0L) {
     return(FALSE)
   }
   if (is_nested_list(x)) {
@@ -297,13 +291,13 @@ is_df_list <- function(x, strict = FALSE) {
   if (strict) {
     return(all(out))
   }
-  return(any(out))
+  any(out)
 }
 is_env_name <- function(env_name, silent = FALSE) {
   result <- tryCatch({
     if (is.null(env_name))
       stop("env_name is NULL")
-    if (nchar(env_name) == 0) {
+    if (nchar(env_name) == 0L) {
       stop("Short name cannot be empty.")
     }
     if (grepl("^\\d", env_name)) {
@@ -312,13 +306,14 @@ is_env_name <- function(env_name, silent = FALSE) {
     if (grepl("[^A-Za-z0-9_]", env_name)) {
       stop("Short name can only contain letters, numbers, and underscores.")
     }
-    return(TRUE) # Return TRUE if all checks pass
+    TRUE # Return TRUE if all checks pass
   }, error = function(e) {
-    if (!silent)
+    if (!silent){
       message(e$message)
-    return(FALSE) # Return FALSE if any error occurs
+    }
+    FALSE # Return FALSE if any error occurs
   })
-  return(result)
+  result
 }
 is_nested_list <- function(x) {
   if (!is.list(x)) {
@@ -327,12 +322,12 @@ is_nested_list <- function(x) {
   if (is.data.frame(x)) {
     return(FALSE)
   }
-  outcome <- length(x) == 0
+  outcome <- length(x) == 0L
   for (i in seq_along(x)) {
     outcome <- outcome || is_nested_list(x[[i]])
     # print(outcome)
   }
-  return(outcome)
+  outcome
 }
 clean_num <- function(num) {
   formatC(num, format = "d", big.mark = ",")
@@ -343,23 +338,23 @@ is_date <- function(date) {
     OUT2 <- date |>
       strsplit(split = "-") |>
       unlist()
-    year <- OUT2[[1]]
+    year <- OUT2[[1L]]
     check_date <- year
-    if (length(OUT2) == 1) {
+    if (length(OUT2) == 1L) {
       check_date <- check_date |> paste0("-01")
-      OUT2[[2]] <- "01"
+      OUT2[[2L]] <- "01"
     }
-    if (length(OUT2) == 2) {
+    if (length(OUT2) == 2L) {
       check_date <- check_date |> paste0("-01")
-      OUT2[[3]] <- "01"
+      OUT2[[3L]] <- "01"
     }
     year <- year |> as.integer()
-    month <- OUT2[[2]] |> as.integer()
-    day <- OUT2[[3]] |> as.integer()
-    OUT <- month >= 1 &&
-      month <= 12 &&
-      day >= 1 &&
-      day <= 31 && year >= 1900 && year <= lubridate::year(Sys.Date())
+    month <- OUT2[[2L]] |> as.integer()
+    day <- OUT2[[3L]] |> as.integer()
+    OUT <- month >= 1L &&
+      month <= 12L &&
+      day >= 1L &&
+      day <= 31L && year >= 1900L && year <= lubridate::year(Sys.Date())
   }
   OUT
 }
@@ -372,10 +367,10 @@ date_imputation <- function(dates_in, date_imputation) {
   x <- which(z & !is_date_full(dates_in))
   y <- which(!z)
   date_out <- dates_in
-  if (length(y) > 0) {
+  if (length(y) > 0L) {
     date_out[y] <- NA
   }
-  if (length(x) > 0) {
+  if (length(x) > 0L) {
     if (missing(date_imputation))
       date_imputation <- NULL
     if (is.null(date_imputation)) {

@@ -28,23 +28,23 @@ app_server <- function(input, output, session) {
     # display a modal dialog with a header, textinput and action buttons
     showModal(
       modalDialog(
-        tags$h2('Please enter your Project Information'),
-        textInput('user_adds_project_short_name', 'Short Name'),
-        textInput('user_adds_project_api_token', 'API token'),
+        tags$h2("Please enter your Project Information"),
+        textInput("user_adds_project_short_name", "Short Name"),
+        textInput("user_adds_project_api_token", "API token"),
         textInput(
-          'user_adds_project_redcap_base',
+          "user_adds_project_redcap_base",
           "Institutional REDCap Link",
           placeholder = "https://redcap.miami.edu/"
         ),
         textInput(
-          'user_adds_project_merged_form_name',
+          "user_adds_project_merged_form_name",
           "Merged Form Name",
           placeholder = "merged"
         ),
         #dir
         footer = tagList(
-          actionButton('user_adds_project_submit', 'Submit'),
-          modalButton('user_adds_project_cancel')
+          actionButton("user_adds_project_submit", "Submit"),
+          modalButton("user_adds_project_cancel")
         )
       )
     )
@@ -99,7 +99,7 @@ app_server <- function(input, output, session) {
   })
   # tables --------
   output$dt_tables_view <- renderUI({
-    if (length(values$project_data_list$data) == 0)
+    if (length(values$project_data_list$data) == 0L)
       return(h3("No tables available to display."))
     do.call(tabsetPanel, c(id = "tabs", lapply(seq_along(values$project_data_list$data), function(i) {
       table_name_raw <- names(values$project_data_list$data)[i]
@@ -119,38 +119,41 @@ app_server <- function(input, output, session) {
         "repeating_via_events"
       )
     )
-    values$editable_forms_transformation_table |> make_DT_table(editable = list(target = 'cell', disable = list(columns = cols -
-                                                                                                                   1)),
-                                                                 selection = 'none')
+    values$editable_forms_transformation_table |> make_DT_table(editable = list(target = "cell", disable = list(columns = cols -
+                                                                                                                  1L)),
+                                                                selection = "none")
   })
   observeEvent(input$forms_transformation_cell_edit, {
     info <- input$forms_transformation_cell_edit
     message(info$value, " edited!")
     message(info$row, " row!")
     message(info$col, " col!")
-    values$editable_forms_transformation_table[info$row, info$col + 1] <- info$value # had to add +1 because not showing rownames
+    values$editable_forms_transformation_table[info$row, info$col + 1L] <- info$value # had to add +1 because not showing rownames
   })
   output$table1 <- renderUI({
     if (is_something(input$choose_form)) {
-      variables <- unique(c(
-        ifelse(
-          input$choose_split == "no_choice",
-          NA,
-          input$choose_split
-        ),
+      variables <- c(
+        ifelse(input$choose_split == "no_choice", NA, input$choose_split),
         input$choose_fields_cat
-      ) |> drop_nas() |> drop_if(""))
-      if (length(variables) == 0)
+      ) |>
+        unique() |>
+        drop_nas() |>
+        drop_if("")
+      if (length(variables) == 0L) {
         return()
+      }
       DF <- values$project_data_list$data[[input$choose_form]][, variables, drop = FALSE]
       if (is_something(DF)) {
         # message("input$choose_split: ",input$choose_split)
-        # message("variables: ",variables |> as_comma_string())
+        # message("variables: ",variables |> toString())
         # DF |> head() |> print()
         html_output <- htmlTable::htmlTable(
           align = "l",
           #,other_drops = other_drops(ignore = input$render_missing)
-          DF |> REDCapSync:::clean_form(values$project_data_list$metadata$fields) |> make_table1(
+          make_table1(
+            DF = REDCapSync:::clean_form(
+              form = DF,
+              fields = values$project_data_list$metadata$fields),
             group = input$choose_split,
             variables = variables,
             render.missing = input$render_missing
@@ -168,14 +171,14 @@ app_server <- function(input, output, session) {
   # dt_tables_view-----------
   # Create a reactive list of DT tables
   output$dt_tables_view_records <- renderUI({
-    if (length(values$dt_tables_view_list) == 0) {
+    if (length(values$dt_tables_view_list) == 0L) {
       # If the list is empty, show a message
       return(h3("No tables available to display."))
     } else {
       if (input$view_switch_text) {
         form_list_to_text(form_list = values$dt_tables_view_list,
                           project = values$project) |> HTML()
-      } else{
+      } else {
         # Otherwise, generate the list of tables
         lapply(seq_along(values$dt_tables_view_list), function(i) {
           table_name <- names(values$dt_tables_view_list)[i]
@@ -336,10 +339,12 @@ app_server <- function(input, output, session) {
       inputId = "choose_form",
       label = "Choose Form",
       selected = NULL,
-      choices = stats::setNames(
-        object = values$project_data_list$metadata$forms$form_name,
-        nm = values$project_data_list$metadata$forms$form_label
-      ) |> vec1_in_vec2(names(values$project_data_list$data))
+      choices = vec1_in_vec2(
+        stats::setNames(
+          object = values$project_data_list$metadata$forms$form_name,
+          nm = values$project_data_list$metadata$forms$form_label
+        ),
+        names(values$project_data_list$data))
     )
   })
   output$choose_field_ <- renderUI({
@@ -418,10 +423,10 @@ app_server <- function(input, output, session) {
     sliderInput(
       inputId = "choose_survival_xlim",
       label = "X Limits",
-      min = 0,
-      max = 12,
-      value = c(0, 12),
-      step = 1,
+      min = 0L,
+      max = 12L,
+      value = c(0L, 12L),
+      step = 1L,
       width = "100%"
     )
   })
@@ -455,7 +460,7 @@ app_server <- function(input, output, session) {
       updateSelectizeInput(
         session = session,
         inputId = "choose_record",
-        selected = values$subset_records[1],
+        selected = values$subset_records[1L],
         choices = values$subset_records,
         server = TRUE
       )
@@ -481,9 +486,11 @@ app_server <- function(input, output, session) {
       if (!is.null(values$project$transformation)) {
         values$editable_forms_transformation_table <- values$project$transformation$forms |> as.data.frame(stringsAsFactors = FALSE)
       }
-      field_names <- values$sbc$field_name |> unique() |> vec1_in_vec2(values$project_data_list$metadata$fields$field_name[which(
-        values$project_data_list$metadata$fields$field_type_R %in% c("factor", "integer", "numeric")
-      )])
+      field_names <- values$sbc$field_name |>
+        unique() |>
+        vec1_in_vec2(values$project_data_list$metadata$fields$field_name[which(
+          values$project_data_list$metadata$fields$field_type_R %in% c("factor", "integer", "numeric")
+        )])
       updateSelectizeInput(
         session,
         "choose_group",
@@ -498,7 +505,7 @@ app_server <- function(input, output, session) {
         object = values$project_data_list$metadata$forms$form_name,
         nm = values$project_data_list$metadata$forms$form_label
       ) |> vec1_in_vec2(names(values$project_data_list$data))
-      selected <- choices[1]
+      selected <- choices[1L]
       if ("merged" %in% choices) {
         selected <- "merged"
       }
@@ -510,17 +517,17 @@ app_server <- function(input, output, session) {
       )
       values$data_list_form_fields_cat <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = 'factor',
+        field_type_R = "factor",
         form_name = input$choose_form
       )
       values$data_list_form_fields_date <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = 'date',
+        field_type_R = "date",
         form_name = input$choose_form
       )
       values$data_list_form_fields_int <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = 'integer',
+        field_type_R = "integer",
         form_name = input$choose_form
       )
       # updateSelectizeInput(
@@ -617,7 +624,7 @@ app_server <- function(input, output, session) {
               include_log = FALSE,
               internal_use = TRUE
             )
-            if (length(input$choose_group) == 1) {
+            if (length(input$choose_group) == 1L) {
               sbc <- sidebar_choices(values$project_data_list)
               if (!identical(sbc, values$sbc)) {
                 values$sbc <- sbc
@@ -626,7 +633,7 @@ app_server <- function(input, output, session) {
                 values$subset_records <- values$all_records
               } else {
                 x <- values$sbc[which(values$sbc$label == input$choose_group), ]
-                if (nrow(x) > 0) {
+                if (nrow(x) > 0L) {
                   DF <- values$project_data_list$data[[x$form_name]]
                   filter_field <- values$project$metadata$id_col
                   values$subset_records <- filter_choices <- DF[[values$project$metadata$id_col]][which(DF[[x$field_name]] ==
@@ -651,7 +658,7 @@ app_server <- function(input, output, session) {
       }
     })
   })
-  debounced_tabs <- debounce(reactive(input$tabs), 250)  # 250ms delay
+  debounced_tabs <- debounce(reactive(input$tabs), 250L)  # 250ms delay
   observeEvent(debounced_tabs(), {
     values$selected_form <-
       input$tabs |>
@@ -668,7 +675,7 @@ app_server <- function(input, output, session) {
     if (is_something(input$choose_record)) {
       if (!input$choose_record %in% values$subset_records) {
         if (is_something(values$subset_records)) {
-          selected <- values$subset_records[1]
+          selected <- values$subset_records[1L]
         }
       }
     }
@@ -829,17 +836,17 @@ app_server <- function(input, output, session) {
                         selected = selected)
       values$data_list_form_fields_cat <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = 'factor',
+        field_type_R = "factor",
         form_name = input$choose_form
       )
       values$data_list_form_fields_date <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = 'date',
+        field_type_R = "date",
         form_name = input$choose_form
       )
       values$data_list_form_fields_int <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = 'integer',
+        field_type_R = "integer",
         form_name = input$choose_form
       )
       # }
@@ -889,7 +896,7 @@ app_server <- function(input, output, session) {
             if (!is.null(input[[paste0("table___home__", form, "_state")]])) {
               message("form: ", form)
               ROWS <- which(values$project_data_list$data[[form]][[values$project$metadata$id_col]] == input$choose_record)
-              message("ROWS: ", ROWS |> as_comma_string())
+              message("ROWS: ", ROWS |> toString())
               skip <- FALSE
               if (!is.null(input[[paste0("table___home__", form, "_rows_selected")]])) {
                 message("ident ",
@@ -910,8 +917,8 @@ app_server <- function(input, output, session) {
                   ),
                   selected = ROWS
                 )
-                if (length(ROWS) > 0) {
-                  page <- as.integer(ROWS[[1]] / state_length) + 1
+                if (length(ROWS) > 0L) {
+                  page <- as.integer(ROWS[[1L]] / state_length) + 1L
                   message("triggered page: ", page)
                   DT::selectPage(
                     proxy = DT::dataTableProxy(
@@ -959,7 +966,7 @@ app_server <- function(input, output, session) {
     if (!is.null(values$projects)) {
       updateSelectizeInput(
         session,
-        "choose_project" ,
+        "choose_project",
         choices = values$projects$project_name,
         server = TRUE
       )
@@ -1006,16 +1013,17 @@ app_server <- function(input, output, session) {
     if (is_something(input$choose_fields_change)) {
       message("clicked add_input_instance_ui")
       DF <- values$fields_to_change_input_df
-      blank_df <- DF[0, ]
+      blank_df <- DF[0L, ]
       x <- data.frame(
         record_id = input$choose_record,
         redcap_repeat_instrument = input$choose_form,
-        redcap_repeat_instance = "1"
+        redcap_repeat_instance = "1",
+        stringsAsFactors = FALSE
       )
       colnames(x)[which(colnames(x) == "record_id")] <- values$project$metadata$id_col
       if (is_something(DF)) {
-        if (nrow(DF) > 0) {
-          x$redcap_repeat_instance <- DF$redcap_repeat_instance |> as.integer() |> max() |> magrittr::add(1) |> as.character()
+        if (nrow(DF) > 0L) {
+          x$redcap_repeat_instance <- DF$redcap_repeat_instance |> as.integer() |> max() |> magrittr::add(1L) |> as.character()
         }
       }
       values$fields_to_change_input_df <- DF |> dplyr::bind_rows(x)
@@ -1032,8 +1040,8 @@ app_server <- function(input, output, session) {
           OUT <- input[[dynamic_input_id]]
           if (!is.null(OUT)) {
             ij <- gsub("input_dynamic_", "", dynamic_input_id) |> strsplit("_") |> unlist()
-            i <- ij[1] |> as.integer()
-            j <- ij[2] |> as.integer()
+            i <- ij[1L] |> as.integer()
+            j <- ij[2L] |> as.integer()
             if (OUT == "_truly_blank_in_redcap_")
               OUT <- ""
             message("original ", i, " ", j, " ", DF[i, j])
@@ -1051,10 +1059,10 @@ app_server <- function(input, output, session) {
         values$fields_to_change_input_df <- DF
       }
     }
-    print("uploaded!")
+    message("uploaded!")
   })
   output$fields_to_change_dynamic_inputs <- renderUI({
-    print("fields_to_change_dynamic_inputs triggered")
+    message("fields_to_change_dynamic_inputs triggered")
     input$choose_fields_change
     values$dynamic_input_ids
     input$choose_record
@@ -1064,24 +1072,24 @@ app_server <- function(input, output, session) {
     }
     DF <- values$fields_to_change_input_df
     ref_cols <- values$project_data_list$metadata$form_key_cols[[input$choose_form]]
-    if (nrow(DF) == 0) {
+    if (nrow(DF) == 0L) {
       return(h3("No Items available to display."))
     }
     ncols <- ncol(DF)
     nrows <- nrow(DF)
-    the_cols <- (1:ncols)[which(!colnames(DF) %in% ref_cols)]
+    the_cols <- (1L:ncols)[which(!colnames(DF) %in% ref_cols)]
     the_number_of_cols <- ncols - length(ref_cols)
-    base_width <- floor(12 / the_number_of_cols)
-    remainder <- 12 %% the_number_of_cols
+    base_width <- floor(12L / the_number_of_cols)
+    remainder <- 12L %% the_number_of_cols
     message("ref_cols: ", ref_cols |> length())
     message("base_width: ", base_width)
     message("the_number_of_cols: ", the_number_of_cols)
     column_widths <- rep(base_width, the_number_of_cols)
-    if (remainder > 0) {
-      column_widths[1:remainder] <- column_widths[1:remainder] + 1
+    if (remainder > 0L) {
+      column_widths[1L:remainder] <- column_widths[1L:remainder] + 1L
     }
     names(column_widths) <- the_cols
-    the_rows <- 1:nrows
+    the_rows <- 1L:nrows
     input_list <- lapply(the_rows, function(i) {
       lapply(the_cols, function(j) {
         the_col_name <- names(DF)[j]
@@ -1091,7 +1099,7 @@ app_server <- function(input, output, session) {
             # Dynamically adjust column width
             # h4(names(DF)[j], style = "text-align: center;"), # Column name as header
             lapply(i, function(i) {
-              input_name <- paste0(DF[i, ref_cols], collapse = "_")
+              input_name <- paste(DF[i, ref_cols], collapse = "_")
               input_value <- DF[i, j]
               input_id <- paste0("input_dynamic_", i, "_", j)
               if (values$project_data_list$metadata$fields$field_type[which(values$project_data_list$metadata$fields$field_name ==
@@ -1116,7 +1124,7 @@ app_server <- function(input, output, session) {
                       selected = input_value
                     )
                   )
-                } else{
+                } else {
                   choices <- choice_values |>  as.list()
                   names(choices) <- choice_names
                   return(
@@ -1128,7 +1136,7 @@ app_server <- function(input, output, session) {
                     )
                   )
                 }
-              } else{
+              } else {
                 return(textInput(
                   inputId = input_id,
                   label = "",
@@ -1143,12 +1151,13 @@ app_server <- function(input, output, session) {
     values$dynamic_input_ids <- lapply(the_cols, function(j) {
       the_col_name <- names(DF)[j]
       if (!the_col_name %in% ref_cols) {
-        lapply(1:nrows, function(i) {
+        lapply(1L:nrows, function(i) {
           input_id <- paste0("input_dynamic_", i, "_", j)
-          return(input_id)
+          input_id
         }) |> unlist()
       }
-    }) |> unlist()
+    }) |>
+      unlist()
     do.call(fluidRow, input_list) # Arrange columns in a fluidRow
   })
   # ab----------
@@ -1166,13 +1175,13 @@ app_server <- function(input, output, session) {
   observeEvent(input$ab_next_record, {
     if (is_something(values$subset_records) &&
         is_something(input$choose_record)) {
-      if (length(values$subset_records) > 1) {
+      if (length(values$subset_records) > 1L) {
         row <- which(values$subset_records == input$choose_record)
         len <- length(values$subset_records)
         if (row == len) {
-          next_record_row <- 1
-        } else{
-          next_record_row <- row + 1
+          next_record_row <- 1L
+        } else {
+          next_record_row <- row + 1L
         }
         next_record <- values$subset_records[next_record_row]
         if (is_something(next_record)) {
@@ -1197,7 +1206,7 @@ app_server <- function(input, output, session) {
       values$editable_forms_transformation_table
     )) {
       message("values$editable_forms_transformation_table didnt change!")
-    } else{
+    } else {
       message("would have accepted values$editable_forms_transformation_table!")
       print.table(values$editable_forms_transformation_table)
     }
@@ -1205,7 +1214,7 @@ app_server <- function(input, output, session) {
   # redcap links -----
   output$redcap_links <- renderUI({
     if (is_something(input$choose_record) &
-        length(input$choose_record) > 0) {
+        length(input$choose_record) > 0L) {
       IF <- shinydashboard::menuItem(
         text = paste0("REDCap Record (", input$choose_record, ")"),
         icon = shiny::icon("file-lines"),
@@ -1219,7 +1228,7 @@ app_server <- function(input, output, session) {
           input$choose_record
         )
       )
-    } else{
+    } else {
       IF <- NULL
     }
     shinydashboard::sidebarMenu(
@@ -1259,7 +1268,7 @@ app_server <- function(input, output, session) {
     # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
     # print(cols)
     # # fields_to_forms
-    if (length(input$choose_fields_cat) > 0) {
+    if (length(input$choose_fields_cat) > 0L) {
       cols <- input$choose_fields_cat |> vec1_in_vec2(colnames(DF))
       x <- DF[, cols, drop = FALSE] |>
         REDCapSync:::clean_form(fields = values$project_data_list$metadata,
@@ -1273,7 +1282,7 @@ app_server <- function(input, output, session) {
       DF <- values$project_data_list$data[[input$choose_form]]
     }
     date_fields <- get_field_names_date(values$project_data_list)
-    if (length(date_fields) > 0) {
+    if (length(date_fields) > 0L) {
       strat_col <- NULL
       if (!is.null(input$choose_split)) {
         if (input$choose_split != "no_choice") {

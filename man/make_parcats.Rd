@@ -6,6 +6,13 @@
 \usage{
 make_parcats(DF, remove_missing = FALSE, marginal_histograms = TRUE)
 }
+\arguments{
+\item{DF}{data.frame}
+
+\item{remove_missing}{Logical for removing missing/NA data}
+
+\item{marginal_histograms}{Logical for including marginal_histograms}
+}
 \description{
 make_parcats
 }

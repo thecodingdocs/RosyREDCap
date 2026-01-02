@@ -6,6 +6,18 @@
 \usage{
 generate_redcap_ids(project, needed, prefix = "", chosen_length = 6L)
 }
+\arguments{
+\item{project}{REDCapSync project object}
+
+\item{needed}{integer length of new IDs needed}
+
+\item{prefix}{character string of ID prefix such as "ID" for "ID001"}
+
+\item{chosen_length}{integer length of padding for IDs}
+}
+\value{
+character string of new REDCap IDs not included in current object
+}
 \description{
 generate_redcap_ids
 }

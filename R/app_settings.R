@@ -8,7 +8,7 @@
 golem_add_external_resources <- function(...) {
   add_resource_path("www", app_sys("app/www"))
   tags$head(
-    favicon(ext = 'png'),
+    favicon(ext = "png"),
     bundle_resources(path = app_sys("app/www"), app_title = .packageName),
     # includeCSS(system.file(package="table1", "table1_defaults_1.0/table1_defaults.css")),
     ...

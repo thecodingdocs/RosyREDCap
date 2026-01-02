@@ -1,3 +1,4 @@
+#' @title generate_redcap_ids
 #' @export
 generate_redcap_ids <- function (project,
                                needed,

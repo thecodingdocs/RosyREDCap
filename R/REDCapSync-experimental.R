@@ -1,47 +1,4 @@
-#' @title Add Field Transformation to the Database
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' Adds a new field transformation to the REDCap database (`project`). This
-#' allows users to define custom transformations for a specific field in a form,
-#' including its type, label, choices, and associated function for data
-#' manipulation.
-#'
-#' @inheritParams save_project
-#' @param field_name Character. The name of the field to which the
-#' transformation
-#' will be applied.
-#' @param form_name Character. The name of the form containing the field.
-#' @param field_type Character. The type of the field in REDCap (e.g., "text",
-#' "checkbox", "dropdown").
-#' @param field_type_R Character. The corresponding R data type for the field.
-#' Default is `NA`.
-#' @param field_label Character. The label for the field. Default is `NA`.
-#' @param select_choices_or_calculations Character. A string specifying the
-#' choices (for dropdown, radio, or checkbox fields) or calculations (for
-#' calculated fields). Default is `NA`.
-#' @param field_note Character. An optional note or comment for the field.
-#' Default is `NA`.
-#' @param identifier Character. A string indicating whether the field is an
-#' identifier (e.g., "Y" for yes). Default is an empty string (`""`).
-#' @param units Character. The units of measurement for the field, if
-#' applicable. Default is `NA`.
-#' @param data_func Function or NA. An optional function to transform or
-#' validate the data in the field. Default is `NA`.
-#'
-#' @return
-#' The updated `project` object with the field transformation added.
-#'
-#' @details
-#' This function facilitates the addition of a new field transformation to a
-#' REDCap database. The transformation includes metadata such as the field's
-#' type, label, and choices, along with an optional function to process the
-#' data. This is particularly useful for customizing or extending the
-#' functionality of existing REDCap forms and fields.
-#'
-#' @seealso
-#' \code{\link{save_project}} for saving the database or summaries.
-#'
-#' @export
+#' @noRd
 add_project_field <- function(project,
                               field_name,
                               form_name,
@@ -323,13 +280,7 @@ add_fields_to_data_list <- function(data_list, transformation) {
   data_list$data <- named_df_list
   data_list
 }
-#' @title clear_project_fields
-#' @inheritParams save_project
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' Clears and project fields that were added with `add_project_fields()`
-#' or if `setup_project()` contained `add_default_fields = TRUE`
-#' @export
+#' @noRd
 clear_project_fields <- function(project) {
   lifecycle::signal_stage("experimental", "clear_project_transformation()")
   assert_setup_project(project)
@@ -342,32 +293,7 @@ clear_project_fields <- function(project) {
   cli_alert_success("Cleared project transformations!")
   invisible(project)
 }
-#' @rdname default-transformations
-#' @title Add Default Forms Transformation to the Database
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' Applies default transformations to specific forms within the REDCap database
-#' (`project`).
-#' This function modifies the `project` object to include default
-#' transformations, which may
-#' involve adjustments, calculations, or reformatting of data in predefined
-#' forms.
-#'
-#' @inheritParams REDCapSync save_project
-#' @param forms_transformation a data.frame that matches instruments. See
-#' `default_project_transformation` for an example.
-#' @return
-#' The updated `project` object with default transformations applied to the
-#' specified forms.
-#'
-#' @details
-#' This function is designed to streamline and standardize data processing by
-#' applying default transformations to the database forms. The transformations
-#' are predefined within the function and ensure consistency across datasets.
-#'
-#' @seealso
-#' \code{\link{save_project}} for saving the database or summaries.
-#' @export
+#' @noRd
 add_project_transformation <- function(project, forms_transformation) {
   lifecycle::signal_stage("experimental", "add_project_transformation()")
   if (missing(forms_transformation)) {
@@ -406,30 +332,7 @@ add_project_transformation <- function(project, forms_transformation) {
   project$summary$all_records$was_transformed <- FALSE
   invisible(project)
 }
-#' @title rmarkdown_project
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' Generates an RMarkdown report for the given REDCap database (`project`
-#' object). This function creates an RMarkdown file in the specified directory
-#' or default directory, allowing users to create custom reports based on the
-#' database content.
-#'
-#' @details
-#' This function checks if a directory is specified, and if not, defaults to the
-#' `output` folder within the project's directory. It generates the RMarkdown
-#' file that can then be used for further processing or rendering into HTML,
-#' PDF, or other formats.
-#'
-#' @inheritParams save_project
-#' @param dir_other Character string specifying the directory where the
-#' RMarkdown report will be saved. If not provided, it defaults to the `output`
-#' directory inside the project's main directory.
-#' @return A message indicating the creation of the RMarkdown report and the
-#' path to the generated file.
-#' @seealso
-#' \code{\link[REDCapSync]{save_project}} for saving the `project` object.
-#' @family db_functions
-#' @export
+#' @noRd
 rmarkdown_project <- function(project, dir_other) {
   if (missing(dir_other)) {
     dir <- get_dir(project) |> file.path("output")
@@ -441,17 +344,14 @@ rmarkdown_project <- function(project, dir_other) {
                      gsub("-", "_", Sys.Date()),
                      ".pdf")
   rmarkdown::render(
-    input = system.file("rmarkdown", "pdf.Rmd", package = pkg_name),
+    input = system.file("rmarkdown", "pdf.Rmd", package = "RosyREDCap"),
     output_format = "pdf_document",
     output_file = dir |> file.path(filename),
     output_dir = dir,
     quiet = FALSE
   )
 }
-#' @title Run Quality Checks
-#' @inheritParams save_project
-#' @return project object
-#' @export
+#' @noRd
 run_quality_checks <- function(project) {
   project <- assert_blank_project(project)
   if (is_something(project$quality_checks)) {
@@ -561,41 +461,7 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
     }
   }
 }
-#' @title Edit REDCap Data While Viewing
-#' @description
-#' Allows for editing a specific field in a REDCap project while simultaneously
-#' viewing the corresponding records and fields from other forms. Supports
-#' viewing and updating records individually, with flexible field selection.
-#'
-#' @inheritParams save_project
-#' @param optional_form Optional data frame. A data frame containing the data to
-#' be edited. If not provided, the function will pull the data from the REDCap
-#' database using the specified `field_name_to_change`.
-#' @param records Character or numeric vector. The records to be edited. If not
-#' provided, the function will use the unique values from the specified forms.
-#' @param field_name_to_change Character. The field name to be changed in the
-#' REDCap database.
-#' @param field_names_to_view Optional character vector. A list of field names
-#' to view alongside the field being edited. Defaults to `NULL`, in which case
-#' only the field being changed will be viewed.
-#' @param upload_individually Logical. If `TRUE`, each change is uploaded
-#' individually. Default is `TRUE`.
-#'
-#' @return
-#' A modified `project` object with changes to the specified field(s) in the
-#' REDCap project.
-#'
-#' @details
-#' This function is useful when you want to edit specific fields in a REDCap
-#' project while also reviewing related data from other forms in the project.
-#' The `field_name_to_change` must be provided, and you can also specify
-#' additional fields to view while editing. The data is either passed through
-#' `optional_form` or pulled from the project based on the provided field names.
-#'
-#' @seealso
-#' \code{\link{save_project}} for saving the modified database.
-#'
-#' @export
+#' @noRd
 edit_REDCap_while_viewing <- function(project,
                                       optional_form,
                                       records,
@@ -783,31 +649,7 @@ edit_REDCap_while_viewing <- function(project,
       upload_form_to_REDCap(project)
   }
 }
-#' @title Find the project_import and project differences
-#' @description
-#' This function compares the data in the `project` object (new data) with the
-#' previous or reference data to identify differences. It returns a list of
-#' differences for upload. The function ensures that the new data matches the
-#' structure defined by the metadata and provides warnings when discrepancies
-#' are found.
-#' @param to_be_uploaded a data.frame or list of data.frames to be uploaded
-#' @inheritParams save_project
-#' @param view_old Logical. If TRUE, it will display a preview of the old data
-#' (default is FALSE).
-#' @param n_row_view Numeric. Defines how many rows of the old data to view
-#' (default is 20).
-#' @return A list of differences between the new and old data (`upload_list`).
-#' @details
-#' The function compares the data in `project$data_updates` (new data) with the
-#' current data in the database (`project$data`). If the form names in the new
-#' data do not match the `project$metadata$forms$form_name`, a warning is
-#' issued. The function goes through each table in the new data and compares it
-#' with the old data, recording the differences.
-#'
-#' The `compare` and `to` parameters allow users to specify specific data
-#' choices to compare, though their exact usage will depend on how the function
-#' is fully implemented.
-#' @export
+#' @noRd
 find_upload_diff <- function(to_be_uploaded,
                              project,
                              view_old = FALSE,

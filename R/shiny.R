@@ -32,7 +32,7 @@ dbBody <- function(...) {
 }
 dbHeader <- function(...) {
   shinydashboardPlus::dashboardHeader(title = tagList(
-    span(class = "logo-lg", pkg_name),
+    span(class = "logo-lg", "RosyREDCap"),
     tags$a(
       href = "https://thecodingdocs.com",
       target = "_blank",
@@ -44,10 +44,10 @@ dbControlbar <- function(...) {
   shinydashboardPlus::dashboardControlbar(
     TCD_SBH(),
     div(style = "text-align:center", p(
-      paste0(pkg_name, ' Version: ', pkg_version)
+      paste0("RosyREDCap", ' Version: ', "pkg_version")
     )),
     div(style = "text-align:center", p(paste0(
-      'Pkg Updated: ', pkg_date
+      'Pkg Updated: ', "pkg_date"
     ))),
     ...,
     TCD_SBF(),
@@ -72,7 +72,6 @@ mod_list_server <- function(id, values) {
       if (!is_something(values)){
         return(NULL)
       }
-
       x <- values |> shiny::reactiveValuesToList() |> listviewer::jsonedit()
       return(x)
     })
@@ -145,7 +144,7 @@ TCD_NF <- function() {
         icon = shiny::icon("github"),
         onclick = paste0(
           "window.open('https://github.com/brandonerose/",
-          pkg_name,
+          "RosyREDCap",
           "', '_blank')"
         )
       ),
@@ -193,7 +192,7 @@ TCD_SF <- function() {
         icon = shiny::icon("github"),
         onclick = paste0(
           "window.open('https://github.com/brandonerose/",
-          pkg_name,
+          "RosyREDCap",
           "', '_blank')"
         )
       ),

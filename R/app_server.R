@@ -219,13 +219,14 @@ app_server <- function(input, output, session) {
         # values$project_data_list$data$sarcoma |> dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) |> make_PSproject_table(project = values$project)
         if (!is_something(values$dt_tables_view_list))
           return(h3("No tables available to display."))
-        lapply(seq_along(values$dt_tables_view_list), function(i) {
+        x <- lapply(seq_along(values$dt_tables_view_list), function(i) {
           table_data <- values$dt_tables_view_list[[i]]
           table_id <- paste0("table__dt_view_", i)
           output[[table_id]] <- DT::renderDT({
             table_data |> REDCapSync:::clean_form(fields = values$project_data_list$metadata$fields) |> make_DT_table()
           })
-        }) |> return()
+        })
+        return(x)
       }
     }
   })
@@ -255,7 +256,7 @@ app_server <- function(input, output, session) {
   observe({
     if (!is_something(values$project_data_list$data))
       return(h3("No tables available to display."))
-    lapply(names(values$project_data_list$data), function(TABLE) {
+    x <- lapply(names(values$project_data_list$data), function(TABLE) {
       table_data <- values$project_data_list$data[[TABLE]]
       table_id <- paste0("table___home__", TABLE)
       output[[table_id]] <- DT::renderDT({
@@ -263,16 +264,18 @@ app_server <- function(input, output, session) {
           clean_RC_df_for_DT(values$project) |>
           make_DT_table()
       })
-    }) |> return()
+    })
+    return(x)
   })
   observe({
     if (!is_something(values$project_data_list$data))
       return(h3("No tables available to display."))
-    lapply(names(values$project_data_list$data), function(TABLE) {
+    x <- lapply(names(values$project_data_list$data), function(TABLE) {
       table_data <- values$project_data_list$data[[TABLE]]
       table_id <- paste0("table___home__", TABLE, "_exists")
       values[[table_id]] <- !is.null(input[[paste0("table___home__", TABLE, "_state")]])
-    }) |> return()
+    })
+    return(x)
   })
   # html ---------------
   output$html_test <- renderUI({
@@ -1258,12 +1261,11 @@ app_server <- function(input, output, session) {
     # # fields_to_forms
     if (length(input$choose_fields_cat) > 0) {
       cols <- input$choose_fields_cat |> vec1_in_vec2(colnames(DF))
-      DF[, cols, drop = FALSE] |>
+      x <- DF[, cols, drop = FALSE] |>
         REDCapSync:::clean_form(fields = values$project_data_list$metadata,
                                 drop_blanks = TRUE) |>
-        plotly_parcats(remove_missing = !input$render_missing) |>
-        return()
-      # mtcars  |> plotly_parcats(remove_missing = FALSE) |> return()
+        plotly_parcats(remove_missing = !input$render_missing)
+      return(x)
     }
   })
   output$survival <- renderPlot({
@@ -1278,16 +1280,15 @@ app_server <- function(input, output, session) {
           strat_col <- input$choose_split
         }
       }
-      make_survival(
+      x <- make_survival(
         DF,
         start_col = input$choose_survival_start_col,
         end_col = input$choose_survival_end_col,
         status_col = input$choose_survival_status_col,
         units = input$survival_units,
         strat_col = strat_col
-      ) |>
-        return()
-      # mtcars  |> plotly_parcats(remove_missing = FALSE) |> return()
+      )
+      return(x)
     }
   })
 }

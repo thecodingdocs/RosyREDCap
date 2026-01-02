@@ -160,7 +160,7 @@ plotly_parcats <- function(DF,
       margin = list(l = adj_margins_l, r = adj_margins_r)
       #l = 100, r = 100)
     ) |> plotly::style(hoverinfo = 'none')
-  return(fig)
+  fig
 }
 numeric_to_cats <- function(vec,
                             method = "quantile",
@@ -307,14 +307,14 @@ numeric_to_cats <- function(vec,
   data_category <- factor(data_category,
                           levels = levels(data_category),
                           ordered = TRUE)
-  return(data_category)
+  data_category
 }
 adjust_margins <- function(max_label_length,
                            tick_font_size = 12,
                            base_margin = 20) {
   extra_margin <- max_label_length * tick_font_size * 0.4  # Adjust multiplier as needed
   out <- base_margin + extra_margin
-  return(out)
+  out
 }
 #' @title plotify
 #' @export

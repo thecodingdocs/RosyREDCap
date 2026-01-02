@@ -524,5 +524,5 @@ create_node_edge_REDCap <- function(project,
   # final edges -------------------
   edge_df$id <- seq_len(nrow(edge_df))
   OUT <- list(node_df = node_df, edge_df = edge_df)
-  return(OUT)
+  OUT
 }

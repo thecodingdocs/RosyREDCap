@@ -112,7 +112,7 @@ node_aes_names_visNetwork <- function(all = FALSE) {
       )
     )
   }
-  return(OUT)
+  OUT
 }
 edge_aes_names_visNetwork <- function(all = FALSE) {
   #?visNetwork::visEdges()
@@ -148,5 +148,5 @@ edge_aes_names_visNetwork <- function(all = FALSE) {
       )
     )
   }
-  return(OUT)
+  OUT
 }

@@ -138,7 +138,7 @@ clean_function <- function (func) {
     stop("Input must be a function")
   }
   environment(func) <- emptyenv()
-  return(func)
+  func
 }
 #' @noRd
 add_default_fields <- function(project) {

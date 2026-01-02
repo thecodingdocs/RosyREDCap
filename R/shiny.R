@@ -69,9 +69,12 @@ mod_list_server <- function(id, values) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     output$values_list <- listviewer::renderJsonedit({
-      if (!is_something(values))
+      if (!is_something(values)){
         return(NULL)
-      values |> shiny::reactiveValuesToList() |> listviewer::jsonedit() |> return()
+      }
+
+      x <- values |> shiny::reactiveValuesToList() |> listviewer::jsonedit()
+      return(x)
     })
   })
 }

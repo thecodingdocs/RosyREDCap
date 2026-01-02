@@ -43,5 +43,5 @@ create_gauge_plot <- function(percentage_done,
         size = text_size
       )
     )
-  return(gauge_plot)
+  gauge_plot
 }

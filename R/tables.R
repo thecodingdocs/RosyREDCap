@@ -40,7 +40,7 @@ make_table1 <- function(DF,
     variables <- variables[which(variables != group)]
   }
   if (!is_something(variables))
-    return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
+    return(h3("Nothing to  |> !")) # stop("Provide variable names of at least length 1!")
   forumla <- paste0(variables, collapse = " + ")
   if (has_group)
     forumla <- paste0(forumla, " | ", group)
@@ -151,7 +151,7 @@ make_DT_table <- function(DF,
       colnames = " "
     ))
   }
-  DF |> DT::datatable(
+  x <- DF |> DT::datatable(
     selection = selection,
     editable = editable,
     rownames = FALSE,
@@ -177,11 +177,12 @@ make_DT_table <- function(DF,
     class = "cell-border",
     # filter = 'top',
     escape = FALSE
-  ) |> DT::formatStyle(colnames(DF), color = "#000") |> return()
+  ) |> DT::formatStyle(colnames(DF), color = "#000")
+  return(x)
 }
 make_DT_table_simple <- function(DF) {
   if (!is_something(DF)) {
     return(h3("No data available to display."))
   }
-  DF |> DT::datatable() |> DT::formatStyle(colnames(DF), color = "#000") |> return()
+  DF |> DT::datatable() |> DT::formatStyle(colnames(DF), color = "#000")
 }

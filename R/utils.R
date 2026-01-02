@@ -91,14 +91,14 @@ clean_RC_col_names <- function(DF, project) {
       x <- x[[1]]
     }
     ifelse(length(x) > 0, x, COL)
-  }) |> unlist() |> return()
+  }) |> unlist()
   DF
 }
 #' @noRd
 clean_RC_df_for_DT <- function(DF, project) {
   DF |>
     add_redcap_links_table(project) |>
-    clean_RC_col_names(project) |> return()
+    clean_RC_col_names(project)
 }
 #' @noRd
 remove_records_from_list <- function(project, records, silent = FALSE) {

@@ -95,7 +95,7 @@ app_server <- function(input, output, session) {
       ext <- "REDCap_diagram_test_vis"
       OUT <- visNetwork::visNetworkOutput(ext)
     }
-    return(OUT)
+    OUT
   })
   # tables --------
   output$dt_tables_view <- renderUI({

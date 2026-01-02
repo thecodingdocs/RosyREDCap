@@ -47,7 +47,4 @@ Generates a diagram of the REDCap project structure based on the `project` objec
 \details{
 This function generates a visual diagram of the REDCap project structure, including forms, fields, and choices. It supports various options such as rendering the diagram, including fields and choices, and specifying the direction of the diagram.
 }
-\seealso{
-\link{setup_project} for initializing the `project` object.
-}
 \concept{Visuals}

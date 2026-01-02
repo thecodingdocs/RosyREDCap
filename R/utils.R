@@ -17,9 +17,7 @@ generate_redcap_ids <- function (project,
 }
 #' @noRd
 convert_project <- function(project){
-  is_REDCapSync_project <-
-    checkmate::check_class(project, classes = c("REDCapSync_project", "R6"))
-  if (is_REDCapSync_project) {
+  if (test_class(project, classes = c("REDCapSync_project", "R6"))) {
     project <- project$.internal()
   }
   invisible(project)

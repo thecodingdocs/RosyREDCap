@@ -12,7 +12,7 @@ create_gauge_plot <- function(percentage_done,
   )
   df$start <- dplyr::lag(df$percentage, default = 0) * pi
   df$end = df$start + (df$percentage * pi)
-  gauge_plot <- ggplot(df) +
+  gauge_plot <- ggplot2::ggplot(df) +
     ggforce::geom_arc_bar(aes(
       x0 = 1,
       y0 = 1,
@@ -22,14 +22,14 @@ create_gauge_plot <- function(percentage_done,
       r0 = 0.75,
       r = 1
     )) +
-    coord_fixed() +
-    theme_void() +
-    scale_fill_manual(values = c(
+    ggplot2::coord_fixed() +
+    ggplot2::theme_void() +
+    ggplot2::scale_fill_manual(values = c(
       "Complete" = color_func(percentage_done),
       "Incomplete" = "grey80"
     )) +
-    labs(title = title, caption = caption) +
-    theme(
+    ggplot2::labs(title = title, caption = caption) +
+    ggplot2::theme(
       legend.position = "none",
       plot.title = element_text(
         hjust = 0.5,

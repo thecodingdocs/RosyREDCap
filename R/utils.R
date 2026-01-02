@@ -1,8 +1,9 @@
-#' @noRd
-add_ids_to_redcap <- function (project,
+#' @export
+generate_redcap_ids <- function (project,
                                needed,
                                prefix = "",
                                chosen_length = 6L) {
+  project <- convert_project(project)
   chosen_max <- as.integer(paste0(rep(9, chosen_length), collapse = ""))
   project <- project$.internal()
   all <- paste0(
@@ -12,6 +13,15 @@ add_ids_to_redcap <- function (project,
   used <- project$summary$all_records[[project$metadata$id_col]]
   unused <- all[which(!all %in% used)]
   sample(unused, needed, replace = FALSE)
+}
+#' @noRd
+convert_project <- function(project){
+  is_REDCapSync_project <-
+    checkmate::check_class(project, classes = c("REDCapSync_project", "R6"))
+  if (is_REDCapSync_project) {
+    project <- project$.internal()
+  }
+  invisible(project)
 }
 #' @noRd
 add_redcap_links_to_DF <- function(DF, project) {

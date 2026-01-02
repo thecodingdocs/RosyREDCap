@@ -30,11 +30,7 @@ REDCap_diagram <- function(project,
                            hierarchical = FALSE,
                            direction = "LR",
                            zoomView = TRUE) {
-  is_REDCapSync_project <-
-    checkmate::check_class(project, classes = c("REDCapSync_project", "R6"))
-  if (is_REDCapSync_project) {
-    project <- project$.internal()
-  }
+  project <- convert_project(project)
   if (is.null(project$redcap)){
     return(NULL)
   }

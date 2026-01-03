@@ -1,0 +1,5 @@
+# REDCapSync
+
+``` r
+library(RosyREDCap)
+```

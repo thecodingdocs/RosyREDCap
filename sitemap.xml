@@ -12,7 +12,14 @@
 <url><loc>https://thecodingdocs.github.io/RosyREDCap/news/index.html</loc></url>
 <url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/REDCap_diagram.html</loc></url>
 <url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/RosyREDCap-package.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/generate_redcap_ids.html</loc></url>
 <url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/index.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/make_parcats.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/make_survival.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/make_table1.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/plotify.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/plotly_bar.html</loc></url>
+<url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/plotly_parcats.html</loc></url>
 <url><loc>https://thecodingdocs.github.io/RosyREDCap/reference/run_RosyREDCap.html</loc></url>
 </urlset>
 

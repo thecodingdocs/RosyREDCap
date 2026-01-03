@@ -407,7 +407,9 @@ check_field <- function(project, form, field_name, autofill_new = TRUE) {
     }
     # add event?
   }
-  z <- new |> RosyUtils::find_df_diff2(old, ref_cols = cols_mandatory_structure)
+  z <- find_df_diff2(new = new,
+                     old = old,
+                     ref_cols = cols_mandatory_structure)
   if (!is.null(z)) {
     i_of_old_name_change <- which(!colnames(old) %in% cols_mandatory_structure)
     colnames(old)[i_of_old_name_change] <- paste0(colnames(old)[i_of_old_name_change], "_old")
@@ -690,7 +692,7 @@ find_upload_diff <- function(to_be_uploaded,
       message("Dropping field_names that aren't part of REDCap metadata: ",
               toString(drop))
     }
-    final <- RosyUtils::find_df_diff2(
+    final <- find_df_diff2(
       new = new[, keep],
       old = project$data[[form_names]][, keep],
       ref_cols = ref_cols,

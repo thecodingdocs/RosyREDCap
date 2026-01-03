@@ -1,11 +1,3 @@
-ggsave_workaround <- function(g) {
-  survminer:::.build_ggsurvplot(
-    x = g,
-    surv.plot.height = NULL,
-    risk.table.height = NULL,
-    ncensor.plot.height = NULL
-  )
-}
 font_maker <- function(size = 12L,
                        style = "bold",
                        color = "black") {

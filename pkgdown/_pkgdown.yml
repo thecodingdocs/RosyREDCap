@@ -33,12 +33,16 @@ reference:
     contents:
       - REDCap_diagram
 
-  - title: REDCapSync Experimental
+  - title: REDCapSync Helpers
   - desc: Add ons to REDCapSync allowing more customization but too niche for CRAN for now
   - contents:
-      - add_project_field
-      - add_project_transformation
-
+      - generate_redcap_ids
+      - make_parcats
+      - plotify
+      - plotly_bar
+      - plotly_parcats
+      - make_survival
+      - make_table1
 
 articles:
   - title: Using RosyREDCap ✨

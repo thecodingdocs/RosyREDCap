@@ -1,9 +1,16 @@
+#' @title make_table1
+#' @param DF data.frame
+#' @param group character string of no_choice or a factor column name
+#' @param variables character vector of variables to include. NULL is all.
+#' @param render.missing logical for rendering missing data or not
+#' @export
 make_table1 <- function(DF,
                         group = "no_choice",
                         variables = NULL,
                         render.missing = FALSE) {
-  if (is.null(variables))
+  if (is.null(variables)){
     variables <- colnames(DF)
+  }
   has_group <- group != "no_choice"
   # if(any(!x))warning(paste0(x,collapse = ", ")," <- not in the form you specified")
   if (!is_something(variables))

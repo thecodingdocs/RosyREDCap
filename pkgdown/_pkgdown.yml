@@ -54,6 +54,9 @@ articles:
   - title: REDCapSync
     contents:
       - REDCapSync
+  - title: RosyREDCap
+    contents:
+      - RosyREDCap
 authors:
   Brandon Rose:
     href: https://github.com/brandonerose

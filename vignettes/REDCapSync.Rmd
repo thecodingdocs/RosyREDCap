@@ -1,8 +1,8 @@
 ---
-title: "RosyREDCap"
+title: "REDCapSync"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{RosyREDCap}
+  %\VignetteIndexEntry{REDCapSync}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

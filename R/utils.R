@@ -11,7 +11,7 @@ generate_redcap_ids <- function(project,
                                 chosen_length = 6L) {
   project <- convert_project(project)
   chosen_max <- as.integer(paste(rep(9L, chosen_length), collapse = ""))
-  project <- project$.internal()
+  project <- project$.internal
   all <- paste0(
     prefix,
     sprintf(paste0("%0", chosen_length, "d"), 0L:chosen_max)
@@ -23,7 +23,7 @@ generate_redcap_ids <- function(project,
 #' @noRd
 convert_project <- function(project) {
   if (test_class(project, classes = c("REDCapSync_project", "R6"))) {
-    project <- project$.internal()
+    project <- project$.internal
   }
   invisible(project)
 }

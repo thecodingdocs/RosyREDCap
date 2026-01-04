@@ -571,7 +571,7 @@ app_server <- function(input, output, session) {
     if (!is.null(input$choose_project)) {
       if (is_something(input$choose_project)) {
         values$project <- tryCatch({
-          load_project(project_name = input$choose_project)$.internal()
+          load_project(project_name = input$choose_project)$.internal
         }, error = function(e) {
           NULL
         })

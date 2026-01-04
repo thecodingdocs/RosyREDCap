@@ -12,3 +12,7 @@
 ### REDCapSync
 
 - [REDCapSync](https://thecodingdocs.github.io/RosyREDCap/articles/REDCapSync.md):
+
+### RosyREDCap
+
+- [RosyREDCap](https://thecodingdocs.github.io/RosyREDCap/articles/RosyREDCap.md):

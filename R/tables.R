@@ -141,7 +141,7 @@ get_labels <- function(DF) {
 }
 get_field_names_date <- function(data_list) {
   #assert
-  the_rows <- which(data_list$metadata$fields$field_type_R == "date")
+  the_rows <- which(data_list$metadata$fields$field_type_r == "date")
   if (length(the_rows) == 0L) {
     return(NULL)
   }

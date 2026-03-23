@@ -4,7 +4,7 @@
 app_server <- function(input, output, session) {
   # values ------------
   values <- reactiveValues()
-  values$projects <- get_projects() # get list of cached projects
+  values$projects <- REDCapSync::projects$df() # get list of cached projects
   values$project <- NULL
   values$project_data_list <- NULL
   values$project_summaries <- NULL
@@ -194,13 +194,13 @@ app_server <- function(input, output, session) {
     if (is_something(input$choose_record) &&
         is_something(input$choose_fields_view)) {
       if (is_something(values$project)) {
-        values$dt_tables_view_list <- REDCapSync:::generate_project_summary(
+        values$dt_tables_view_list <- REDCapSync:::generate_project_dataset(
           project = values$project,
           transformation_type = "none",
           filter_field = values$project$metadata$id_col,
           filter_choices = input$choose_record,
           filter_strict = FALSE,
-          form_names = REDCapSync:::field_names_to_form_names(values$project, field_names = input$choose_fields_view),
+          form_names = REDCapSync:::field_to_form_names(values$project, field_names = input$choose_fields_view),
           field_names = input$choose_fields_view,
           no_duplicate_cols = TRUE,
           exclude_identifiers = input$deidentify_switch,
@@ -218,7 +218,7 @@ app_server <- function(input, output, session) {
           internal_use = TRUE
         ) |> process_df_list()
         # print(values$dt_tables_view_list)
-        # values$dt_tables_view_list <- project |> generate_project_summary(records = project_data_list$data$sarcoma$record_id |> sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") |> process_df_list()
+        # values$dt_tables_view_list <- project |> generate_project_dataset(records = project_data_list$data$sarcoma$record_id |> sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") |> process_df_list()
         # values$project_data_list$data$sarcoma |> dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) |> make_PSproject_table(project = values$project)
         if (!is_something(values$dt_tables_view_list))
           return(h3("No tables available to display."))
@@ -456,7 +456,7 @@ app_server <- function(input, output, session) {
       values$data_list_form_fields_int <- NULL
       values$subset_records <-
         values$all_records <-
-        values$project$summary$all_records[[values$project$metadata$id_col]]
+        values$project$record_summary[[values$project$metadata$id_col]]
       updateSelectizeInput(
         session = session,
         inputId = "choose_record",
@@ -464,7 +464,7 @@ app_server <- function(input, output, session) {
         choices = values$subset_records,
         server = TRUE
       )
-      values$project_data_list <- REDCapSync:::generate_project_summary(
+      values$project_data_list <- REDCapSync:::generate_project_dataset(
         project = values$project,
         transformation_type = input$transformation_switch,
         labelled = input$labelled,
@@ -489,7 +489,7 @@ app_server <- function(input, output, session) {
       field_names <- values$sbc$field_name |>
         unique() |>
         vec1_in_vec2(values$project_data_list$metadata$fields$field_name[which(
-          values$project_data_list$metadata$fields$field_type_R %in% c("factor", "integer", "numeric")
+          values$project_data_list$metadata$fields$field_type_r %in% c("factor", "integer", "numeric")
         )])
       updateSelectizeInput(
         session,
@@ -517,17 +517,17 @@ app_server <- function(input, output, session) {
       )
       values$data_list_form_fields_cat <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = "factor",
+        field_type_r = "factor",
         form_name = input$choose_form
       )
       values$data_list_form_fields_date <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = "date",
+        field_type_r = "date",
         form_name = input$choose_form
       )
       values$data_list_form_fields_int <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = "integer",
+        field_type_r = "integer",
         form_name = input$choose_form
       )
       # updateSelectizeInput(
@@ -605,7 +605,7 @@ app_server <- function(input, output, session) {
       if (is_something(values$project)) {
         if (is_something(input$choose_group)) {
           if (is_something(input$transformation_switch)) {
-            values$project_data_list <- REDCapSync:::generate_project_summary(
+            values$project_data_list <- REDCapSync:::generate_project_dataset(
               project = values$project,
               transformation_type = input$transformation_switch,
               labelled = input$labelled,
@@ -732,12 +732,12 @@ app_server <- function(input, output, session) {
   #       if(is_something(values$project_data_list$data)){
   #         field_choices_date <- get_field_type_from_data_list(
   #           data_list = values$project_data_list,
-  #           field_type_R = 'date',
+  #           field_type_r = 'date',
   #           form_name = input$choose_form
   #         )
   #         field_choices_cat <- get_field_type_from_data_list(
   #           data_list = values$project_data_list,
-  #           field_type_R = 'factor',
+  #           field_type_r = 'factor',
   #           form_name = input$choose_form
   #         )
   #         fields <- values$project_data_list$metadata$fields
@@ -836,17 +836,17 @@ app_server <- function(input, output, session) {
                         selected = selected)
       values$data_list_form_fields_cat <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = "factor",
+        field_type_r = "factor",
         form_name = input$choose_form
       )
       values$data_list_form_fields_date <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = "date",
+        field_type_r = "date",
         form_name = input$choose_form
       )
       values$data_list_form_fields_int <- get_field_type_from_data_list(
         data_list = values$project_data_list,
-        field_type_R = "integer",
+        field_type_r = "integer",
         form_name = input$choose_form
       )
       # }

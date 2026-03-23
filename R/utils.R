@@ -16,7 +16,7 @@ generate_redcap_ids <- function(project,
     prefix,
     sprintf(paste0("%0", chosen_length, "d"), 0L:chosen_max)
   )
-  used <- project$summary$all_records[[project$metadata$id_col]]
+  used <- project$record_summary[[project$metadata$id_col]]
   unused <- all[which(!all %in% used)]
   sample(unused, needed, replace = FALSE)
 }
@@ -82,7 +82,7 @@ all_project_to_char_cols <- function(project) {
 #' @noRd
 add_redcap_links_table <- function(DF, project) {
   if (nrow(DF) > 0L) {
-    link_vector <- REDCapSync:::add_redcap_links_to_form(DF, project)$redcap_link
+    link_vector <- REDCapSync:::add_redcap_links(DF, project)$redcap_link
     DF[[project$metadata$id_col]] <- paste0("<a href='", link_vector, "' target='_blank'>", DF[[project$metadata$id_col]], "</a>")
   }
   DF
@@ -244,11 +244,11 @@ field_names_to_field_labels_alt <- function(field_names, metadata) {
 }
 #' @noRd
 get_field_type_from_data_list <- function(data_list,
-                                          field_type_R,
+                                          field_type_r,
                                           form_name = NULL,
                                           include_no_choice = TRUE) {
   fields <- data_list$metadata$fields
-  field_names <- fields$field_name[which(fields$field_type_R %in% field_type_R)]
+  field_names <- fields$field_name[which(fields$field_type_r %in% field_type_r)]
   field_labels <- field_names |> field_names_to_field_labels_alt(data_list$metadata)
   field_names <- stats::setNames(field_names, field_labels)
   if (!is.null(form_name)) {

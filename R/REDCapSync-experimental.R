@@ -3,7 +3,7 @@ add_project_field <- function(project,
                               field_name,
                               form_name,
                               field_type,
-                              field_type_R = NA,
+                              field_type_r = NA,
                               field_label = NA,
                               select_choices_or_calculations = NA,
                               field_note = NA,
@@ -24,7 +24,7 @@ add_project_field <- function(project,
       form_name <- original_fields_row$form_name
     if (missing(field_type)) {
       field_type <- original_fields_row$field_type
-      field_type_R <- field_types_to_R(original_fields_row)
+      field_type_r <- field_types_to_R(original_fields_row)
     }
     if (is.na(field_label))
       field_label <- original_fields_row$field_label
@@ -64,7 +64,7 @@ add_project_field <- function(project,
     select_choices_or_calculations = as.character(select_choices_or_calculations),
     field_note = as.character(field_note),
     identifier = as.character(identifier),
-    field_type_R = as.character(field_type_R),
+    field_type_r = as.character(field_type_r),
     units = as.character(units),
     in_original_redcap = as.logical(in_original_redcap),
     field_label_short = as.character(field_label),
@@ -111,7 +111,7 @@ add_default_fields <- function(project) {
           field_name = paste0("n_forms_", form_name),
           form_name = last_non_rep,
           field_type = "text",
-          field_type_R = "integer",
+          field_type_r = "integer",
           field_label = paste0(form_label, " Forms"),
           units = "n",
           data_func = function(project, field_name, form_name) {
@@ -133,7 +133,7 @@ add_default_fields <- function(project) {
       field_name = paste0(form_name, "_compound_key"),
       form_name = form_name,
       field_type = "text",
-      field_type_R = "character",
+      field_type_r = "character",
       field_label = paste(form_label, "Compound Key"),
       data_func = function(project, field_name, form_name) {
         col_names <- project$metadata$form_key_cols[[form_name]]
@@ -329,7 +329,7 @@ add_project_transformation <- function(project, forms_transformation) {
   }
   # add more checks
   project$transformation$forms <- forms_transformation
-  project$summary$all_records$was_transformed <- FALSE
+  project$record_summary$was_transformed <- FALSE
   invisible(project)
 }
 #' @noRd
@@ -366,9 +366,9 @@ run_quality_checks <- function(project) {
 }
 #' @noRd
 check_field <- function(project, form, field_name, autofill_new = TRUE) {
-  form <- field_names_to_form_names(project, field_name)
+  form <- field_to_form_names(project, field_name)
   records <- form[[project$metadata$id_col]] |> unique()
-  bad_records <- records[which(!records %in% project$summary$all_records[[project$metadata$id_col]])]
+  bad_records <- records[which(!records %in% project$record_summary[[project$metadata$id_col]])]
   if (length(bad_records) > 0L)
     stop("Records not included in project: ", records |> toString())
   cols_mandatory_structure <- project$metadata$form_key_cols[[form]]
@@ -470,8 +470,8 @@ edit_REDCap_while_viewing <- function(project,
                                       field_name_to_change,
                                       field_names_to_view = NULL,
                                       upload_individually = TRUE) {
-  change_form <- field_names_to_form_names(project, field_name_to_change)
-  view_forms <- field_names_to_form_names(project, field_names_to_view)
+  change_form <- field_to_form_names(project, field_name_to_change)
+  view_forms <- field_to_form_names(project, field_names_to_view)
   field_names_to_view <- c(field_name_to_change, field_names_to_view) |> unique()
   # if(length(view_forms)>1)stop("only one form combinations are allowed.")
   if (missing(records))
@@ -673,7 +673,7 @@ find_upload_diff <- function(to_be_uploaded,
     ref_cols <- project$metadata$raw_structure_cols
     ref_cols <- ref_cols[which(ref_cols %in% colnames(new))]
     data_cols <- colnames(new)[which(!colnames(new) %in% ref_cols)]
-    form_names <- field_names_to_form_names(project, data_cols)
+    form_names <- field_to_form_names(project, data_cols)
     # if (any(form_names %in% already_used)) {
     #   stop("REDCapSync will not allow you to upload items from same form multiple times in one loop without refreshing.")
     # }

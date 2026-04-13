@@ -196,6 +196,7 @@ app_server <- function(input, output, session) {
       if (is_something(values$project)) {
         values$dt_tables_view_list <- REDCapSync:::generate_project_dataset(
           project = values$project,
+          dataset_name = "RosyREDCap",
           transformation_type = "none",
           filter_field = values$project$metadata$id_col,
           filter_choices = input$choose_record,
@@ -466,6 +467,7 @@ app_server <- function(input, output, session) {
       )
       values$project_data_list <- REDCapSync:::generate_project_dataset(
         project = values$project,
+        dataset_name = "RosyREDCap",
         transformation_type = input$transformation_switch,
         labelled = input$labelled,
         exclude_identifiers = input$deidentify_switch,
@@ -607,6 +609,7 @@ app_server <- function(input, output, session) {
           if (is_something(input$transformation_switch)) {
             values$project_data_list <- REDCapSync:::generate_project_dataset(
               project = values$project,
+              dataset_name = "RosyREDCap",
               transformation_type = input$transformation_switch,
               labelled = input$labelled,
               filter_strict = FALSE,

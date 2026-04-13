@@ -22,7 +22,7 @@ generate_redcap_ids <- function(project,
 }
 #' @noRd
 convert_project <- function(project) {
-  if (test_class(project, classes = c("REDCapSync_project", "R6"))) {
+  if (test_class(project, classes = c("REDCapSyncProject", "R6"))) {
     project <- project$.internal
   }
   invisible(project)

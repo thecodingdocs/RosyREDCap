@@ -215,8 +215,7 @@ app_server <- function(input, output, session) {
           annotate_from_log = FALSE,
           include_records = FALSE,
           include_users = FALSE,
-          include_log = FALSE,
-          internal_use = TRUE
+          include_log = FALSE
         ) |> process_df_list()
         # print(values$dt_tables_view_list)
         # values$dt_tables_view_list <- project |> generate_project_dataset(records = project_data_list$data$sarcoma$record_id |> sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") |> process_df_list()
@@ -481,8 +480,7 @@ app_server <- function(input, output, session) {
         annotate_from_log = FALSE,
         include_records = FALSE,
         include_users = FALSE,
-        include_log = FALSE,
-        internal_use = TRUE
+        include_log = FALSE
       )
       values$sbc <- sidebar_choices(values$project_data_list)
       if (!is.null(values$project$transformation)) {
@@ -624,8 +622,7 @@ app_server <- function(input, output, session) {
               annotate_from_log = FALSE,
               include_records = FALSE,
               include_users = FALSE,
-              include_log = FALSE,
-              internal_use = TRUE
+              include_log = FALSE
             )
             if (length(input$choose_group) == 1L) {
               sbc <- sidebar_choices(values$project_data_list)

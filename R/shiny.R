@@ -10,11 +10,9 @@ dbSidebar <- function(...) {
 backend_menu_item <- function() {
   if (golem::app_prod())
     return(NULL)
-  menuItem(
-    text = "Backend",
-    tabName = "backend",
-    icon = shiny::icon("gear")
-  )
+  menuItem(text = "Backend",
+           tabName = "backend",
+           icon = shiny::icon("gear"))
 }
 dbBody <- function(...) {
   dashboardBody(tabItems(..., tabItem("backend", fluidRow(
@@ -124,53 +122,52 @@ TCD_SBF <- function() {
   # p(paste0('Last Update: ',pkg_date)) |> shiny::div(style="text-align:center"),
 }
 TCD_NF <- function() {
-  shinydashboardPlus::dashboardFooter(
-    left = shiny::div(
-      fluidRow(
-        shiny::actionButton(
-          inputId = "ab1",
-          label = "Donate!",
-          icon = shiny::icon("dollar"),
-          onclick = "window.open('https://account.venmo.com/u/brandonerose', '_blank')"
-        ) ,
-        shiny::actionButton(
-          inputId = "ab2",
-          label = "TheCodingDocs.com",
-          icon = shiny::icon("stethoscope"),
-          onclick = "window.open('https://thecodingdocs.com', '_blank')"
-        ) ,
-        shiny::actionButton(
-          inputId = "ab3",
-          label = "GitHub Code",
-          icon = shiny::icon("github"),
-          onclick = paste0(
-            "window.open('https://github.com/brandonerose/",
-            "RosyREDCap",
-            "', '_blank')"
-          )
-        ),
-        shiny::actionButton(
-          inputId = "ab4",
-          label = "TheCodingDocs",
-          icon = shiny::icon("twitter"),
-          onclick = "window.open('https://twitter.com/TheCodingDocs', '_blank')"
-        ) ,
-        shiny::actionButton(
-          inputId = "ab5",
-          label = "BRoseMDMPH",
-          icon = shiny::icon("square-twitter"),
-          onclick = "window.open('https://twitter.com/BRoseMDMPH', '_blank')"
-        ) ,
-        shiny::actionButton(
-          inputId = "ab6",
-          label = "Brandon Rose, MD, MPH",
-          icon = shiny::icon("user-doctor"),
-          onclick = "window.open('https://www.thecodingdocs.com/founder', '_blank')"
+  shinydashboardPlus::dashboardFooter(left = shiny::div(
+    fluidRow(
+      shiny::actionButton(
+        inputId = "ab1",
+        label = "Donate!",
+        icon = shiny::icon("dollar"),
+        onclick = "window.open('https://account.venmo.com/u/brandonerose', '_blank')"
+      ) ,
+      shiny::actionButton(
+        inputId = "ab2",
+        label = "TheCodingDocs.com",
+        icon = shiny::icon("stethoscope"),
+        onclick = "window.open('https://thecodingdocs.com', '_blank')"
+      ) ,
+      shiny::actionButton(
+        inputId = "ab3",
+        label = "GitHub Code",
+        icon = shiny::icon("github"),
+        onclick = paste0(
+          "window.open('https://github.com/brandonerose/",
+          "RosyREDCap",
+          "', '_blank')"
         )
       ),
-      style = "text-align:center"),
-    right = NULL
-  )
+      shiny::actionButton(
+        inputId = "ab4",
+        label = "TheCodingDocs",
+        icon = shiny::icon("twitter"),
+        onclick = "window.open('https://twitter.com/TheCodingDocs', '_blank')"
+      ) ,
+      shiny::actionButton(
+        inputId = "ab5",
+        label = "BRoseMDMPH",
+        icon = shiny::icon("square-twitter"),
+        onclick = "window.open('https://twitter.com/BRoseMDMPH', '_blank')"
+      ) ,
+      shiny::actionButton(
+        inputId = "ab6",
+        label = "Brandon Rose, MD, MPH",
+        icon = shiny::icon("user-doctor"),
+        onclick = "window.open('https://www.thecodingdocs.com/founder', '_blank')"
+      )
+    ),
+    style = "text-align:center"
+  ),
+  right = NULL)
 }
 TCD_SF <- function() {
   shiny::div(

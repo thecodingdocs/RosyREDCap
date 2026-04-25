@@ -8,7 +8,7 @@ make_table1 <- function(DF,
                         group = "no_choice",
                         variables = NULL,
                         render.missing = FALSE) {
-  if (is.null(variables)){
+  if (is.null(variables)) {
     variables <- colnames(DF)
   }
   has_group <- group != "no_choice"
@@ -31,10 +31,8 @@ make_table1 <- function(DF,
   BAD <- variables |> vec1_not_in_vec2(colnames(DF))
   if (length(BAD) > 0L) {
     variables <- variables[which(!variables %in% BAD)]
-    warning(
-      "Following variables dropped (only NAs in DF): " |> paste0(toString(BAD)),
-      immediate. = TRUE
-    )
+    warning("Following variables dropped (only NAs in DF): " |> paste0(toString(BAD)),
+            immediate. = TRUE)
   }
   if (!is_something(variables))
     return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
@@ -70,8 +68,7 @@ index_na <- function(DF, MARGIN = "col", invert = FALSE) {
   if (length(MARGIN) != 1L)
     stop("MARGIN must be length 1")
   if (!tolower(MARGIN) %in% allowed)
-    stop("MARGIN must be one of the following ... ",
-         toString(allowed))
+    stop("MARGIN must be one of the following ... ", toString(allowed))
   if (tolower(MARGIN) %in% okcols)
     MARGIN <- 2L
   if (tolower(MARGIN) %in% okrows)
@@ -131,7 +128,7 @@ get_labels <- function(DF) {
     names() |>
     lapply(function(name) {
       out <- attr(DF[[name]], "label")
-      if (!is.null(out)){
+      if (!is.null(out)) {
         return(out)
       }
       name

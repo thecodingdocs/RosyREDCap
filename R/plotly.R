@@ -295,8 +295,8 @@ numeric_to_cats <- function(vec,
   } else if (method == "quantile") {
     # Quantile-based binning
     quantile_cutoffs <- stats::quantile(vec,
-                                 probs = seq(0L, 1L, length.out = quantiles + 1L),
-                                 na.rm = TRUE)
+                                        probs = seq(0L, 1L, length.out = quantiles + 1L),
+                                        na.rm = TRUE)
     # Generate labels for the specified number of quantiles
     labels <- paste0("Q", 1L:quantiles)
     if (more_descriptive_label) {

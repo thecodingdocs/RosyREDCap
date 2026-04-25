@@ -15,14 +15,15 @@ create_gauge_plot <- function(percentage_done,
   gauge_plot <- ggplot2::ggplot(df) +
     ggforce::geom_arc_bar(
       ggplot2::aes(
-      x0 = 1L,
-      y0 = 1L,
-      fill = df$part,
-      start = df$start - pi / 2L,
-      end = df$end - pi / 2L,
-      r0 = 0.75,
-      r = 1L
-    )) +
+        x0 = 1L,
+        y0 = 1L,
+        fill = df$part,
+        start = df$start - pi / 2L,
+        end = df$end - pi / 2L,
+        r0 = 0.75,
+        r = 1L
+      )
+    ) +
     ggplot2::coord_fixed() +
     ggplot2::theme_void() +
     ggplot2::scale_fill_manual(values = c(

@@ -300,17 +300,15 @@ create_node_edge_REDCap <- function(project,
           # turn to function
           level = level,
           # label = forms$form_label |> stringr::str_replace_all( "[^[:alnum:]]", ""),
-          title = unlist(
-            lapply(event_mapping$form, function(x) {
-              paste0(
-                "<p><b>",
-                x,
-                "</b><br>",
-                paste(form_names_to_field_names(x, project), collapse = "<br>"),
-                "</p>"
-              )
-            })
-          ),
+          title = unlist(lapply(event_mapping$form, function(x) {
+            paste0(
+              "<p><b>",
+              x,
+              "</b><br>",
+              paste(form_names_to_field_names(x, project), collapse = "<br>"),
+              "</p>"
+            )
+          })),
           shape = "box",
           # entity
           style = "filled",
@@ -331,17 +329,15 @@ create_node_edge_REDCap <- function(project,
           entity_label = forms$form_label,
           level = level,
           # label = forms$form_label |> stringr::str_replace_all( "[^[:alnum:]]", ""),
-          title = unlist(
-            lapply(forms$form_name, function(x) {
-              paste0(
-                "<p><b>",
-                x,
-                "</b><br>",
-                paste(form_names_to_field_names(x, project), collapse = "<br>"),
-                "</p>"
-              )
-            })
-          ),
+          title = unlist(lapply(forms$form_name, function(x) {
+            paste0(
+              "<p><b>",
+              x,
+              "</b><br>",
+              paste(form_names_to_field_names(x, project), collapse = "<br>"),
+              "</p>"
+            )
+          })),
           shape = "box",
           # entity
           style = "filled",
@@ -468,12 +464,10 @@ create_node_edge_REDCap <- function(project,
     edge_df <- edge_df |> dplyr::bind_rows(
       data.frame(
         id = NA,
-        from = unlist(
-          lapply(events$arm_number, function(x) {
-            node_df$id[which(node_df$group == "Arm" &
-                               node_df$entity_name == x)]
-          })
-        ),
+        from = unlist(lapply(events$arm_number, function(x) {
+          node_df$id[which(node_df$group == "Arm" &
+                             node_df$entity_name == x)]
+        })),
         to = unlist(lapply(events$unique_event_name, function(x) {
           node_df$id[which(node_df$group == "Event" &
                              node_df$entity_name == x)]
@@ -496,12 +490,10 @@ create_node_edge_REDCap <- function(project,
         dplyr::bind_rows(
           data.frame(
             id = NA,
-            from = unlist(
-              lapply(event_mapping$unique_event_name, function(x) {
-                node_df$id[which(node_df$group == "Event" &
-                                   node_df$entity_name == x)]
-              })
-            ),
+            from = unlist(lapply(event_mapping$unique_event_name, function(x) {
+              node_df$id[which(node_df$group == "Event" &
+                                 node_df$entity_name == x)]
+            })),
             to = sub_node_df$id,
             rel = NA,
             #"Belongs to",
@@ -521,11 +513,10 @@ create_node_edge_REDCap <- function(project,
               node_df$id[which(node_df$group == "Event" &
                                  node_df$entity_name == x)]
             })),
-            to =  unlist(
-              lapply(event_mapping$form, function(x) {
-                node_df$id[which(node_df$group == "Form" &
-                                   node_df$entity_name == x)]
-              })),
+            to =  unlist(lapply(event_mapping$form, function(x) {
+              node_df$id[which(node_df$group == "Form" &
+                                 node_df$entity_name == x)]
+            })),
             rel = NA,
             #"Belongs to",
             style = "filled",
@@ -579,13 +570,16 @@ create_node_edge_REDCap <- function(project,
   node_df$repeating <- FALSE
   f_tf <- node_df$entity_name %in% forms$form_name[which(forms$repeating)]
   node_df$repeating[which(node_df$group == "Form" & f_tf)] <- TRUE
-  repeating_form_rows <- which(node_df$group == "Form" & node_df$repeating)
+  repeating_form_rows <- which(node_df$group == "Form" &
+                                 node_df$repeating)
   node_df$group[repeating_form_rows] <- "Form (repeating)"
   node_df$color.background[repeating_form_rows] <- repeating_form_color
   if (project$metadata$is_longitudinal) {
     e_tf <- node_df$entity_name %in% events$event_name[which(events$repeating)]
-    node_df$repeating[which(node_df$group == "Event" & e_tf)] <- TRUE
-    repeating_events_rows <- which(node_df$group == "Event" & node_df$repeating)
+    node_df$repeating[which(node_df$group == "Event" &
+                              e_tf)] <- TRUE
+    repeating_events_rows <- which(node_df$group == "Event" &
+                                     node_df$repeating)
     node_df$group[repeating_events_rows] <- "Event (repeating)"
     node_df$color.background[repeating_events_rows] <- repeating_event_color
   }

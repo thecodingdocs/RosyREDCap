@@ -3,80 +3,20 @@ age <- function(dob,
                 units = "years",
                 floor = TRUE) {
   calc_age <- lubridate::interval(dob, age.day) / lubridate::duration(num = 1L, units = units)
-  if (floor){
+  if (floor) {
     return(as.integer(floor(calc_age)))
   }
   calc_age
-}
-cli_alert_wrap <- function(text = "",
-                           url = NULL,
-                           bullet_type = "i",
-                           collapse = TRUE,
-                           file = NULL,
-                           silent = FALSE) {
-  if (silent) {
-    return(invisible())
-  }
-  url_if <- ""
-  file_if <- ""
-  if (length(url) > 0L) {
-    # url |> lapply(function(x){assert_web_link(x)})
-    # doesnt work for /subheaders/
-    # url_if <- " {.url {url}}"
-    url_names <- names(url)
-    if (is.list(url)) {
-      url_names <- unlist(url)
-      if (is_named_list(url)) {
-        url_names <- names(url)
-      }
-      url <- unlist(url)
-    }
-    if (is.null(url_names))
-      url_names <- url
-    if (collapse)
-      url_if <- paste(url_if, collapse = " and ")
-    url_if <- paste0(" {cli::col_blue(cli::style_hyperlink('",
-                     url_names,
-                     "', '",
-                     url,
-                     "'))}")
-  }
-  if (length(file) > 0L) {
-    file_names <- names(file)
-    if (is.list(file)) {
-      file_names <- unlist(file)
-      if (is_named_list(file))
-        file_names <- names(file)
-      file <- unlist(file)
-    }
-    if (is.null(file_names))
-      file_names <- file
-    if (collapse)
-      file_if <- paste(file_if, collapse = " and ")
-    file_if <- paste0(
-      " {cli::col_blue(cli::style_hyperlink('",
-      sanitize_path(file_names),
-      "', '",
-      sanitize_path(paste0("file://", file)),
-      "'))}"
-    )
-  }
-  for (i in seq_along(url_if))
-    text[i] <- paste0(text[i], url_if[i])
-  for (i in seq_along(file_if))
-    text[i] <- paste0(text[i], file_if[i])
-  names(text)[seq_along(text)] <- bullet_type
-  cli::cli_bullets(text)
 }
 now_time <- function() {
   as.POSIXct(Sys.time(), tz = Sys.timezone())
 }
 process_df_list <- function(list,
-                            drop_empty = TRUE,
-                            silent = FALSE) {
+                            drop_empty = TRUE) {
   if (is_something(list)) {
-    if (!is_df_list(list))
+    if (!is_df_list(list)) {
       stop("list must be ...... a list :)")
+    }
     if (drop_empty) {
       is_a_df_with_rows <- list |>
         lapply(function(x) {
@@ -90,12 +30,6 @@ process_df_list <- function(list,
         unlist()
       keeps <- which(is_a_df_with_rows)
       drops <- which(!is_a_df_with_rows)
-      if (length(drops) > 0L) {
-        if (!silent) {
-          cli_alert_wrap("Dropping non-data.frames and empties... ",
-                         toString(names(drops)))
-        }
-      }
       list <- list[keeps]
     }
     if (length(list) > 0L) {
@@ -308,7 +242,7 @@ is_env_name <- function(env_name, silent = FALSE) {
     }
     TRUE # Return TRUE if all checks pass
   }, error = function(e) {
-    if (!silent){
+    if (!silent) {
       message(e$message)
     }
     FALSE # Return FALSE if any error occurs
@@ -354,7 +288,8 @@ is_date <- function(date) {
     OUT <- month >= 1L &&
       month <= 12L &&
       day >= 1L &&
-      day <= 31L && year >= 1900L && year <= lubridate::year(Sys.Date())
+      day <= 31L &&
+      year >= 1900L && year <= lubridate::year(Sys.Date())
   }
   OUT
 }
@@ -404,7 +339,8 @@ find_df_diff2 <- function(new,
   if (!all(colnames(new) %in% colnames(old))) {
     stop("All new DF columns must be included in old DF")
   }
-  if (!all(ref_cols %in% colnames(new)) | !all(ref_cols %in% colnames(old))) {
+  if (!all(ref_cols %in% colnames(new)) |
+      !all(ref_cols %in% colnames(old))) {
     stop("ref_cols must be included in both dfs")
   }
   if (length(ref_cols) > 1) {
@@ -465,15 +401,26 @@ find_df_diff2 <- function(new,
         if (length_of_rows_to_keep == 0) {
           done <- TRUE
         } else {
-          indices <- 1:ifelse(length_of_rows_to_keep < n_row_view, length_of_rows_to_keep, n_row_view)
+          indices <- 1:ifelse(length_of_rows_to_keep < n_row_view,
+                              length_of_rows_to_keep,
+                              n_row_view)
           rows_to_keep3 <- rows_to_keep2[indices]
           print.data.frame(merged_df[rows_to_keep3, unique(cols_to_view)])
-          choice <- utils::menu(choices = c("Check more rows", "Proceed with no more checking", "Stop the function"), title = "What would you like to do?")
+          choice <- utils::menu(
+            choices = c(
+              "Check more rows",
+              "Proceed with no more checking",
+              "Stop the function"
+            ),
+            title = "What would you like to do?"
+          )
           if (choice == 3) {
             stop("Stopped as requested!")
           }
-          if (choice == 2) done <- TRUE
-          if (choice == 1) rows_to_keep2 <- rows_to_keep2[-indices]
+          if (choice == 2)
+            done <- TRUE
+          if (choice == 1)
+            rows_to_keep2 <- rows_to_keep2[-indices]
         }
       }
     }

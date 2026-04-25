@@ -26,9 +26,7 @@ app_server <- function(input, output, session) {
   # projects --------------------------------
   observeEvent(input$test_mode, {
     if (input$test_mode) {
-      values$projects <- data.frame(
-        project_name = REDCapSync:::TEST_PROJECT_NAMES
-      )
+      values$projects <- data.frame(project_name = REDCapSync:::TEST_PROJECT_NAMES)
     } else{
       values$projects <- REDCapSync::projects$df() # get list of cached projects
     }
@@ -143,7 +141,11 @@ app_server <- function(input, output, session) {
   output$table1 <- renderUI({
     if (is_something(input$choose_form)) {
       variables <- c(
-        ifelse(input$choose_split == "no_choice", NA, input$choose_split),
+        ifelse(
+          input$choose_split == "no_choice",
+          NA,
+          input$choose_split
+        ),
         input$choose_fields_cat
       ) |>
         unique() |>
@@ -163,7 +165,8 @@ app_server <- function(input, output, session) {
           make_table1(
             DF = REDCapSync:::clean_form(
               form = DF,
-              fields = values$dataset$metadata$fields),
+              fields = values$dataset$metadata$fields
+            ),
             group = input$choose_split,
             variables = variables,
             render.missing = input$render_missing
@@ -316,9 +319,11 @@ app_server <- function(input, output, session) {
       label = "Transformation",
       multiple = FALSE,
       selected = "default",
-      choices = c(Default = "default",
-                  None = "none",
-                  "Merge-Non-Repeating" = "merge_non_repeating")
+      choices = c(
+        Default = "default",
+        None = "none",
+        "Merge-Non-Repeating" = "merge_non_repeating"
+      )
     )
   })
   output$filter_switch_ <- renderUI({
@@ -356,7 +361,8 @@ app_server <- function(input, output, session) {
           object = values$dataset$metadata$forms$form_name,
           nm = values$dataset$metadata$forms$form_label
         ),
-        names(values$dataset$data))
+        names(values$dataset$data)
+      )
     )
   })
   output$choose_field_ <- renderUI({
@@ -996,12 +1002,10 @@ app_server <- function(input, output, session) {
       values$fields_to_change_input_df <- NULL
       values$dynamic_input_ids <- NULL
       if (running_it) {
-        vars <- unique(
-          c(
-            values$dataset$metadata$form_key_cols[[input$choose_form]],
-            input$choose_fields_change
-          )
-        )
+        vars <- unique(c(
+          values$dataset$metadata$form_key_cols[[input$choose_form]],
+          input$choose_fields_change
+        ))
         DF <- NULL
         if (is_something(input$choose_form)) {
           DF <- values$dataset$data[[input$choose_form]]
@@ -1016,7 +1020,7 @@ app_server <- function(input, output, session) {
         is_something(input$choose_fields_change) &&
         is_something(input$choose_form)) {
       if (values$dataset$metadata$forms$repeating[which(values$dataset$metadata$forms$form_name ==
-                                                                  input$choose_form)]) {
+                                                        input$choose_form)]) {
         actionButton(inputId = "add_input_instance_ui", label = "Add Instance")
       }
     }
@@ -1035,7 +1039,8 @@ app_server <- function(input, output, session) {
       colnames(x)[which(colnames(x) == "record_id")] <- values$project$metadata$id_col
       if (is_something(DF)) {
         if (nrow(DF) > 0L) {
-          x$redcap_repeat_instance <- DF$redcap_repeat_instance |> as.integer() |> max() |> magrittr::add(1L) |> as.character()
+          new_inst <- DF$redcap_repeat_instance |> as.integer() |> max()
+          x$redcap_repeat_instance <- as.character(new_inst + 1L)
         }
       }
       values$fields_to_change_input_df <- DF |> dplyr::bind_rows(x)
@@ -1115,10 +1120,8 @@ app_server <- function(input, output, session) {
               input_value <- DF[i, j]
               input_id <- paste0("input_dynamic_", i, "_", j)
               if (values$dataset$metadata$fields$field_type[which(values$dataset$metadata$fields$field_name ==
-                                                                            the_col_name)] %in% c("radio", "dropdown", "yesno")) {
-                codebook_names <- values$dataset$metadata$choices$name[which(
-                  values$dataset$metadata$choices$field_name == the_col_name
-                )]
+                                                                  the_col_name)] %in% c("radio", "dropdown", "yesno")) {
+                codebook_names <- values$dataset$metadata$choices$name[which(values$dataset$metadata$choices$field_name == the_col_name)]
                 missing_codes <- values$dataset$metadata$missing_codes
                 choice_names <- c("*Truly blank in REDCap*", codebook_names)
                 choice_values <- c("_truly_blank_in_redcap_", codebook_names)

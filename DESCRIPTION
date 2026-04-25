@@ -17,7 +17,6 @@ Depends:
 Imports: 
     admiral,
     checkmate,
-    cli,
     config (>= 0.3.2),
     DiagrammeR,
     dplyr,
@@ -30,7 +29,6 @@ Imports:
     htmlTable,
     listviewer,
     lubridate,
-    magrittr,
     parcats,
     plotly,
     RColorBrewer,

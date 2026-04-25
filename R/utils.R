@@ -12,10 +12,7 @@ generate_redcap_ids <- function(project,
   project <- convert_project(project)
   chosen_max <- as.integer(paste(rep(9L, chosen_length), collapse = ""))
   project <- project$.internal
-  all <- paste0(
-    prefix,
-    sprintf(paste0("%0", chosen_length, "d"), 0L:chosen_max)
-  )
+  all <- paste0(prefix, sprintf(paste0("%0", chosen_length, "d"), 0L:chosen_max))
   used <- project$record_summary[[project$metadata$id_col]]
   unused <- all[which(!all %in% used)]
   sample(unused, needed, replace = FALSE)
@@ -116,7 +113,9 @@ remove_records_from_list <- function(project, records, silent = FALSE) {
       "no records supplied to remove_records_from_list, but it's used in update which depends on records."
     )
   true_false_rows <- names(data_list) |>
-    lapply(function(form) {nrow(data_list[[form]]) > 0L}) |>
+    lapply(function(form) {
+      nrow(data_list[[form]]) > 0L
+    }) |>
     unlist()
   forms <- names(data_list)[which(true_false_rows)]
   for (TABLE in forms) {

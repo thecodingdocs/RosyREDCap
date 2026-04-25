@@ -15,7 +15,6 @@ BugReports: https://github.com/thecodingdocs/RosyREDCap/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
-    admiral,
     checkmate,
     config (>= 0.3.2),
     DiagrammeR,

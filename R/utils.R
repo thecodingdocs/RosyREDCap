@@ -25,58 +25,6 @@ convert_project <- function(project) {
   invisible(project)
 }
 #' @noRd
-add_redcap_links_to_DF <- function(DF, project) {
-  # add instance links
-  if (project$metadata$id_col %in% colnames(DF)) {
-    DF_structure_cols <- project$metadata$raw_structure_cols[which(project$metadata$raw_structure_cols %in%
-                                                                     colnames(DF))]
-    DF_structure_cols <- project$metadata$raw_structure_cols[which(
-      project$metadata$raw_structure_cols %in% colnames(DF) &
-        project$metadata$raw_structure_cols != project$metadata$id_col
-    )]
-    link_head <- project$links$redcap_record_home
-    link_tail <- "&id=" |> paste0(DF[[project$metadata$id_col]])
-    if ("redcap_repeat_instrument" %in% DF_structure_cols) {
-      link_head <- project$links$redcap_record_subpage
-      link_tail <- link_tail |> paste0("&page=", DF[["redcap_repeat_instrument"]])
-    }
-    if ("redcap_repeat_instance" %in% DF_structure_cols) {
-      link_head <- project$links$redcap_record_subpage
-      link_tail <- link_tail |> paste0("&instance=", DF[["redcap_repeat_instance"]])
-    }
-    DF$redcap_link <- paste0(link_head, link_tail)
-    if ("arm_number" %in% colnames(DF)) {
-      DF$redcap_link <- DF$redcap_link |> paste0("&arm=", DF[["arm_number"]])
-    }
-  }
-  DF
-}
-#' @noRd
-count_project_upload_cells <- function(project) {
-  project$data_update |> lapply(function(x) {
-    nrow(x) * ncol(x)
-  }) |>
-    unlist() |>
-    sum()
-}
-#' @noRd
-husk_of_form <- function(project, FORM, field_names) {
-  DF <- project$data[[FORM]]
-  cols <- colnames(DF)[which(colnames(DF) %in% project$metadata$raw_structure_cols)]
-  DF2 <- NULL
-  for (col in cols) {
-    DF2[[col]] <- DF[[col]]
-  }
-  DF2 <- as.data.frame(DF2)
-  DF2
-}
-#' @noRd
-all_project_to_char_cols <- function(project) {
-  project$data <- project$data |> all_character_cols_list()
-  project$data_update <- project$data_update |> all_character_cols_list()
-  project
-}
-#' @noRd
 add_redcap_links_table <- function(DF, project) {
   if (nrow(DF) > 0L) {
     link_vector <- REDCapSync:::add_redcap_links(DF, project)$redcap_link
@@ -169,25 +117,6 @@ sidebar_choices <- function(data_list, n_threshold = 1L) {
     label = paste0(choices$label, " (n = ", clean_num(choices$n), ")")
   )
   sbc
-}
-#' @noRd
-split_choices <- function(x) {
-  oops <- x
-  x <- gsub("\n", " | ", x)  #added this to account for redcap metadata output if not a number
-  x <- x |> strsplit(" [:|:] ") |> unlist()
-  check_length <- length(x)
-  # code <- x |> stringr::str_extract("^[^,]+(?=, )")
-  # name <- x |> stringr::str_extract("(?<=, ).*$")
-  result <- x |> stringr::str_match("([^,]+), (.*)")
-  # x <- data.frame(
-  #   code=x |> strsplit(", ") |> lapply(`[`, 1),
-  #   name=x |> strsplit(", ")|> lapply(`[`, -1) |> lapply(function(y){paste0(y,collapse = ", ")})
-  # )
-  x <- data.frame(code = result[, 2L], name = result[, 3L])
-  rownames(x) <- NULL
-  if (nrow(x) != check_length)
-    stop("split choice error: ", oops)
-  x
 }
 #' @noRd
 redcap_field_types_not_in_data <- c("descriptive", "checkbox")

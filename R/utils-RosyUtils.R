@@ -79,12 +79,6 @@ sanitize_path <- function(path) {
   sanitized <- normalizePath(sanitized, winslash = "/", mustWork = FALSE)
   sanitized
 }
-all_character_cols <- function(DF) {
-  as.data.frame(lapply(DF, as.character))
-}
-all_character_cols_list <- function(list) {
-  lapply(list, all_character_cols)
-}
 vec1_in_vec2 <- function(vec1, vec2) {
   vec1[which(vec1 %in% vec2)]
 }
@@ -184,33 +178,7 @@ wrap_text <- function(text,
   result <- paste0(result, current_line)
   result
 }
-clean_env_names <- function(env_names,
-                            silent = FALSE,
-                            lowercase = TRUE) {
-  cleaned_names <- character(length(env_names))
-  for (i in seq_along(env_names)) {
-    name <- env_names[i]
-    is_valid <- is_env_name(name, silent = TRUE)
-    if (is_valid)
-      cleaned_names[i] <- name
-    if (!is_valid) {
-      if (!silent)
-        message("Invalid environment name: '", name)
-      cleaned_name <- gsub("__", "_", gsub(" ", "_", gsub("-", "", name)))
-      if (lowercase)
-        cleaned_name <- tolower(cleaned_name)
-      if (cleaned_name %in% cleaned_names) {
-        if (!silent)
-          message("Non-unique environment name: '",
-                  name,
-                  "', added numbers...")
-        cleaned_name <- cleaned_name |> paste0("_", max(wl(cleaned_name %in% cleaned_names)) + 1L)
-      }
-      cleaned_names[i] <- cleaned_name
-    }
-  }
-  cleaned_names
-}
+
 is_df_list <- function(x, strict = FALSE) {
   if (!is.list(x)) {
     return(FALSE)
@@ -296,38 +264,7 @@ is_date <- function(date) {
 is_date_full <- function(date) {
   grepl("^\\d{4}-\\d{2}-\\d{2}$", date)
 }
-date_imputation <- function(dates_in, date_imputation) {
-  # followup add min max
-  z <- lapply(dates_in, is_date) |> as.logical()
-  x <- which(z & !is_date_full(dates_in))
-  y <- which(!z)
-  date_out <- dates_in
-  if (length(y) > 0L) {
-    date_out[y] <- NA
-  }
-  if (length(x) > 0L) {
-    if (missing(date_imputation))
-      date_imputation <- NULL
-    if (is.null(date_imputation)) {
-      date_out[x] <- NA
-    }
-    if (!is.null(date_imputation)) {
-      date_out[x] <- dates_in[x] |>
-        lapply(function(date) {
-          admiral::impute_dtc_dt(
-            date,
-            highest_imputation = "M",
-            # "n" for normal date
-            date_imputation = date_imputation
-            # min_dates = min_dates |> lubridate::ymd() |> as.list(),
-            # max_dates = max_dates |> lubridate::ymd() |> as.list()c
-          )
-        }) |>
-        unlist()
-    }
-  }
-  date_out
-}
+
 find_df_diff2 <- function(new,
                           old,
                           ref_cols = NULL,

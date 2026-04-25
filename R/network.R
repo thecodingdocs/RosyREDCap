@@ -29,43 +29,6 @@ node_aes_names_DiagrammR <- function(all = FALSE) {
     "margin"
   )
 }
-edge_aes_names_DiagrammR <- function(all = FALSE) {
-  c(
-    #write conversion
-    "style",
-    "penwidth",
-    "color",
-    "arrowsize",
-    "arrowhead",
-    "arrowtail",
-    "fontname",
-    "fontsize",
-    "fontcolor",
-    "len",
-    "tooltip",
-    "URL",
-    "label",
-    "labelfontname",
-    "labelfontsize",
-    "labelfontcolor",
-    "labeltooltip",
-    "labelURL",
-    "edgetooltip",
-    "edgeURL",
-    "dir",
-    "headtooltip",
-    "headURL",
-    "headclip",
-    "headlabel",
-    "headport",
-    "tailtooltip",
-    "tailURL",
-    "tailclip",
-    "taillabel",
-    "tailport",
-    "decorate"
-  )
-}
 node_aes_names_visNetwork <- function(all = FALSE) {
   #?visNetwork::visNodes()
   OUT <- c(

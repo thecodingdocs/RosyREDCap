@@ -14,7 +14,9 @@
 #' @param include_fields Logical (TRUE/FALSE). If TRUE, includes fields in the diagram. Default is `FALSE`.
 #' @param include_choices Logical (TRUE/FALSE). If TRUE, includes choices in the diagram. Default is `FALSE`.
 #' @param hierarchical Logical (TRUE/FALSE). If TRUE, generates a hierarchical diagram. Default is `FALSE`.
-#' @param direction Character string specifying the direction of the diagram. Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left), and "BT" (bottom to top). Default is "LR".
+#' @param direction Character string specifying the direction of the diagram.
+#' Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left),
+#' and "BT" (bottom to top). Default is "LR".
 #' @return A diagram object representing the REDCap project structure.
 #' @family Visuals
 #' @export

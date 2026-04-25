@@ -58,11 +58,11 @@ or 0/1 pr T/F)}
 
 \item{xlim}{limits for x axis}
 
-\item{legend.position}{ong of top, bottom, left, right}
+\item{legend.position}{on of top, bottom, left, right}
 
 \item{tables.height}{table high as character}
 
-\item{show_stats}{logcial for stat printing}
+\item{show_stats}{logical for stat printing}
 }
 \value{
 survival curve plot

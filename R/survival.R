@@ -24,9 +24,9 @@ font_maker <- function(size = 12L,
 #' @param palette colors
 #' @param conf.int logical for confidence interval shading
 #' @param xlim limits for x axis
-#' @param legend.position ong of top, bottom, left, right
+#' @param legend.position on of top, bottom, left, right
 #' @param tables.height table high as character
-#' @param show_stats logcial for stat printing
+#' @param show_stats logical for stat printing
 #' @return survival curve plot
 #' @export
 make_survival <- function(DF,

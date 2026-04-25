@@ -18,6 +18,6 @@ knitr::opts_chunk$set(
 library(REDCapSync)
 library(RosyREDCap)
 
-TEST_CLASSIC <- load_test_project("TEST_CLASSIC", with_data = TRUE)
+TEST_CLASSIC <- load_project("TEST_CLASSIC")
 TEST_CLASSIC |> REDCap_diagram()
 ```

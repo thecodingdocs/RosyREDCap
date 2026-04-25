@@ -34,7 +34,9 @@ REDCap_diagram(
 
 \item{hierarchical}{Logical (TRUE/FALSE). If TRUE, generates a hierarchical diagram. Default is `FALSE`.}
 
-\item{direction}{Character string specifying the direction of the diagram. Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left), and "BT" (bottom to top). Default is "LR".}
+\item{direction}{Character string specifying the direction of the diagram.
+Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left),
+and "BT" (bottom to top). Default is "LR".}
 
 \item{zoomView}{Logical (TRUE/FALSE). If TRUE, user can zoom. Default is `TRUE`.}
 }

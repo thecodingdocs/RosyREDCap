@@ -4,15 +4,11 @@ Version: 0.0.0.9004
 Authors@R: c(
     person("Brandon", "Rose", , "thecodingdocs@gmail.com", role = c("cre", "aut"),
            comment = c(ORCID = "0009-0009-7813-1960")),
-    person("Natalie", "Goulett", role = "ctb"),
-    person("Chris", "Hilsinger-Pate", role = "ctb"),
-    person("Nikola", "Susic", role = "ctb"),
-    person("Sydney", "Stern", role = "ctb",
-           comment = c(ORCID = "0000-0002-1479-605X"))
+    person("Natalie", "Goulett", role = "ctb")
   )
 Description: Uses REDCapSync to load or build standardized R list objects
-    for data viewing, quaility, and analysis.
-License: MIT + file LICENSE
+    for data viewing, quality, and analysis.
+License: GPL (>= 3)
 URL: https://github.com/thecodingdocs/RosyREDCap,
     https://thecodingdocs.github.io/RosyREDCap/
 BugReports: https://github.com/thecodingdocs/RosyREDCap/issues
@@ -32,7 +28,6 @@ Imports:
     ggplot2,
     golem (>= 0.4.1),
     htmlTable,
-    lifecycle,
     listviewer,
     lubridate,
     magrittr,
@@ -40,7 +35,6 @@ Imports:
     plotly,
     RColorBrewer,
     REDCapSync,
-    rmarkdown,
     scales,
     shiny (>= 1.8.1.1),
     shinydashboard,
@@ -55,6 +49,8 @@ Imports:
     visNetwork
 Suggests: 
     knitr,
+    rmarkdown,
+    spelling,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
@@ -62,4 +58,5 @@ Remotes:
     github::thecodingdocs/REDCapSync
 Config/testthat/edition: 3
 Encoding: UTF-8
+Language: en-US
 RoxygenNote: 7.3.3

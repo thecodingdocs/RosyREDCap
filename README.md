@@ -28,7 +28,7 @@ future development and changes are possible.
 # What is `{RosyREDCap}`?
 
 R and REDCap are both widely utilized in medicine, including basic
-science, clinical research, and clinal trials. Both have independent
+science, clinical research, and clinical trials. Both have independent
 strengths, but together they can create powerful data pipelines. While
 several R packages exist for extracting data using the REDCap API,
 `{RosyREDCap}` stands out by offering comprehensive extraction of all
@@ -70,16 +70,16 @@ remotes::install_github("thecodingdocs/RosyREDCap")
 ```
 
 Note that the version used at the time of writing this book is
-0.0.0.9003. You can check what version you have installed with the
+0.0.0.9004. You can check what version you have installed with the
 following.
 
 ``` r
 packageVersion("RosyREDCap")
-#> [1] '0.0.0.9003'
+#> [1] '0.0.0.9004'
 ```
 
 If you have any issues, try downloading the most recent version of R at
-RStudtio and update all packages in RStudio. See
+RStudio and update all packages in RStudio. See
 [thecodingdocs.com/r/getting-started](https://www.thecodingdocs.com/r/getting-started "R Getting Started").
 
 ## Getting Started
@@ -92,12 +92,12 @@ run_RosyREDCap() # will work with multiple REDCap projects!
 
 ## About the Name
 
-Rosy with a capital ‘R’ evokes the R statistical programming language,
-the primary developer’s last name, and the idea of making something more
-beautiful and user-friendly. This prefix combined with REDCap
-demonstrates the package’s goal of enhancing the REDCap experience by
-creating data tools that are powerful and pleasant to use, combining the
-best of R with best REDCap.
+Rosy with a capital “R” evokes the R statistical programming language
+and is an adjective for making something more beautiful and
+user-friendly. This prefix combined with REDCap demonstrates the
+package’s goal of enhancing the REDCap experience by creating data tools
+that are powerful and pleasant to use, combining the best of R with best
+REDCap.
 
 ## Links
 

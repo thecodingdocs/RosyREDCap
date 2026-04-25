@@ -28,6 +28,14 @@ app_ui <- function(request) {
           tabName = "home",
           icon = shiny::icon("home")
         ),
+        conditionalPanel(
+          "input.sb1 === 'home'",
+          shinyWidgets::switchInput(
+            inputId = "test_mode",
+            label = "TEST Mode?",
+            value = get_golem_options("test_mode")
+          )
+        ),
         # conditionalPanel(
         #   "input.sb1 === 'home'",
         uiOutput("choose_project_"),
@@ -56,11 +64,6 @@ app_ui <- function(request) {
             label = "Duplicate Forms?",
             value = TRUE
           )
-        ),
-        menuItem(
-          text = "Transformation",
-          tabName = "transformation",
-          icon = shiny::icon("gear")
         ),
         menuItem(
           text = "Data",
@@ -179,18 +182,6 @@ app_ui <- function(request) {
           width = 12L,
           uiOutput("dt_tables_view")
         ))),
-        # Transformation--------
-        tabItem("transformation", fluidRow(
-          box(
-            title = h1("Forms Transformation"),
-            width = 12L,
-            DT::DTOutput("forms_transformation"),
-            actionButton(
-              "ab_accept_form_transform",
-              "Accept Forms Transformation Edit!"
-            )
-          )
-        )),
         # group--------
         tabItem(
           "group",

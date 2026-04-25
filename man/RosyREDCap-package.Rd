@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Uses REDCapSync to load or build standardized R list objects for data viewing, quaility, and analysis.
+Uses REDCapSync to load or build standardized R list objects for data viewing, quality, and analysis.
 }
 \seealso{
 Useful links:
@@ -25,9 +25,6 @@ Useful links:
 Other contributors:
 \itemize{
   \item Natalie Goulett [contributor]
-  \item Chris Hilsinger-Pate [contributor]
-  \item Nikola Susic [contributor]
-  \item Sydney Stern (\href{https://orcid.org/0000-0002-1479-605X}{ORCID}) [contributor]
 }
 
 }

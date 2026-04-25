@@ -15,9 +15,7 @@ golem_add_external_resources <- function(...) {
   )
 }
 #' @title run_RosyREDCap
-#' @param ... arguments to pass to golem_opts.
-#' See `?golem::get_golem_options` for more details.
-#' @param launch_type choice of how to launch
+#' @param test_mode Test mode.
 #' @inheritParams shiny::shinyApp
 #' @importFrom shiny shinyApp
 #' @importFrom golem with_golem_options
@@ -28,19 +26,8 @@ run_RosyREDCap <- function(onStart = NULL,
                            enableBookmarking = NULL,
                            uiPattern = "/",
                            # project_short_name
-                           options = NULL,
-                           launch_type = "browser",
-                           ...) {
-  #add assert c("browser","rstudop_pane","rstudio_window")
-  if (launch_type == "browser") {
-    options$launch.browser <- TRUE
-  }
-  if (launch_type == "rstudio_pane") {
-    options$launch.browser <- .rs.invokeShinyPaneViewer
-  }
-  if (launch_type == "rstudio_window") {
-    options$launch.browser <- FALSE
-  }
+                           test_mode = FALSE,
+                           options = NULL) {
   with_golem_options(
     app = shinyApp(
       ui = app_ui,
@@ -50,6 +37,6 @@ run_RosyREDCap <- function(onStart = NULL,
       enableBookmarking = enableBookmarking,
       uiPattern = uiPattern
     ),
-    golem_opts = list(...)
+    golem_opts = list(test_mode = test_mode)
   )
 }

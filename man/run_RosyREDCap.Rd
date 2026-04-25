@@ -8,9 +8,8 @@ run_RosyREDCap(
   onStart = NULL,
   enableBookmarking = NULL,
   uiPattern = "/",
-  options = NULL,
-  launch_type = "browser",
-  ...
+  test_mode = FALSE,
+  options = NULL
 )
 }
 \arguments{
@@ -28,16 +27,13 @@ request to determine whether the \code{ui} should be used to handle the
 request. Note that the entire request path must match the regular
 expression in order for the match to be considered successful.}
 
+\item{test_mode}{Test mode.}
+
 \item{options}{Named options that should be passed to the \code{runApp} call
 (these can be any of the following: "port", "launch.browser", "host", "quiet",
 "display.mode" and "test.mode"). You can also specify \code{width} and
 \code{height} parameters which provide a hint to the embedding environment
 about the ideal height/width for the app.}
-
-\item{launch_type}{choice of how to launch}
-
-\item{...}{arguments to pass to golem_opts.
-See `?golem::get_golem_options` for more details.}
 }
 \value{
 shiny application

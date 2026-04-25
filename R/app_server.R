@@ -23,6 +23,16 @@ app_server <- function(input, output, session) {
   values$data_list_form_fields_cat <- NULL
   values$data_list_form_fields_date <- NULL
   values$data_list_form_fields_int <- NULL
+  # projects --------------------------------
+  observeEvent(input$test_mode, {
+    if (input$test_mode) {
+      values$projects <- data.frame(
+        project_name = REDCapSync:::TEST_PROJECT_NAMES
+      )
+    } else{
+      values$projects <- REDCapSync::projects$df() # get list of cached projects
+    }
+  })
   # user input project -------
   observeEvent(input$user_adds_project_modal, {
     # display a modal dialog with a header, textinput and action buttons
@@ -306,7 +316,9 @@ app_server <- function(input, output, session) {
       label = "Transformation",
       multiple = FALSE,
       selected = "default",
-      choices = c("default", "none", "flat", "merge-non-repeating")
+      choices = c(Default = "default",
+                  None = "none",
+                  "Merge-Non-Repeating" = "merge_non_repeating")
     )
   })
   output$filter_switch_ <- renderUI({
@@ -1272,7 +1284,7 @@ app_server <- function(input, output, session) {
     if (length(input$choose_fields_cat) > 0L) {
       cols <- input$choose_fields_cat |> vec1_in_vec2(colnames(DF))
       x <- DF[, cols, drop = FALSE] |>
-        REDCapSync:::clean_form(fields = values$dataset$metadata,
+        REDCapSync:::clean_form(fields = values$dataset$metadata$fields,
                                 drop_blanks = TRUE) |>
         plotly_parcats(remove_missing = !input$render_missing)
       return(x)

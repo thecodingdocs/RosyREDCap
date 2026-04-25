@@ -24,7 +24,7 @@ plotly_parcats(
 
 \item{quantiles}{integer for quantiles}
 
-\item{more_descriptive_label}{logical for having more descriptive labes}
+\item{more_descriptive_label}{logical for having more descriptive labels}
 }
 \value{
 plotly

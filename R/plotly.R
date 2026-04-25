@@ -82,7 +82,7 @@ plotly_bar <- function(DF, x_col, y_col, name) {
 #' @param line_shape_curved logical for having curved lines
 #' @param numeric_to_factor logical for making numerics factors using quantiles
 #' @param quantiles integer for quantiles
-#' @param more_descriptive_label logical for having more descriptive labes
+#' @param more_descriptive_label logical for having more descriptive labels
 #' @return plotly
 #' @export
 plotly_parcats <- function(DF,
@@ -183,8 +183,8 @@ numeric_to_cats <- function(vec,
                             quantiles = 5L,
                             more_descriptive_label = FALSE) {
   if (method == "sd") {
-    med <- median(vec)
-    sd_val <- sd(vec)
+    med <- stats::median(vec)
+    sd_val <- stats::sd(vec)
     # Define the actual value ranges rounded to 1 decimal place
     low_threshold <- round(med - 2L * sd_val, 1L)
     mid_low_threshold <- round(med - 1L * sd_val, 1L)
@@ -242,8 +242,8 @@ numeric_to_cats <- function(vec,
     )
   } else if (method == "sd_mod") {
     # Standard deviation-based binning
-    med <- median(vec)
-    sd_val <- sd(vec)
+    med <- stats::median(vec)
+    sd_val <- stats::sd(vec)
     # Define the actual value ranges rounded to 1 decimal place
     low_threshold <- round(med - 1.5 * sd_val, 1L)
     mid_low_threshold <- round(med - 0.5 * sd_val, 1L)
@@ -294,7 +294,7 @@ numeric_to_cats <- function(vec,
     )
   } else if (method == "quantile") {
     # Quantile-based binning
-    quantile_cutoffs <- quantile(vec,
+    quantile_cutoffs <- stats::quantile(vec,
                                  probs = seq(0L, 1L, length.out = quantiles + 1L),
                                  na.rm = TRUE)
     # Generate labels for the specified number of quantiles

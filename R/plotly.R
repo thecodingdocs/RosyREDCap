@@ -332,38 +332,6 @@ adjust_margins <- function(max_label_length,
   out <- base_margin + extra_margin
   out
 }
-#' @title plotify
-#' @param GG ggplot object
-#' @export
-plotify <- function(GG) {
-  GG |>
-    plotly::ggplotly(tooltip = "text") |>
-    plotly::config(
-      scrollZoom = FALSE,
-      displaylogo = FALSE,
-      modeBarButtonsToRemove = c(
-        "zoom2d",
-        "pan2d",
-        "select2d",
-        "lasso2d",
-        # "zoomIn2d",
-        # "zoomOut2d",
-        "autoScale2d",
-        # "resetScale2d",
-        "hoverClosestCartesian",
-        "hoverCompareCartesian"
-      )
-    ) |>
-    plotly::layout(
-      hoverlabel = list(align = "left"),
-      xaxis = list(tickfont = list(
-        size = 10L, color = "black"
-      )),
-      yaxis = list(tickfont = list(
-        size = 10L, color = "black"
-      ))
-    )
-}
 #' @title make_parcats
 #' @param DF data.frame
 #' @param remove_missing Logical for removing missing/NA data

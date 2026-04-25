@@ -81,6 +81,10 @@ index_na <- function(DF, MARGIN = "col", invert = FALSE) {
   x <- x |> which() |> unname()
   x
 }
+#' @title save_table1
+#' @param table1 from [make_table1]
+#' @param filepath filepath to save
+#' @export
 save_table1 <- function(table1, filepath) {
   table1 |>
     table1::t1flex() |>

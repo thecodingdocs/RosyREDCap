@@ -32,17 +32,17 @@ reference:
     desc: For users interested in using components of the shiny app without the application.
     contents:
       - REDCap_diagram
+      - plotly_bar
+      - plotly_parcats
+      - make_parcats
+      - make_survival
+      - make_table1
+      - save_table1
 
   - title: REDCapSync Helpers
   - desc: Add ons to REDCapSync allowing more customization but too niche for CRAN for now
   - contents:
       - generate_redcap_ids
-      - make_parcats
-      - plotify
-      - plotly_bar
-      - plotly_parcats
-      - make_survival
-      - make_table1
 
 articles:
   - title: Using RosyREDCap ✨

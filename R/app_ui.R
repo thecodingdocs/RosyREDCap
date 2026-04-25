@@ -36,10 +36,7 @@ app_ui <- function(request) {
             value = get_golem_options("test_mode")
           )
         ),
-        # conditionalPanel(
-        #   "input.sb1 === 'home'",
         uiOutput("choose_project_"),
-        # ),
         menuItem(
           text = "Project",
           tabName = "project",

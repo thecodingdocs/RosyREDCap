@@ -27,7 +27,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$test_mode, {
     if (input$test_mode) {
       values$projects <- data.frame(project_name = REDCapSync:::TEST_PROJECT_NAMES)
-    } else{
+    } else {
       values$projects <- REDCapSync::projects$df() # get list of cached projects
     }
   })
@@ -1029,7 +1029,7 @@ app_server <- function(input, output, session) {
     if (is_something(input$choose_fields_change)) {
       message("clicked add_input_instance_ui")
       DF <- values$fields_to_change_input_df
-      blank_df <- DF[0L, ]
+      # blank_df <- DF[0L, ]
       x <- data.frame(
         record_id = input$choose_record,
         redcap_repeat_instrument = input$choose_form,
@@ -1116,7 +1116,7 @@ app_server <- function(input, output, session) {
             # Dynamically adjust column width
             # h4(names(DF)[j], style = "text-align: center;"), # Column name as header
             lapply(i, function(i) {
-              input_name <- paste(DF[i, ref_cols], collapse = "_")
+              # input_name <- paste(DF[i, ref_cols], collapse = "_")
               input_value <- DF[i, j]
               input_id <- paste0("input_dynamic_", i, "_", j)
               if (values$dataset$metadata$fields$field_type[which(values$dataset$metadata$fields$field_name ==
@@ -1228,8 +1228,8 @@ app_server <- function(input, output, session) {
   })
   # redcap links -----
   output$redcap_links <- renderUI({
-    if (is_something(input$choose_record) &
-        length(input$choose_record) > 0L) {
+    if (is_something(input$choose_record) &&
+        (length(input$choose_record) > 0L)) {
       IF <- shinydashboard::menuItem(
         text = paste0("REDCap Record (", input$choose_record, ")"),
         icon = shiny::icon("file-lines"),

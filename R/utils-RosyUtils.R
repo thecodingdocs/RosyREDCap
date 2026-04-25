@@ -1,8 +1,8 @@
 age <- function(dob,
-                age.day = lubridate::today(),
+                age_day = lubridate::today(),
                 units = "years",
                 floor = TRUE) {
-  calc_age <- lubridate::interval(dob, age.day) / lubridate::duration(num = 1L, units = units)
+  calc_age <- lubridate::interval(dob, age_day) / lubridate::duration(num = 1L, units = units)
   if (floor) {
     return(as.integer(floor(calc_age)))
   }
@@ -26,7 +26,6 @@ process_df_list <- function(list,
         }) |>
         unlist()
       keeps <- which(is_a_df_with_rows)
-      drops <- which(!is_a_df_with_rows)
       list <- list[keeps]
     }
     if (length(list) > 0L) {

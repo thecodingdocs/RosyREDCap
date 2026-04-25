@@ -53,7 +53,7 @@ make_survival <- function(DF,
   if (missing(time_col)) {
     DF[["time_col"]] <- age(
       dob = DF[[start_col]],
-      age.day = DF[[end_col]],
+      age_day = DF[[end_col]],
       floor = FALSE,
       units = units
     )#imputation here?

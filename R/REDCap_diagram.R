@@ -130,7 +130,7 @@ REDCap_diagram <- function(project,
           highlight = form_color
         ),
         font = list(color = bordercolor)
-      ) |>      visNetwork::visGroups(
+      ) |> visNetwork::visGroups(
         groupname = "Form (repeating)",
         color = list(
           background = repeating_form_color,

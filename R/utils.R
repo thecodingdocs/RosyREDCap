@@ -145,7 +145,6 @@ form_list_to_text <- function(form_list,
           }
         }
       }
-      # output_list <- c(output_list, "<br>")
     }
     output_list <- c(output_list, "<br>")
   }

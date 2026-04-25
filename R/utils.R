@@ -52,29 +52,6 @@ clean_RC_df_for_DT <- function(DF, project) {
     clean_RC_col_names(project)
 }
 #' @noRd
-remove_records_from_list <- function(project, records, silent = FALSE) {
-  data_list <- project$data
-  if (!is_df_list(data_list))
-    stop("data_list is not a list of data.frames as expected.")
-  if (length(records) == 0L)
-    stop(
-      "no records supplied to remove_records_from_list, but it's used in update which depends on records."
-    )
-  true_false_rows <- names(data_list) |>
-    lapply(function(form) {
-      nrow(data_list[[form]]) > 0L
-    }) |>
-    unlist()
-  forms <- names(data_list)[which(true_false_rows)]
-  for (TABLE in forms) {
-    data_list[[TABLE]] <- data_list[[TABLE]][which(!data_list[[TABLE]][[project$metadata$id_col]] %in%
-                                                     records), ]
-  }
-  if (!silent)
-    message("Removed: ", toString(records))
-  data_list
-}
-#' @noRd
 sidebar_choices <- function(data_list, n_threshold = 1L) {
   choices <- REDCapSync:::annotate_choices(data_list)
   choices <- choices[which(choices$n >= n_threshold), ]

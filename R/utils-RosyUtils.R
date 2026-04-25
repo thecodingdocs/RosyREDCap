@@ -8,9 +8,6 @@ age <- function(dob,
   }
   calc_age
 }
-now_time <- function() {
-  as.POSIXct(Sys.time(), tz = Sys.timezone())
-}
 process_df_list <- function(list,
                             drop_empty = TRUE) {
   if (is_something(list)) {
@@ -80,12 +77,6 @@ vec1_in_vec2 <- function(vec1, vec2) {
 vec1_not_in_vec2 <- function(vec1, vec2) {
   vec1[which(!vec1 %in% vec2)]
 }
-ul <- function(x) {
-  length(unique(x))
-}
-wl <- function(x) {
-  length(which(x))
-}
 drop_nas <- function(x) {
   x[!unlist(lapply(x, is.na))]
 }
@@ -123,19 +114,6 @@ drop_if <- function(x, drops) {
 sample1 <- function(x) {
   sample(x, 1L)
 }
-list.files.real <- function(path,
-                            full.names = TRUE,
-                            recursive = FALSE) {
-  grep(
-    "~$",
-    sanitize_path(
-      list.files(path, full.names = full.names, recursive = recursive)
-    ),
-    fixed = TRUE,
-    value = TRUE,
-    invert = TRUE
-  )
-}
 wrap_text <- function(text,
                       max_length = 40L,
                       spacer = "\n") {
@@ -172,28 +150,6 @@ is_df_list <- function(x, strict = FALSE) {
     return(all(out))
   }
   any(out)
-}
-is_env_name <- function(env_name, silent = FALSE) {
-  result <- tryCatch({
-    if (is.null(env_name))
-      stop("env_name is NULL")
-    if (nchar(env_name) == 0L) {
-      stop("Short name cannot be empty.")
-    }
-    if (grepl("^\\d", env_name)) {
-      stop("Short name cannot start with a number.")
-    }
-    if (grepl("[^A-Za-z0-9_]", env_name)) {
-      stop("Short name can only contain letters, numbers, and underscores.")
-    }
-    TRUE # Return TRUE if all checks pass
-  }, error = function(e) {
-    if (!silent) {
-      message(e$message)
-    }
-    FALSE # Return FALSE if any error occurs
-  })
-  result
 }
 is_nested_list <- function(x) {
   if (!is.list(x)) {

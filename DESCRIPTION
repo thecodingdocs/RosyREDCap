@@ -42,7 +42,6 @@ Imports:
     survival,
     survminer,
     table1,
-    utils,
     visNetwork
 Suggests: 
     knitr,

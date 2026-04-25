@@ -75,38 +75,6 @@ remove_records_from_list <- function(project, records, silent = FALSE) {
   data_list
 }
 #' @noRd
-ignore_redcap_log <- function(collapse = TRUE) {
-  ignores <- c(
-    "export",
-    "download ",
-    "edit report",
-    "Switch DAG",
-    "Copy report",
-    "Multi-Language",
-    "File Repository ",
-    "custom record dashboard",
-    "User regenerate own API token",
-    "Create report",
-    " external module"
-  )
-  if (collapse)
-    return(paste(ignores, collapse = "|"))
-  ignores
-}
-#' @noRd
-log_details_that_trigger_refresh <- function() {
-  c(
-    "Edit project field",
-    "Delete project field",
-    "Create project field",
-    "Make project customizations",
-    "Delete data collection instrument",
-    "Download instrument from Shared Library",
-    "Create data collection instrument",
-    "Tag new identifier fields"
-  )
-}
-#' @noRd
 sidebar_choices <- function(data_list, n_threshold = 1L) {
   choices <- REDCapSync:::annotate_choices(data_list)
   choices <- choices[which(choices$n >= n_threshold), ]
@@ -121,32 +89,7 @@ sidebar_choices <- function(data_list, n_threshold = 1L) {
 #' @noRd
 redcap_field_types_not_in_data <- c("descriptive", "checkbox")
 #' @noRd
-form_names_to_form_labels <- function(form_names, project) {
-  project$metadata$forms$form_label[match(x = form_names, table = project$metadata$forms$form_name)]
-}
-#' @noRd
-form_labels_to_form_names <- function(form_labels, project) {
-  project$metadata$forms$form_name[match(x = form_labels, table = project$metadata$forms$form_label)]
-}
-#' @noRd
-field_names_to_field_labels <- function(field_names, project) {
-  project$metadata$fields$field_label[match(x = field_names, table = project$metadata$fields$field_name)]
-}
-#' @noRd
 form_names_to_field_names <- function(form_names, project, original_only = FALSE) {
-  field_names <- NULL
-  if (original_only) {
-    fields <- project$metadata$fields
-  } else {
-    fields <- project$metadata$fields
-  }
-  for (form_name in form_names) {
-    field_names <- field_names |> append(fields$field_name[which(fields$form_name == form_name)])
-  }
-  unique(field_names)
-}
-#' @noRd
-form_names_to_field_names_alt <- function(form_names, project, original_only = FALSE) {
   field_names <- NULL
   if (original_only) {
     fields <- project$metadata$fields

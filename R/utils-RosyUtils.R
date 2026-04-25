@@ -74,11 +74,6 @@ is_something <- function(thing, row = 0L) {
   }
   out
 }
-sanitize_path <- function(path) {
-  sanitized <- gsub("\\\\", "/", path)
-  sanitized <- normalizePath(sanitized, winslash = "/", mustWork = FALSE)
-  sanitized
-}
 vec1_in_vec2 <- function(vec1, vec2) {
   vec1[which(vec1 %in% vec2)]
 }
@@ -118,22 +113,6 @@ is_named_list <- function(x,
     }
   }
   named_all # Return the result
-}
-dw <- function(x) {
-  which(duplicated(x))
-}
-is_consecutive_srt_1 <- function(vec) {
-  if (vec[1L] != 1L) {
-    return(FALSE)
-  }
-  if (length(vec) > 1L) {
-    for (i in 2L:length(vec)) {
-      if (vec[i] != vec[i - 1L] + 1L) {
-        return(FALSE)
-      }
-    }
-  }
-  TRUE
 }
 remove_html_tags <- function(text_vector) {
   gsub(pattern = "<[^>]+>", replacement = "", text_vector)
@@ -178,7 +157,6 @@ wrap_text <- function(text,
   result <- paste0(result, current_line)
   result
 }
-
 is_df_list <- function(x, strict = FALSE) {
   if (!is.list(x)) {
     return(FALSE)
@@ -233,138 +211,4 @@ is_nested_list <- function(x) {
 }
 clean_num <- function(num) {
   formatC(num, format = "d", big.mark = ",")
-}
-is_date <- function(date) {
-  OUT <- grepl("^\\d{4}-\\d{2}-\\d{2}$|^\\d{4}-\\d{2}$|^\\d{4}$", date)
-  if (OUT) {
-    OUT2 <- date |>
-      strsplit(split = "-") |>
-      unlist()
-    year <- OUT2[[1L]]
-    check_date <- year
-    if (length(OUT2) == 1L) {
-      check_date <- check_date |> paste0("-01")
-      OUT2[[2L]] <- "01"
-    }
-    if (length(OUT2) == 2L) {
-      check_date <- check_date |> paste0("-01")
-      OUT2[[3L]] <- "01"
-    }
-    year <- year |> as.integer()
-    month <- OUT2[[2L]] |> as.integer()
-    day <- OUT2[[3L]] |> as.integer()
-    OUT <- month >= 1L &&
-      month <= 12L &&
-      day >= 1L &&
-      day <= 31L &&
-      year >= 1900L && year <= lubridate::year(Sys.Date())
-  }
-  OUT
-}
-is_date_full <- function(date) {
-  grepl("^\\d{4}-\\d{2}-\\d{2}$", date)
-}
-
-find_df_diff2 <- function(new,
-                          old,
-                          ref_cols = NULL,
-                          message_pass = "",
-                          view_old = TRUE,
-                          n_row_view = 20) {
-  new <- all_character_cols(new)
-  old <- all_character_cols(old)
-  if (!all(colnames(new) %in% colnames(old))) {
-    stop("All new DF columns must be included in old DF")
-  }
-  if (!all(ref_cols %in% colnames(new)) ||
-      !all(ref_cols %in% colnames(old))) {
-    stop("ref_cols must be included in both dfs")
-  }
-  if (length(ref_cols) > 1) {
-    new_keys <- apply(new[, ref_cols], 1, paste, collapse = "_")
-    old_keys <- apply(old[, ref_cols], 1, paste, collapse = "_")
-  } else {
-    new_keys <- new[, ref_cols]
-    old_keys <- old[, ref_cols]
-  }
-  if (anyDuplicated(old_keys) > 0) {
-    stop("Keys must lead to unique rows! (old DF)")
-  }
-  if (anyDuplicated(new_keys) > 0) {
-    stop("Keys must lead to unique rows! (new DF)")
-  }
-  appended_old_col_suffix <- "__old"
-  if (any(endsWith(unique(colnames(old), colnames(new)), appended_old_col_suffix))) {
-    stop("colnames cant end with '", appended_old_col_suffix, "'")
-  }
-  merged_df <- merge(
-    new,
-    old,
-    by = ref_cols,
-    suffixes = c("", appended_old_col_suffix),
-    all.x = TRUE
-  )
-  placeholder <- "NA_placeholder"
-  rows_to_keep <- NULL
-  cols_to_view <- cols_to_keep <- which(colnames(merged_df) %in% ref_cols)
-  COLS <- colnames(new)[which(!colnames(new) %in% ref_cols)]
-  for (COL in COLS) {
-    vector1 <- merged_df[[COL]]
-    compare_COL <- paste0(COL, appended_old_col_suffix)
-    vector2 <- merged_df[[compare_COL]]
-    vector1_no_na <- ifelse(is.na(vector1), placeholder, vector1)
-    vector2_no_na <- ifelse(is.na(vector2), placeholder, vector2)
-    # Compare vectors element-wise
-    are_not_equal <- which(vector1_no_na != vector2_no_na)
-    if (length(are_not_equal) > 0) {
-      rows_to_keep <- rows_to_keep |> append(are_not_equal)
-      additional_cols <- which(colnames(merged_df) == COL)
-      cols_to_keep <- cols_to_keep |> append(additional_cols)
-      if (view_old) {
-        cols_to_view <- cols_to_view |>
-          append(additional_cols) |>
-          append(which(colnames(merged_df) == compare_COL))
-      }
-    }
-  }
-  if (length(rows_to_keep) > 0) {
-    rows_to_keep <- unique(rows_to_keep)
-    cols_to_keep <- unique(cols_to_keep)
-    if (view_old) {
-      rows_to_keep2 <- rows_to_keep
-      done <- FALSE
-      while (!done) {
-        length_of_rows_to_keep <- length(rows_to_keep2)
-        if (length_of_rows_to_keep == 0) {
-          done <- TRUE
-        } else {
-          indices <- 1:ifelse(length_of_rows_to_keep < n_row_view,
-                              length_of_rows_to_keep,
-                              n_row_view)
-          rows_to_keep3 <- rows_to_keep2[indices]
-          print.data.frame(merged_df[rows_to_keep3, unique(cols_to_view)])
-          choice <- utils::menu(
-            choices = c(
-              "Check more rows",
-              "Proceed with no more checking",
-              "Stop the function"
-            ),
-            title = "What would you like to do?"
-          )
-          if (choice == 3) {
-            stop("Stopped as requested!")
-          }
-          if (choice == 2)
-            done <- TRUE
-          if (choice == 1)
-            rows_to_keep2 <- rows_to_keep2[-indices]
-        }
-      }
-    }
-    message(message_pass, length(rows_to_keep), " rows have updates")
-    return(merged_df[rows_to_keep, cols_to_keep])
-  } else {
-    message(message_pass, "No changes!")
-    return(NULL)
-  }
 }

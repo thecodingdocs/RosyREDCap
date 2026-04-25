@@ -339,7 +339,7 @@ find_df_diff2 <- function(new,
   if (!all(colnames(new) %in% colnames(old))) {
     stop("All new DF columns must be included in old DF")
   }
-  if (!all(ref_cols %in% colnames(new)) |
+  if (!all(ref_cols %in% colnames(new)) ||
       !all(ref_cols %in% colnames(old))) {
     stop("ref_cols must be included in both dfs")
   }

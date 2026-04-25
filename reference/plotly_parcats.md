@@ -39,7 +39,7 @@ plotly_parcats(
 
 - more_descriptive_label:
 
-  logical for having more descriptive labes
+  logical for having more descriptive labels
 
 ## Value
 

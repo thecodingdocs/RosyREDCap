@@ -9,9 +9,8 @@ run_RosyREDCap(
   onStart = NULL,
   enableBookmarking = NULL,
   uiPattern = "/",
-  options = NULL,
-  launch_type = "browser",
-  ...
+  test_mode = FALSE,
+  options = NULL
 )
 ```
 
@@ -39,6 +38,10 @@ run_RosyREDCap(
   that the entire request path must match the regular expression in
   order for the match to be considered successful.
 
+- test_mode:
+
+  Test mode.
+
 - options:
 
   Named options that should be passed to the `runApp` call (these can be
@@ -46,15 +49,6 @@ run_RosyREDCap(
   "display.mode" and "test.mode"). You can also specify `width` and
   `height` parameters which provide a hint to the embedding environment
   about the ideal height/width for the app.
-
-- launch_type:
-
-  choice of how to launch
-
-- ...:
-
-  arguments to pass to golem_opts. See \`?golem::get_golem_options\` for
-  more details.
 
 ## Value
 

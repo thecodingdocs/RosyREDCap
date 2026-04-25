@@ -93,7 +93,7 @@ make_survival(
 
 - legend.position:
 
-  ong of top, bottom, left, right
+  on of top, bottom, left, right
 
 - tables.height:
 
@@ -101,7 +101,7 @@ make_survival(
 
 - show_stats:
 
-  logcial for stat printing
+  logical for stat printing
 
 ## Value
 

@@ -19,6 +19,32 @@ app_ui <- function(request) {
   "
       )
     ),
+    tags$script(HTML("
+  $(document).on('input', '#user_adds_project_short_name', function() {
+    let val = this.value.toUpperCase();
+    // keep only valid chars
+    val = val.replace(/[^A-Z0-9_]/g, '');
+    // enforce: must start with a letter
+    if (val.length > 0 && !/^[A-Z]/.test(val)) {
+      val = val.replace(/^[^A-Z]+/, '');
+    }
+    this.value = val;
+  });
+")),
+    tags$script(HTML("
+  $(document).on('keydown', '#user_adds_project_api_token, #user_adds_project_redcap_uri, #user_adds_project_dir_path', function(e) {
+    // block space key
+    if (e.which === 32 || e.keyCode === 32) {
+      e.preventDefault();
+      return false;
+    }
+  });
+")),
+    tags$style(HTML("
+  #user_adds_project_short_name {
+    text-transform: uppercase;
+  }
+")),
     shinydashboardPlus::dashboardPage(
       options = list(sidebarExpandOnHover = FALSE),
       header = dbHeader(),
@@ -30,7 +56,8 @@ app_ui <- function(request) {
         ),
         conditionalPanel(
           "input.sb1 === 'home'",
-          shinyWidgets::switchInput(
+          actionBttn("user_adds_project_modal", "Add New Project"),
+          switchInput(
             inputId = "test_mode",
             label = "TEST Mode?",
             value = get_golem_options("test_mode")
@@ -44,45 +71,29 @@ app_ui <- function(request) {
         ),
         conditionalPanel(
           "input.sb1 === 'project'",
-          selectizeInput(
-            "metadata_graph_type",
-            label = "Graph Type",
-            choices = c("visNetwork", "DiagrammeR"),
-            selected = "DiagrammeR"
-          ),
-          actionButton("ab_update_redcap", "Update REDCap!"),
-          shinyWidgets::awesomeCheckbox(
-            inputId = "metadata_graph_include_vars",
-            label = "Include Variables?",
-            value = FALSE
-          ),
-          shinyWidgets::awesomeCheckbox(
-            inputId = "metadata_graph_duplicate_forms",
-            label = "Duplicate Forms?",
-            value = TRUE
-          )
+          actionButton("ab_update_redcap", "Update REDCap!")
         ),
         menuItem(
           text = "Data",
           tabName = "data",
-          icon = shiny::icon("users")
+          icon = shiny::icon("chart-bar")
         ),
         conditionalPanel(
           "input.sb1 === 'data' || input.sb1 === 'group' || input.sb1 === 'record'",
           uiOutput("choose_form_"),
           uiOutput("choose_group_"),
-          shinyWidgets::switchInput(
+          switchInput(
             inputId = "deidentify_switch",
             label = "Exclude Identifiers",
             value = TRUE
           ),
-          shinyWidgets::switchInput(
+          switchInput(
             inputId = "exclude_free_text_switch",
             label = "Exclude Free Text",
             value = TRUE
           ),
           uiOutput("transformation_switch_"),
-          shinyWidgets::switchInput(
+          switchInput(
             inputId = "labelled",
             label = "Labelled",
             value = TRUE
@@ -94,34 +105,14 @@ app_ui <- function(request) {
           tabName = "group",
           icon = shiny::icon("users")
         ),
-        conditionalPanel(
-          "input.sb1 === 'group' || input.sb1 === 'record'",
-          shinyWidgets::awesomeCheckbox(
-            inputId = "render_missing",
-            label = "Include Missing/Unkown",
-            value = FALSE
-          ),
-          shinyWidgets::awesomeCheckbox(
-            inputId = "sidebar_choice_radio",
-            label = "Dropdown instead of radio",
-            value = FALSE
-          )
-        ),
-        menuItem(
-          text = "Plot",
-          tabName = "plot",
-          icon = shiny::icon("chart-bar")
-        ),
-        menuItem(
-          text = "Record",
-          tabName = "record",
-          icon = shiny::icon("user-large")
-        ),
+        menuItem(text = "Record",
+                 tabName = "record",
+                 icon = shiny::icon("user-large")),
         uiOutput("choose_record_"),
         # conditionalPanel(
         #   "input.sb1 === 'record'",
         #   actionButton("ab_random_record","Random Record!"),
-        #   shinyWidgets::switchInput(
+        #   switchInput(
         #     inputId = "view_switch_text",
         #     onLabel = "Text",
         #     offLabel = "Tables",
@@ -137,15 +128,56 @@ app_ui <- function(request) {
             title = h1("Home"),
             width = 12L,
             DT::DTOutput("projects_table")
-          )
+          ),
         )),
         # project--------
         tabItem("project", fluidRow(
-          box(
-            title = h1("Project"),
+          shinydashboardPlus::box(
+            title = "REDCap Metadata Network",
+            closable = FALSE,
             width = 12L,
-            #more summary stuff
-            uiOutput("REDCap_diagram_ui_test")
+            height = "700px",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            sidebar = shinydashboardPlus::boxSidebar(
+              id = "mycardsidebar",
+              width = 25,
+              awesomeCheckbox(inputId = "metadata_graph_duplicate_forms",
+                              label = "Duplicate Forms?",
+                              value = TRUE),
+              awesomeCheckbox(inputId = "metadata_graph_clean_names",
+                              label = "Clean Variable Names",
+                              value = TRUE),
+              awesomeCheckbox(inputId = "metadata_graph_include_fields",
+                              label = "Include Fields?",
+                              value = FALSE),
+              awesomeCheckbox(inputId = "metadata_graph_include_choices",
+                              label = "Include Choices?",
+                              value = FALSE),
+              awesomeCheckbox(inputId = "metadata_graph_hierarchical",
+                              label = "Hierarchical?",
+                              value = FALSE),
+              selectizeInput(inputId = "metadata_graph_direction",
+                             label = "Graph Direction (if hierarchical)",
+                             choices = c("LR", "UD", "RL", "DU"),
+                             selected = "LR"),
+              awesomeCheckbox(inputId = "metadata_graph_allow_zoom",
+                              label = "Allow Zoom?",
+                              value = FALSE)
+            ),
+            tabBox(
+              id = "metadata_graph_tabs",
+              width = 12L,
+              height = "700px",
+              tabPanel(
+                "visNetwork",
+                visNetwork::visNetworkOutput("REDCap_diagram_vis")
+              ),
+              tabPanel(
+                "DiagrammeR",
+                DiagrammeR::grVizOutput("REDCap_diagram_dia")
+              )
+            )
           ),
           box(
             title = h1("Instruments"),
@@ -182,109 +214,141 @@ app_ui <- function(request) {
         # group--------
         tabItem(
           "group",
-          fluidRow(box(width = 6L, uiOutput("choose_split_")), box(
-            width = 6L, uiOutput("choose_fields_cat_")
-          )),
           fluidRow(
-            box(
-              title = h1("Group"),
-              width = 12L,
-              plotly::plotlyOutput("parcats"),
-              actionButton("shuffle_colors", "Shuffle Colors")
-            )
+            box(width = 6L, uiOutput("choose_split_")),
+            box(width = 6L, uiOutput("choose_fields_cat_"))
           ),
           fluidRow(
-            tabBox(
-              title = h1("Plots"),
-              width = 6L,
-              # uiOutput("table1")
-              id = "tabset_plots",
-              tabPanel("Scatter", "Scatter Plot!"),
-              tabPanel(
-                "Survival",
-                fluidRow(
-                  column(4L, uiOutput("choose_survival_start_col_")),
-                  column(4L, uiOutput("choose_survival_end_col_")),
-                  column(4L, uiOutput("choose_survival_status_col_"))
-                ),
-                fluidRow(column(
-                  3L,
-                  selectInput(
-                    "survival_units",
-                    "Units",
-                    choices = c("days", "months", "years"),
-                    selected = "years"
-                  )
-                ), column(9L, uiOutput(
-                  "choose_survival_xlim_"
-                ))),
-                plotOutput("survival"),
-                actionButton("survival_save_ab", "Save Plot File")
-              ),
-              tabPanel("Swimmer", "Swimmer Plot!")
+            box(
+              title = "Other Options",
+              width = 12L,
+              awesomeCheckbox(inputId = "render_missing",
+                              label = "Include Missing/Unkown",
+                              value = FALSE))
+          ),
+          shinydashboardPlus::box(
+            title = "Parallel Categories",
+            closable = FALSE,
+            width = 12L,
+            height = "700px",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            plotly::plotlyOutput("parcats"),
+            actionButton("shuffle_colors", "Shuffle Colors")
+          ),
+          shinydashboardPlus::box(
+            title = "Table1",
+            closable = FALSE,
+            width = 12L,
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            uiOutput("table1"),
+            actionButton("table_save_ab", "Save table1")
+          ),
+          shinydashboardPlus::box(
+            title = "Survival Curve",
+            closable = FALSE,
+            width = 12L,
+            height = "800px",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            collapsed = TRUE,
+            sidebar = shinydashboardPlus::boxSidebar(
+              id = "survival_sidebar",
+              width = 25,
+              startOpen = TRUE,
+              uiOutput("choose_survival_start_col_"),
+              uiOutput("choose_survival_end_col_"),
+              uiOutput("choose_survival_status_col_"),
+              uiOutput("choose_survival_status_choice_"),
+              selectInput(inputId = "survival_units",
+                          label = "Units",
+                          choices = c("days", "months", "years"),
+                          selected = "years"),
+              uiOutput("choose_survival_xlim_")
             ),
             box(
-              title = h1("Table1"),
-              width = 6L,
-              uiOutput("table1")
+              width = 12L,
+              plotOutput("survival", height = "700px"),
+              actionButton("survival_save_ab", "Save Plot File")
             )
+          ),
+          shinydashboardPlus::box(
+            title = "Bar Plot",
+            closable = FALSE,
+            width = 12L,
+            height = "700px",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            collapsed = TRUE,
+            h2("Bar Plot Placeholder!")
+          ),
+          shinydashboardPlus::box(
+            title = "Scatter Plot",
+            closable = FALSE,
+            width = 12L,
+            height = "700px",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            collapsed = TRUE,
+            h2("Scatter Plot Placeholder!")
+          ),
+          shinydashboardPlus::box(
+            title = "Swimmer Plot",
+            closable = FALSE,
+            width = 12L,
+            height = "700px",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+            collapsed = TRUE,
+            h2("Swimmer Plot Placeholder!")
           )
         ),
-        # plot--------
-        tabItem("plot", fluidRow(box(
-          width = 6L
-          # uiOutput("choose_split_")
-        ), box(
-          width = 6L
-          # uiOutput("choose_fields_cat_")
-        )), fluidRow(
-          box(
-            title = h1("Plot"),
-            width = 12L,
-            # uiOutput("parcats"),
-            actionButton("shuffle_colors2", "Shuffle Colors")
-          )
-        )),
         # record--------
-        tabItem("record", fluidRow(
-          box(
-            title = h1("View"),
-            width = 6L,
-            shinyWidgets::switchInput(
-              inputId = "view_switch_text",
-              onLabel = "Text",
-              offLabel = "Tables",
-              value = TRUE
+        tabItem(
+          "record",
+          fluidRow(
+            box(
+              title = h1("View"),
+              width = 4L,
+              switchInput(
+                inputId = "view_switch_text",
+                onLabel = "Text",
+                offLabel = "Tables",
+                value = TRUE
+              ),
+              awesomeCheckbox(inputId = "sidebar_choice_radio",
+                              label = "Dropdown instead of radio",
+                              value = FALSE),
+              actionButton("ab_random_record", "Random Record!"),
+              actionButton("ab_next_record", "Next Record!"),
+              uiOutput("choose_fields_view_"),
+              uiOutput("dt_tables_view_records")
             ),
-            actionButton("ab_random_record", "Random Record!"),
-            actionButton("ab_next_record", "Next Record!"),
-            uiOutput("choose_fields_view_"),
-            uiOutput("dt_tables_view_records")
-          ),
-          box(width = 6L, tabsetPanel(
-            tabPanel(
+            box(
+              width = 8L,
               title = "Change",
               uiOutput("choose_fields_change_"),
               uiOutput("fields_to_change_dynamic_inputs"),
-              fluidRow(uiOutput("add_input_instance_ui_")),
-              fluidRow(actionButton("reset_data_values", "Reset Data")),
-              fluidRow(actionButton("submit_data_values", "Submit Data"))
-            ),
-            tabPanel(
+              uiOutput("add_input_instance_ui_"),
+              actionButton("reset_data_values", "Reset Data"),
+              actionButton("submit_data_values", "Pend For Upload")
+
+            )
+          ),
+          fluidRow(
+            box(
+              width = 12L,
               title = "Upload",
               h3("Below is what will be uploaded to REDCap!"),
-              DT::DTOutput("the_uploading_table")
+              DT::DTOutput("the_uploading_table"),
+              actionButton("submit_data_values2", "Upload to REDCap")
             )
-          ))
-        ))
+          )
+        )
       ),
       controlbar = dbControlbar(
-        shinyWidgets::awesomeCheckbox(
-          inputId = "metadata_graph_clean_name",
-          label = "Clean Variable Names",
-          value = TRUE
-        ),
-        shinyWidgets::awesomeCheckbox(
+        awesomeCheckbox(
           inputId = "allow_multiple_groups",
           label = "Allow Multiple Groups",
           value = FALSE

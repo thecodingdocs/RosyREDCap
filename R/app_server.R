@@ -31,37 +31,94 @@ app_server <- function(input, output, session) {
       values$projects <- REDCapSync::projects$df() # get list of cached projects
     }
   })
+  # files ----------
+  shinyFiles::shinyDirChoose(input, 'dir', roots = c(home = '~'), filetypes = c(''))
+  dir <- reactive(input$dir)
+  output$dir <- renderPrint(dir())
+  # path
+  path <- reactive({
+    if(!"path" %in% names(dir())){
+      return(NULL)
+    }
+    x  <- unlist(dir()$path[-1])
+    sanitize_path(file.path(normalizePath("~"), Reduce(file.path, x)))
+  })
   # user input project -------
   observeEvent(input$user_adds_project_modal, {
     # display a modal dialog with a header, textinput and action buttons
     showModal(
       modalDialog(
         tags$h2("Please enter your Project Information"),
-        textInput("user_adds_project_short_name", "Short Name"),
-        textInput("user_adds_project_api_token", "API token"),
         textInput(
-          "user_adds_project_redcap_base",
-          "Institutional REDCap Link",
-          placeholder = "https://redcap.miami.edu/"
+          inputId = "user_adds_project_short_name",
+          label = "Project Name",
+          placeholder = "MY_PROJECT"
+        ),
+        passwordInput("user_adds_project_api_token", "API token"),
+        textInput(
+          inputId = "user_adds_project_redcap_uri",
+          label = "Institutional REDCap URI",
+          placeholder = "https://redcap.example.edu/api/"
         ),
         textInput(
-          "user_adds_project_merged_form_name",
-          "Merged Form Name",
-          placeholder = "merged"
+          inputId = "user_adds_project_dir_path",
+          label = "Directory",
+          placeholder = "example/your/directory/"
         ),
-        #dir
+        shinyFiles::shinyDirButton("dir", "Chose directory", "Upload"),
         footer = tagList(
           actionButton("user_adds_project_submit", "Submit"),
-          modalButton("user_adds_project_cancel")
+          modalButton("Cancel")
         )
       )
     )
   })
+  # user input project -------
+  observeEvent(dir(), {
+    updateTextInput(
+      session = session,
+      inputId = "user_adds_project_dir_path",
+      value = path()
+    )
+  })
   # only store the information if the user clicks submit
   observeEvent(input$user_adds_project_submit, {
+    dir_path <- NULL
+    if(dir.exists(input$user_adds_project_dir_path)){
+      dir_path <- input$user_adds_project_dir_path
+    }
+    if(!is_something(input$user_adds_project_api_token)){
+      return()
+    }
+    if(!is_something(input$user_adds_project_redcap_uri)){
+      return()
+    }
+    project <- setup_project(
+      project_name = toupper(input$user_adds_project_short_name),
+      dir_path = dir_path,
+      redcap_uri = input$user_adds_project_redcap_uri
+    )
+    project$print()
+    keyring::key_set_with_value(service = config$keyring.service(),
+                                username = project$project_name,
+                                password = input$user_adds_project_api_token,
+                                keyring = config$keyring())
+    showModal(
+      modalDialog(
+        tags$h3("Syncing with REDCap..."),
+        tags$p("Please wait while the project is being created."),
+        footer = NULL,
+        easyClose = FALSE
+      )
+    )
+    project$sync()
+    updateSwitchInput(
+      session = session,
+      inputId = "test_mode",
+      value = FALSE
+    )
     removeModal()
-    # values$user_adds_project_short_name <- input$name
-    # l$state <- input$state
+    values$projects <- REDCapSync::projects$df() # get list of cached projects
   })
   # setup_project(
   #   project_name = OUT$project_name,
@@ -72,38 +129,35 @@ app_server <- function(input, output, session) {
   #   merge_form_name = "merged"
   # )
   # diagrams ----------
-  observe({
-    output$REDCap_diagram_test_vis <- visNetwork::renderVisNetwork({
+  output$REDCap_diagram_vis <- visNetwork::renderVisNetwork({
+    REDCap_diagram(
+      project = values$project,
+      static = FALSE,
+      render = TRUE,
+      clean_names = input$metadata_graph_clean_names,
+      duplicate_forms = input$metadata_graph_duplicate_forms,
+      include_fields = input$metadata_graph_include_fields,
+      include_choices = input$metadata_graph_include_choices,
+      hierarchical = input$metadata_graph_hierarchical,
+      direction = input$metadata_graph_direction,
+      zoomView = input$metadata_graph_allow_zoom
+    )
+  })
+  output$REDCap_diagram_dia <- DiagrammeR::renderGrViz({
+    DiagrammeR::grViz(DiagrammeR::generate_dot(
       REDCap_diagram(
         project = values$project,
-        static = FALSE,
-        render = TRUE,
-        include_fields = input$metadata_graph_include_vars,
+        static = TRUE,
+        render = FALSE,
+        clean_names = input$metadata_graph_clean_names,
         duplicate_forms = input$metadata_graph_duplicate_forms,
-        clean_names = input$metadata_graph_clean_name
+        include_fields = input$metadata_graph_include_fields,
+        include_choices = input$metadata_graph_include_choices,
+        hierarchical = input$metadata_graph_hierarchical,
+        direction = input$metadata_graph_direction,
+        zoomView = input$metadata_graph_allow_zoom
       )
-    })
-    output$REDCap_diagram_test_dia <- DiagrammeR::renderGrViz({
-      DiagrammeR::grViz(DiagrammeR::generate_dot(
-        REDCap_diagram(
-          project = values$project,
-          static = TRUE,
-          render = FALSE,
-          include_fields = input$metadata_graph_include_vars,
-          duplicate_forms = input$metadata_graph_duplicate_forms,
-          clean_names = input$metadata_graph_clean_name
-        )
-      ))
-    })
-  })
-  output$REDCap_diagram_ui_test <- renderUI({
-    ext <- "REDCap_diagram_test_dia"
-    OUT <- DiagrammeR::grVizOutput(ext)
-    if (input$metadata_graph_type == "visNetwork") {
-      ext <- "REDCap_diagram_test_vis"
-      OUT <- visNetwork::visNetworkOutput(ext)
-    }
-    OUT
+    ))
   })
   # tables --------
   output$dt_tables_view <- renderUI({
@@ -216,12 +270,11 @@ app_server <- function(input, output, session) {
           filter_strict = FALSE,
           form_names = REDCapSync:::field_to_form_names(values$project, field_names = input$choose_fields_view),
           field_names = input$choose_fields_view,
-          no_duplicate_cols = TRUE,
           exclude_identifiers = input$deidentify_switch,
           exclude_free_text = input$exclude_free_text_switch,
           date_handling = "none",
-          clean = TRUE,
-          drop_blanks = TRUE,
+          clean = FALSE,
+          drop_blanks = FALSE,
           drop_missing_codes = FALSE,
           drop_others = NULL,
           include_metadata = FALSE,
@@ -229,7 +282,7 @@ app_server <- function(input, output, session) {
           include_records = FALSE,
           include_users = FALSE,
           include_log = FALSE
-        ) |> process_df_list()
+        )$data |> process_df_list()
         # print(values$dt_tables_view_list)
         # values$dt_tables_view_list <- project |> generate_project_dataset(records = dataset$data$sarcoma$record_id |> sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") |> process_df_list()
         # values$dataset$data$sarcoma |> dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) |> make_PSproject_table(project = values$project)
@@ -329,7 +382,7 @@ app_server <- function(input, output, session) {
   output$filter_switch_ <- renderUI({
     if (is_something(input$choose_group)) {
       if (input$choose_group != "All Records") {
-        shinyWidgets::switchInput(
+        switchInput(
           inputId = "filter_switch",
           onLabel = "Strict",
           offLabel = "Records",
@@ -387,7 +440,7 @@ app_server <- function(input, output, session) {
       inputId = "choose_fields_view",
       label = "Choose Fields",
       multiple = TRUE,
-      choices = NULL
+      choices = values$dataset$metadata$fields$field_name
     )
   })
   output$choose_fields_change_ <- renderUI({
@@ -395,7 +448,10 @@ app_server <- function(input, output, session) {
       inputId = "choose_fields_change",
       label = "Choose Field",
       multiple = TRUE,
-      choices = NULL
+      choices = values$dataset$data[[input$choose_form]] |>
+        colnames() |>
+        setdiff(values$dataset$metadata$raw_structure_cols)
+      # can remove arm_num and event_name
     )
   })
   output$choose_group_ <- renderUI({
@@ -433,7 +489,20 @@ app_server <- function(input, output, session) {
       label = "Status",
       multiple = FALSE,
       selected = NULL,
-      choices = values$data_list_form_fields_int,
+      choices = values$data_list_form_fields_cat,
+      width = "100%"
+    )
+  })
+  output$choose_survival_status_choice_ <- renderUI({
+    choice_df <- values$project$metadata$fields |>
+      dplyr::filter(field_name == input$choose_survival_status_col) |>
+      REDCapSync:::fields_to_choices()
+    selectizeInput(
+      inputId = "choose_survival_status_choice",
+      label = "Status",
+      multiple = FALSE,
+      selected = NULL,
+      choices = choice_df$name,
       width = "100%"
     )
   })
@@ -1076,6 +1145,8 @@ app_server <- function(input, output, session) {
         values$fields_to_change_input_df <- DF
       }
     }
+  })
+  observeEvent(input$submit_data_values2, {
     message("uploaded!")
   })
   output$fields_to_change_dynamic_inputs <- renderUI({
@@ -1305,11 +1376,12 @@ app_server <- function(input, output, session) {
           strat_col <- input$choose_split
         }
       }
+      DF$status_col2 <- as.integer(DF[[input$choose_survival_status_col]] == input$choose_survival_status_choice)
       x <- make_survival(
         DF,
         start_col = input$choose_survival_start_col,
         end_col = input$choose_survival_end_col,
-        status_col = input$choose_survival_status_col,
+        status_col = "status_col2",
         units = input$survival_units,
         strat_col = strat_col
       )

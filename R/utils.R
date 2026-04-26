@@ -150,3 +150,45 @@ form_list_to_text <- function(form_list,
   }
   output_list
 }
+#' @noRd
+sanitize_path <- function(path) {
+  sanitized <- gsub("\\\\", "/", path)
+  sanitized <- normalizePath(sanitized, winslash = "/", mustWork = FALSE)
+  sanitized
+}
+#' @noRd
+col_12 <- function(...) {
+  column(12, ...)
+}
+#' @noRd
+col_10 <- function(...) {
+  column(10, ...)
+}
+#' @noRd
+col_9 <- function(...) {
+  column(9, ...)
+}
+#' @noRd
+col_8 <- function(...) {
+  column(8, ...)
+}
+#' @noRd
+col_6 <- function(...) {
+  column(6, ...)
+}
+#' @noRd
+col_4 <- function(...) {
+  column(4, ...)
+}
+#' @noRd
+col_3 <- function(...) {
+  column(3, ...)
+}
+#' @noRd
+col_2 <- function(...) {
+  column(2, ...)
+}
+#' @noRd
+col_1 <- function(...) {
+  column(1, ...)
+}

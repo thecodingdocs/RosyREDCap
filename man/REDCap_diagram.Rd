@@ -20,25 +20,30 @@ REDCap_diagram(
 \arguments{
 \item{project}{project object from REDCapSync package}
 
-\item{static}{Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.}
+\item{static}{Logical (TRUE/FALSE). If TRUE, generates a static diagram with
+`DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`.
+Default is `FALSE`.}
 
-\item{render}{Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.}
+\item{render}{Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is
+`TRUE`.}
 
-\item{duplicate_forms}{Logical (TRUE/FALSE). If TRUE, includes duplicate form nodes in the diagram. Default is `TRUE`.}
+\item{duplicate_forms}{Logical (TRUE/FALSE). If TRUE, includes duplicate
+form nodes in the diagram. Default is `TRUE`.}
 
-\item{clean_names}{Logical (TRUE/FALSE). If TRUE, cleans the names of the forms and fields in the diagram. Default is `TRUE`.}
+\item{clean_names}{Logical (TRUE/FALSE). If TRUE, cleans the names of the
+forms and fields in the diagram. Default is `TRUE`.}
 
-\item{include_fields}{Logical (TRUE/FALSE). If TRUE, includes fields in the diagram. Default is `FALSE`.}
+\item{include_fields}{Logical (TRUE/FALSE). If TRUE, includes fields in the
+diagram. Default is `FALSE`.}
 
-\item{include_choices}{Logical (TRUE/FALSE). If TRUE, includes choices in the diagram. Default is `FALSE`.}
+\item{include_choices}{Logical (TRUE/FALSE). If TRUE, includes choices in
+the diagram. Default is `FALSE`.}
 
-\item{hierarchical}{Logical (TRUE/FALSE). If TRUE, generates a hierarchical diagram. Default is `FALSE`.}
+\item{hierarchical}{: Boolean. Default to false. When true, the layout engine positions the nodes in a hierarchical fashion using default settings. For customization you can use  \link[visNetwork]{visHierarchicalLayout}}
 
-\item{direction}{Character string specifying the direction of the diagram.
-Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left),
-and "BT" (bottom to top). Default is "LR".}
+\item{direction}{: String. Default to 'UD'. The direction of the hierarchical layout. The available options are: UD, DU, LR, RL. To simplify: up-down, down-up, left-right, right-left.}
 
-\item{zoomView}{Logical (TRUE/FALSE). If TRUE, user can zoom. Default is `TRUE`.}
+\item{zoomView}{: Boolean. Default to true. When true, the user can zoom in.}
 }
 \value{
 A diagram object representing the REDCap project structure.
@@ -47,6 +52,9 @@ A diagram object representing the REDCap project structure.
 Generates a diagram of the REDCap project structure based on the `project` object.
 }
 \details{
-This function generates a visual diagram of the REDCap project structure, including forms, fields, and choices. It supports various options such as rendering the diagram, including fields and choices, and specifying the direction of the diagram.
+This function generates a visual diagram of the REDCap project structure,
+including forms, fields, and choices. It supports various options such as
+rendering the diagram, including fields and choices, and specifying the
+direction of the diagram.
 }
 \concept{Visuals}

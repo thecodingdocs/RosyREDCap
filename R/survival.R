@@ -72,6 +72,7 @@ make_survival <- function(DF,
   DF <- DF[, vars] |> stats::na.omit() |> clone_attr(DF_ori)
   legend.title <- NULL
   legend.labs <- NULL
+  fit <- survival::survfit(survival::Surv(time_col, status_col) ~ 1L, data = DF)
   if (!missing(strat_col)) {
     if (!is.null(strat_col)) {
       legend.title <- strat_col
@@ -87,8 +88,6 @@ make_survival <- function(DF,
         legend.labs <- unique(DF[[strat_col]])
       }
     }
-  } else {
-    fit <- survival::survfit(survival::Surv(time_col, status_col) ~ 1L, data = DF)
   }
   if (is.null(fit)) {
     return(NULL)

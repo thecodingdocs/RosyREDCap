@@ -10,7 +10,7 @@ run_RosyREDCap(
   enableBookmarking = NULL,
   uiPattern = "/",
   test_mode = FALSE,
-  options = NULL
+  options = c(launch.browser = TRUE)
 )
 ```
 
@@ -40,7 +40,7 @@ run_RosyREDCap(
 
 - test_mode:
 
-  Test mode.
+  Test mode vs Real REDCap Projects.
 
 - options:
 

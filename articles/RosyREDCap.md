@@ -1,6 +1,11 @@
 # RosyREDCap
 
-Load both REDCapSync and RosyREDCap.
+Load both REDCapSync and RosyREDCap. You can click “Add New Project” in
+the top left of the shiny app. Altertenitively, you can setup projects
+in R using
+[REDCapSync](https://github.com/thecodingdocs/REDCapSync "REDCapSync R package").
+See the page on [storing
+tokens](https://thecodingdocs.github.io/REDCapSync/articles/Tokens.html "REDCapSync Tokens").
 
 ``` r
 library(REDCapSync)

@@ -10,7 +10,7 @@
 #'
 #' @param project project object from REDCapSync package
 #' @param static Logical (TRUE/FALSE). If TRUE, generates a static diagram with
-#' `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`.
+#' [DiagrammeR]. If FALSE, generates an interactive diagram with [visNetwork].
 #' Default is `FALSE`.
 #' @param render Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is
 #' `TRUE`.
@@ -85,10 +85,17 @@ REDCap_diagram <- function(project,
     rendered_graph <- visNetwork::visNetwork(
       nodes =  OUT$node_df,
       edges = OUT$edge_df,
-      main = project$redcap$project_info$project_title,
-      submain =  paste0(
-        project$redcap$project_info$project_notes,
-        "<br>Code by Brandon Rose, M.D., M.P.H. at <a href='https://www.thecodingdocs.com/home'>TheCodingDocs.com</a> using <a href='https://github.com/thecodingdocs/RosyREDCap'>RosyREDCap with REDCapSync</a> and <a href='https://github.com/datastorm-open/visNetwork'>VisNetwork</a>"
+      # height = "600px",
+      main = list(
+        text = project$redcap$project_info$project_title,
+        style = "font-size:24px;font-weight:bold;color:black;font-family:Georgia;text-align:center;"
+      ),
+      submain = list(
+        text = paste0(
+          project$redcap$project_info$project_notes,
+          "<br>Code by Brandon Rose, M.D., M.P.H. at <a href='https://www.thecodingdocs.com/home'>TheCodingDocs.com</a> using <a href='https://github.com/thecodingdocs/RosyREDCap'>RosyREDCap with REDCapSync</a> and <a href='https://github.com/datastorm-open/visNetwork'>VisNetwork</a>"
+        ),
+        style = "font-size:18px;color:black;font-family:Georgia;text-align:center;"
       )
     ) |>
       visNetwork::visInteraction(zoomView = zoomView) |>
@@ -165,7 +172,10 @@ REDCap_diagram <- function(project,
         ),
         font = list(color = bordercolor)
       ) |>
-      visNetwork::visLegend(main = "Legend") |>
+      visNetwork::visLegend(main = list(
+        text ="Legend",
+        style = "font-size:24px;font-weight:bold;color:black;font-family:Georgia;text-align:center;"
+      )) |>
       visNetwork::visLayout(hierarchical = hierarchical)
     if (hierarchical) {
       rendered_graph <- rendered_graph |> visNetwork::visHierarchicalLayout(direction = direction, levelSeparation = 300L)

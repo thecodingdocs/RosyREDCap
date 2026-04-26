@@ -25,7 +25,7 @@ golem_add_external_resources <- function(...) {
 run_RosyREDCap <- function(onStart = NULL,
                            enableBookmarking = NULL,
                            uiPattern = "/",
-                           # project_short_name
+                           # project_names
                            test_mode = FALSE,
                            options = NULL) {
   with_golem_options(

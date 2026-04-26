@@ -172,26 +172,6 @@ app_server <- function(input, output, session) {
       )
     })))
   })
-  output$forms_transformation <- DT::renderDT({
-    cols <- which(
-      colnames(values$editable_forms_transformation_table) %in% c(
-        "form_name",
-        "form_label",
-        "repeating",
-        "repeating_via_events"
-      )
-    )
-    values$editable_forms_transformation_table |> make_DT_table(editable = list(target = "cell", disable = list(columns = cols -
-                                                                                                                  1L)),
-                                                                selection = "none")
-  })
-  observeEvent(input$forms_transformation_cell_edit, {
-    info <- input$forms_transformation_cell_edit
-    message(info$value, " edited!")
-    message(info$row, " row!")
-    message(info$col, " col!")
-    values$editable_forms_transformation_table[info$row, info$col + 1L] <- info$value # had to add +1 because not showing rownames
-  })
   output$table1 <- renderUI({
     if (is_something(input$choose_form)) {
       variables <- c(
@@ -492,7 +472,7 @@ app_server <- function(input, output, session) {
   output$choose_survival_status_col_ <- renderUI({
     selectizeInput(
       inputId = "choose_survival_status_col",
-      label = "Status",
+      label = "Status Field",
       multiple = FALSE,
       selected = NULL,
       choices = values$data_list_form_fields_cat,
@@ -505,7 +485,7 @@ app_server <- function(input, output, session) {
       REDCapSync:::fields_to_choices()
     selectizeInput(
       inputId = "choose_survival_status_choice",
-      label = "Status",
+      label = "Status Choice",
       multiple = FALSE,
       selected = NULL,
       choices = choice_df$name,
@@ -1290,19 +1270,7 @@ app_server <- function(input, output, session) {
     }
   })
   observeEvent(input$ab_update_redcap, {
-    # values$project <- values$project |> sync_project()
-  })
-  observeEvent(input$ab_accept_form_transform, {
-    # values$project$transformation$forms <- values$editable_forms_transformation_table # add check
-    if (identical(
-      values$project$transformation$forms,
-      values$editable_forms_transformation_table
-    )) {
-      message("values$editable_forms_transformation_table didnt change!")
-    } else {
-      message("would have accepted values$editable_forms_transformation_table!")
-      print.table(values$editable_forms_transformation_table)
-    }
+    # values$project <- values$project$sync() # save_datasets no
   })
   # redcap links -----
   output$redcap_links <- renderUI({

@@ -190,8 +190,8 @@ app_server <- function(input, output, session) {
       }
       DF <- values$dataset$data[[input$choose_form]][, variables, drop = FALSE]
       if (is_something(DF)) {
-        # message("input$choose_split: ",input$choose_split)
-        # message("variables: ",variables |> toString())
+        # message_dev("input$choose_split: ",input$choose_split)
+        # message_dev("variables: ",variables |> toString())
         # DF |> head() |> print()
         html_output <- htmlTable::htmlTable(
           align = "l",
@@ -220,7 +220,7 @@ app_server <- function(input, output, session) {
   # Create a reactive list of DT tables
   output$dt_tables_view_records <- renderUI({
     if (length(values$dt_tables_view_list) == 0L) {
-      # If the list is empty, show a message
+      # If the list is empty, show a message_dev
       return(h3("No tables available to display."))
     } else {
       if (input$view_switch_text) {
@@ -264,7 +264,7 @@ app_server <- function(input, output, session) {
           include_users = FALSE,
           include_log = FALSE
         )$data |> process_df_list()
-        # print(values$dt_tables_view_list)
+        # message_dev(values$dt_tables_view_list)
         # values$dt_tables_view_list <- project |> generate_project_dataset(records = dataset$data$sarcoma$record_id |> sample1(), data_choice = get_default_data_choice(values$project),field_names = "sarc_timeline") |> process_df_list()
         # values$dataset$data$sarcoma |> dplyr::filter(sarcoma_id%in%values$chosen_group_sarcoma) |> make_PSproject_table(project = values$project)
         if (!is_something(values$dt_tables_view_list))
@@ -512,7 +512,7 @@ app_server <- function(input, output, session) {
     )
   })
   observeEvent(values$project, {
-    message("values$project changed!")
+    message_dev("values$project changed!")
     if (is_something(values$project)) {
       values$selected_form <- NULL
       values$selected_field <- NULL
@@ -672,7 +672,7 @@ app_server <- function(input, output, session) {
     input$transformation_switch
     input$choose_group
     input$labelled
-    message("trigger switch")
+    message_dev("trigger switch")
     isolate({
       filter_choices <- NULL
       filter_field <- NULL
@@ -744,7 +744,7 @@ app_server <- function(input, output, session) {
     )
   }, ignoreInit = TRUE)
   observeEvent(values$subset_records, {
-    message("values$subset_records changed!")
+    message_dev("values$subset_records changed!")
     selected <- NULL
     if (is_something(input$choose_record)) {
       if (!input$choose_record %in% values$subset_records) {
@@ -762,7 +762,7 @@ app_server <- function(input, output, session) {
     )
   })
   # observeEvent(values$data_list_form_fields_cat,{
-  #   message("values$data_list_form_fields_cat changed!")
+  #   message_dev("values$data_list_form_fields_cat changed!")
   #   selected <- "no_choice"
   #   if(is_something(input$choose_split)){
   #     if(input$choose_split %in% values$data_list_form_fields_cat){
@@ -781,7 +781,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$sb1, ignoreNULL = TRUE, {
     if (is_something(values$project)) {
       if (input$sb1 %in% c("group", "record")) {
-        message("input$sb1:", input$sb1)
+        message_dev("input$sb1:", input$sb1)
         if (is_something(input$choose_form)) {
           updateTabsetPanel(
             session = session,
@@ -795,7 +795,7 @@ app_server <- function(input, output, session) {
   # observe({
   #   if(is_something(values$project)){
   #     if(input$sb1 %in% c("group","record")){
-  #       message("input$sb1:",input$sb1)
+  #       message_dev("input$sb1:",input$sb1)
   #       if(is_something(input$choose_form)){
   #         updateTabsetPanel(
   #           session,
@@ -904,7 +904,7 @@ app_server <- function(input, output, session) {
     selected <-  input$choose_form |> form_names_to_form_labels_alt(values$dataset$metadata)
     if (is_something(selected)) {
       # if(!identical(selected,input$tabs)){
-      message("updating form2: ", selected)
+      message_dev("updating form2: ", selected)
       updateTabsetPanel(session = session,
                         inputId = "tabs",
                         selected = selected)
@@ -928,16 +928,16 @@ app_server <- function(input, output, session) {
   })
   observe({
     selected <- input[["projects_table_rows_selected"]]
-    # message("selected: ", selected)
+    # message_dev("selected: ", selected)
     isolate({
       expected <- NULL
       data_col <- values$projects$project_name
       expected <- which(data_col == input$choose_project)
-      # message("expected: ", expected)
+      # message_dev("expected: ", expected)
       if (is_something(selected)) {
         if (!identical(selected, expected)) {
           selected <- unique(data_col[[selected]])
-          message("valid_click: ", selected)
+          message_dev("valid_click: ", selected)
           updateSelectizeInput(
             session = session,
             inputId = "choose_project",
@@ -955,35 +955,35 @@ app_server <- function(input, output, session) {
       all_forms |> lapply(function(form) {
         values[[paste0("table___home__", form, "_exists")]]
       })
-      message("input$tabs : ", input$tabs)
+      message_dev("input$tabs : ", input$tabs)
       values$selected_form <- input$tabs |> form_labels_to_form_names_alt(values$dataset$metadata)
       isolate({
-        message("values$selected_form: ", values$selected_form)
+        message_dev("values$selected_form: ", values$selected_form)
         if (is_something(values$selected_form)) {
           values$active_table_id <- paste0("table___home__", values$selected_form)
-          message("values$active_table_id: ", values$active_table_id)
+          message_dev("values$active_table_id: ", values$active_table_id)
           starting_record <- input$choose_record
-          message("values$selected_form: ", values$selected_form)
+          message_dev("values$selected_form: ", values$selected_form)
           state_length <- input[[paste0(values$active_table_id, "_state")]]$length
-          message("state_length: ", state_length)
+          message_dev("state_length: ", state_length)
           for (form in all_forms) {
             if (!is.null(input[[paste0("table___home__", form, "_state")]])) {
-              message("form: ", form)
+              message_dev("form: ", form)
               ROWS <- which(values$dataset$data[[form]][[values$project$metadata$id_col]] == input$choose_record)
-              message("ROWS: ", ROWS |> toString())
+              message_dev("ROWS: ", ROWS |> toString())
               skip <- FALSE
               if (!is.null(input[[paste0("table___home__", form, "_rows_selected")]])) {
-                message("ident ",
+                message_dev("ident ",
                         identical(ROWS, input[[paste0("table___home__", form, "_rows_selected")]]),
                         " ",
                         ROWS,
                         " ",
                         input[[paste0("table___home__", form, "_rows_selected")]])
                 skip <- identical(ROWS, input[[paste0("table___home__", form, "_rows_selected")]])
-                message("SKIP: ", skip)
+                message_dev("SKIP: ", skip)
               }
               if (!skip) {
-                message("triggered proxy Tabs: ", form, " Row ", ROWS)
+                message_dev("triggered proxy Tabs: ", form, " Row ", ROWS)
                 DT::selectRows(
                   proxy = DT::dataTableProxy(
                     paste0("table___home__", form),
@@ -993,7 +993,7 @@ app_server <- function(input, output, session) {
                 )
                 if (length(ROWS) > 0L) {
                   page <- as.integer(ROWS[[1L]] / state_length) + 1L
-                  message("triggered page: ", page)
+                  message_dev("triggered page: ", page)
                   DT::selectPage(
                     proxy = DT::dataTableProxy(
                       paste0("table___home__", form),
@@ -1012,17 +1012,17 @@ app_server <- function(input, output, session) {
   observe({
     if (!is.null(values$active_table_id)) {
       selected <- input[[paste0(values$active_table_id, "_rows_selected")]]
-      # message("selected: ", selected)
+      # message_dev("selected: ", selected)
       isolate({
         if (is_something(values$selected_form)) {
           expected <- NULL
           data_col <- values$dataset$data[[values$selected_form]][[values$project$metadata$id_col]]
           expected <- which(data_col == input$choose_record)
-          # message("expected: ", expected)
+          # message_dev("expected: ", expected)
           if (is_something(selected)) {
             if (!identical(selected, expected)) {
               selected <- unique(data_col[[selected]])
-              message("valid_click: ", selected)
+              message_dev("valid_click: ", selected)
               updateSelectizeInput(
                 session,
                 "choose_record",
@@ -1083,7 +1083,7 @@ app_server <- function(input, output, session) {
   })
   observeEvent(input$add_input_instance_ui, ignoreInit = TRUE, {
     if (is_something(input$choose_fields_change)) {
-      message("clicked add_input_instance_ui")
+      message_dev("clicked add_input_instance_ui")
       DF <- values$fields_to_change_input_df
       # blank_df <- DF[0L, ]
       x <- data.frame(
@@ -1117,11 +1117,11 @@ app_server <- function(input, output, session) {
             j <- ij[2L] |> as.integer()
             if (OUT == "_truly_blank_in_redcap_")
               OUT <- ""
-            message("original ", i, " ", j, " ", DF[i, j])
-            message("new ", i, " ", j, " ", OUT)
+            message_dev("original ", i, " ", j, " ", DF[i, j])
+            message_dev("new ", i, " ", j, " ", OUT)
             it_changed <- !identical(unname(DF[i, j]), unname(OUT))
             if (it_changed) {
-              message("it_changed!")
+              message_dev("it_changed!")
               DF[i, j] <- OUT
               any_changes <- TRUE
             }
@@ -1134,10 +1134,10 @@ app_server <- function(input, output, session) {
     }
   })
   observeEvent(input$submit_data_values2, {
-    message("uploaded!")
+    message_dev("uploaded!")
   })
   output$fields_to_change_dynamic_inputs <- renderUI({
-    message("fields_to_change_dynamic_inputs triggered")
+    message_dev("fields_to_change_dynamic_inputs triggered")
     input$choose_fields_change
     values$dynamic_input_ids
     input$choose_record
@@ -1156,9 +1156,9 @@ app_server <- function(input, output, session) {
     the_number_of_cols <- ncols - length(ref_cols)
     base_width <- floor(12L / the_number_of_cols)
     remainder <- 12L %% the_number_of_cols
-    message("ref_cols: ", ref_cols |> length())
-    message("base_width: ", base_width)
-    message("the_number_of_cols: ", the_number_of_cols)
+    message_dev("ref_cols: ", ref_cols |> length())
+    message_dev("base_width: ", base_width)
+    message_dev("the_number_of_cols: ", the_number_of_cols)
     column_widths <- rep(base_width, the_number_of_cols)
     if (remainder > 0L) {
       column_widths[1L:remainder] <- column_widths[1L:remainder] + 1L
@@ -1236,7 +1236,7 @@ app_server <- function(input, output, session) {
   # ab----------
   observeEvent(input$ab_random_record, {
     random_record <- values$subset_records |> sample1()
-    message("Random Record: ", random_record)
+    message_dev("Random Record: ", random_record)
     updateSelectizeInput(
       session,
       "choose_record",
@@ -1326,9 +1326,9 @@ app_server <- function(input, output, session) {
       DF <- values$dataset$data[[input$choose_form]]
     }
     input$shuffle_colors
-    # print(input$choose_fields_cat)
+    # message_dev(input$choose_fields_cat)
     # cols <- vec1_in_vec2(input$choose_fields_cat,colnames(DF))
-    # print(cols)
+    # message_dev(cols)
     # # fields_to_forms
     if (length(input$choose_fields_cat) > 0L) {
       cols <- input$choose_fields_cat |> vec1_in_vec2(colnames(DF))

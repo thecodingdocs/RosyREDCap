@@ -29,8 +29,8 @@ REDCap_diagram(
 - static:
 
   Logical (TRUE/FALSE). If TRUE, generates a static diagram with
-  \`DiagrammeR\`. If FALSE, generates an interactive diagram with
-  \`visnetwork\`. Default is \`FALSE\`.
+  \[DiagrammeR\]. If FALSE, generates an interactive diagram with
+  \[visNetwork\]. Default is \`FALSE\`.
 
 - render:
 

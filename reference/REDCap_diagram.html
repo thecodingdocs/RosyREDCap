@@ -75,41 +75,46 @@
 
 
 <dt id="arg-static">static<a class="anchor" aria-label="anchor" href="#arg-static"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, generates a static diagram with `DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`. Default is `FALSE`.</p></dd>
+<dd><p>Logical (TRUE/FALSE). If TRUE, generates a static diagram with
+`DiagrammeR`. If FALSE, generates an interactive diagram with `visnetwork`.
+Default is `FALSE`.</p></dd>
 
 
 <dt id="arg-render">render<a class="anchor" aria-label="anchor" href="#arg-render"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.</p></dd>
+<dd><p>Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is
+`TRUE`.</p></dd>
 
 
 <dt id="arg-duplicate-forms">duplicate_forms<a class="anchor" aria-label="anchor" href="#arg-duplicate-forms"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, includes duplicate form nodes in the diagram. Default is `TRUE`.</p></dd>
+<dd><p>Logical (TRUE/FALSE). If TRUE, includes duplicate
+form nodes in the diagram. Default is `TRUE`.</p></dd>
 
 
 <dt id="arg-clean-names">clean_names<a class="anchor" aria-label="anchor" href="#arg-clean-names"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, cleans the names of the forms and fields in the diagram. Default is `TRUE`.</p></dd>
+<dd><p>Logical (TRUE/FALSE). If TRUE, cleans the names of the
+forms and fields in the diagram. Default is `TRUE`.</p></dd>
 
 
 <dt id="arg-include-fields">include_fields<a class="anchor" aria-label="anchor" href="#arg-include-fields"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, includes fields in the diagram. Default is `FALSE`.</p></dd>
+<dd><p>Logical (TRUE/FALSE). If TRUE, includes fields in the
+diagram. Default is `FALSE`.</p></dd>
 
 
 <dt id="arg-include-choices">include_choices<a class="anchor" aria-label="anchor" href="#arg-include-choices"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, includes choices in the diagram. Default is `FALSE`.</p></dd>
+<dd><p>Logical (TRUE/FALSE). If TRUE, includes choices in
+the diagram. Default is `FALSE`.</p></dd>
 
 
 <dt id="arg-hierarchical">hierarchical<a class="anchor" aria-label="anchor" href="#arg-hierarchical"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, generates a hierarchical diagram. Default is `FALSE`.</p></dd>
+<dd><p>: Boolean. Default to false. When true, the layout engine positions the nodes in a hierarchical fashion using default settings. For customization you can use  <a href="https://rdrr.io/pkg/visNetwork/man/visHierarchicalLayout.html" class="external-link">visHierarchicalLayout</a></p></dd>
 
 
 <dt id="arg-direction">direction<a class="anchor" aria-label="anchor" href="#arg-direction"></a></dt>
-<dd><p>Character string specifying the direction of the diagram.
-Options are "LR" (left to right), "TB" (top to bottom), "RL" (right to left),
-and "BT" (bottom to top). Default is "LR".</p></dd>
+<dd><p>: String. Default to 'UD'. The direction of the hierarchical layout. The available options are: UD, DU, LR, RL. To simplify: up-down, down-up, left-right, right-left.</p></dd>
 
 
 <dt id="arg-zoomview">zoomView<a class="anchor" aria-label="anchor" href="#arg-zoomview"></a></dt>
-<dd><p>Logical (TRUE/FALSE). If TRUE, user can zoom. Default is `TRUE`.</p></dd>
+<dd><p>: Boolean. Default to true. When true, the user can zoom in.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,7 +123,10 @@ and "BT" (bottom to top). Default is "LR".</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function generates a visual diagram of the REDCap project structure, including forms, fields, and choices. It supports various options such as rendering the diagram, including fields and choices, and specifying the direction of the diagram.</p>
+    <p>This function generates a visual diagram of the REDCap project structure,
+including forms, fields, and choices. It supports various options such as
+rendering the diagram, including fields and choices, and specifying the
+direction of the diagram.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

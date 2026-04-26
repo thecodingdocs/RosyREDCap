@@ -59,18 +59,20 @@ REDCap_diagram(
 
 - hierarchical:
 
-  Logical (TRUE/FALSE). If TRUE, generates a hierarchical diagram.
-  Default is \`FALSE\`.
+  : Boolean. Default to false. When true, the layout engine positions
+  the nodes in a hierarchical fashion using default settings. For
+  customization you can use
+  [visHierarchicalLayout](https://rdrr.io/pkg/visNetwork/man/visHierarchicalLayout.html)
 
 - direction:
 
-  Character string specifying the direction of the diagram. Options are
-  "LR" (left to right), "TB" (top to bottom), "RL" (right to left), and
-  "BT" (bottom to top). Default is "LR".
+  : String. Default to 'UD'. The direction of the hierarchical layout.
+  The available options are: UD, DU, LR, RL. To simplify: up-down,
+  down-up, left-right, right-left.
 
 - zoomView:
 
-  Logical (TRUE/FALSE). If TRUE, user can zoom. Default is \`TRUE\`.
+  : Boolean. Default to true. When true, the user can zoom in.
 
 ## Value
 

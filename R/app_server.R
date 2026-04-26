@@ -219,7 +219,8 @@ app_server <- function(input, output, session) {
           make_table1(
             DF = REDCapSync:::clean_form(
               form = DF,
-              fields = values$dataset$metadata$fields
+              fields = values$dataset$metadata$fields,
+              labelled = input$labelled
             ),
             group = input$choose_split,
             variables = variables,
@@ -292,7 +293,12 @@ app_server <- function(input, output, session) {
           table_data <- values$dt_tables_view_list[[i]]
           table_id <- paste0("table__dt_view_", i)
           output[[table_id]] <- DT::renderDT({
-            table_data |> REDCapSync:::clean_form(fields = values$dataset$metadata$fields) |> make_DT_table()
+            table_data |>
+              REDCapSync:::clean_form(
+                fields = values$dataset$metadata$fields,
+                labelled = input$labelled
+                ) |>
+              make_DT_table()
           })
         })
         return(x)
@@ -685,6 +691,7 @@ app_server <- function(input, output, session) {
     input$exclude_free_text_switch
     input$transformation_switch
     input$choose_group
+    input$labelled
     message("trigger switch")
     isolate({
       filter_choices <- NULL
@@ -1359,6 +1366,7 @@ app_server <- function(input, output, session) {
       cols <- input$choose_fields_cat |> vec1_in_vec2(colnames(DF))
       x <- DF[, cols, drop = FALSE] |>
         REDCapSync:::clean_form(fields = values$dataset$metadata$fields,
+                                labelled = input$labelled,
                                 drop_blanks = TRUE) |>
         plotly_parcats(remove_missing = !input$render_missing)
       return(x)

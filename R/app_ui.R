@@ -333,7 +333,6 @@ app_ui <- function(request) {
               uiOutput("add_input_instance_ui_"),
               actionButton("reset_data_values", "Reset Data"),
               actionButton("submit_data_values", "Pend For Upload")
-
             )
           ),
           fluidRow(

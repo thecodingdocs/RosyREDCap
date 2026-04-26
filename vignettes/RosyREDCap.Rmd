@@ -14,10 +14,36 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+Load both REDCapSync and RosyREDCap.
+
 ```{r setup,eval=TRUE}
 library(REDCapSync)
 library(RosyREDCap)
+```
+
+Launch the shiny app in your browser with ...
+
+```{r, eval=FALSE}
+ # by default will launch in your browser
+run_RosyREDCap()
+# launch in pop out RStudio window
+run_RosyREDCap(options = NULL) 
+# launch in RStudio Viewer
+run_RosyREDCap(options = c(launch.browser = .rs.invokeShinyPaneViewer)) 
+# launch in test_mode (built-in fake projects)
+run_RosyREDCap(test_mode = FALSE)
+```
+
+You can also use plot functions from the shiny app to make visuals in RStudio.
+
+```{r, eval=TRUE}
 
 TEST_CLASSIC <- load_project("TEST_CLASSIC")
 TEST_CLASSIC |> REDCap_diagram()
+
+load_project("TEST_REDCAPR_CLINICAL_TRIAL") |> REDCap_diagram()
 ```
+
+
+As more functions are developed they will be shared. Please reach out if you have ideas/suggestions

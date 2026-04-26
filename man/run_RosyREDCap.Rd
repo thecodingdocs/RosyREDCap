@@ -9,7 +9,7 @@ run_RosyREDCap(
   enableBookmarking = NULL,
   uiPattern = "/",
   test_mode = FALSE,
-  options = NULL
+  options = c(launch.browser = TRUE)
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ request to determine whether the \code{ui} should be used to handle the
 request. Note that the entire request path must match the regular
 expression in order for the match to be considered successful.}
 
-\item{test_mode}{Test mode.}
+\item{test_mode}{Test mode vs Real REDCap Projects.}
 
 \item{options}{Named options that should be passed to the \code{runApp} call
 (these can be any of the following: "port", "launch.browser", "host", "quiet",

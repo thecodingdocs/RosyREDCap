@@ -15,7 +15,7 @@ golem_add_external_resources <- function(...) {
   )
 }
 #' @title run_RosyREDCap
-#' @param test_mode Test mode.
+#' @param test_mode Test mode vs Real REDCap Projects.
 #' @inheritParams shiny::shinyApp
 #' @importFrom shiny shinyApp
 #' @importFrom golem with_golem_options
@@ -27,7 +27,7 @@ run_RosyREDCap <- function(onStart = NULL,
                            uiPattern = "/",
                            # project_names
                            test_mode = FALSE,
-                           options = NULL) {
+                           options = c(launch.browser = TRUE)) {
   with_golem_options(
     app = shinyApp(
       ui = app_ui,

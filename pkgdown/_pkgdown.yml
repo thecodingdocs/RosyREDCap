@@ -44,25 +44,8 @@ reference:
   - contents:
       - generate_redcap_ids
 
-articles:
-  - title: Using RosyREDCap ✨
-    contents:
-      - Shiny
-  - title: API Tokens
-    contents:
-      - Tokens
-  - title: REDCapSync
-    contents:
-      - REDCapSync
-  - title: RosyREDCap
-    contents:
-      - RosyREDCap
 authors:
   Brandon Rose:
     href: https://github.com/brandonerose
   Natalie Goulett:
     href: https://github.com/Goulett
-  Chris Hilsinger-Pate:
-    href: https://github.com/chrishilsingerpate
-  Nikola Susic:
-    href: https://github.com/nsusic

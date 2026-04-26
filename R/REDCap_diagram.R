@@ -85,17 +85,21 @@ REDCap_diagram <- function(project,
     rendered_graph <- visNetwork::visNetwork(
       nodes =  OUT$node_df,
       edges = OUT$edge_df,
-      # height = "600px",
+      height = "600px",
       main = list(
         text = project$redcap$project_info$project_title,
         style = "font-size:24px;font-weight:bold;color:black;font-family:Georgia;text-align:center;"
       ),
       submain = list(
         text = paste0(
-          project$redcap$project_info$project_notes,
+          ifelse(
+            is_something(project$redcap$project_info$project_notes),
+            project$redcap$project_info$project_notes,
+            ""
+          ),
           "<br>Code by Brandon Rose, M.D., M.P.H. at <a href='https://www.thecodingdocs.com/home'>TheCodingDocs.com</a> using <a href='https://github.com/thecodingdocs/RosyREDCap'>RosyREDCap with REDCapSync</a> and <a href='https://github.com/datastorm-open/visNetwork'>VisNetwork</a>"
         ),
-        style = "font-size:18px;color:black;font-family:Georgia;text-align:center;"
+        style = "font-size:14px;color:black;font-family:Georgia;text-align:center;"
       )
     ) |>
       visNetwork::visInteraction(zoomView = zoomView) |>

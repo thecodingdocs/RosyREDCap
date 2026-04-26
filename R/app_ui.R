@@ -136,7 +136,7 @@ app_ui <- function(request) {
             title = "REDCap Metadata Network",
             closable = FALSE,
             width = 12L,
-            height = "700px",
+            height = "800px",
             solidHeader = TRUE,
             collapsible = TRUE,
             sidebar = shinydashboardPlus::boxSidebar(
@@ -163,15 +163,15 @@ app_ui <- function(request) {
                              selected = "LR"),
               awesomeCheckbox(inputId = "metadata_graph_allow_zoom",
                               label = "Allow Zoom?",
-                              value = FALSE)
+                              value = TRUE)
             ),
             tabBox(
               id = "metadata_graph_tabs",
               width = 12L,
-              height = "700px",
+              height = "800px",
               tabPanel(
                 "visNetwork",
-                visNetwork::visNetworkOutput("REDCap_diagram_vis")
+                visNetwork::visNetworkOutput("REDCap_diagram_vis", width = "100%", height = "600px")
               ),
               tabPanel(
                 "DiagrammeR",

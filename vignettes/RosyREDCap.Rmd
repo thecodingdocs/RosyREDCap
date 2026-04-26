@@ -42,7 +42,9 @@ You can also use plot functions from the shiny app to make visuals in RStudio.
 TEST_CLASSIC <- load_project("TEST_CLASSIC")
 TEST_CLASSIC |> REDCap_diagram()
 
-load_project("TEST_REDCAPR_CLINICAL_TRIAL") |> REDCap_diagram()
+load_project("TEST_REDCAPR_LONGITUDINAL") |> 
+  REDCap_diagram(duplicate_forms = FALSE,
+                 hierarchical = TRUE)
 ```
 
 

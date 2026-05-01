@@ -46,6 +46,7 @@ The stable release can be found on CRAN and installed with:
 **PLACEHOLDER NOT SUBMITTED TO CRAN YET**
 
 ``` r
+
 #install.packages("RosyREDCap") #PLACEHOLDER NOT SUBMITTED TO CRAN YET
 ```
 
@@ -55,6 +56,7 @@ install [remotes](https://remotes.r-lib.org) if you don’t have it
 already.
 
 ``` r
+
 #install.packages("remotes)
 remotes::install_github("thecodingdocs/RosyREDCap")
 ```
@@ -64,6 +66,7 @@ Note that the version used at the time of writing this book is
 following.
 
 ``` r
+
 packageVersion("RosyREDCap")
 #> [1] '0.0.0.9005'
 ```
@@ -75,6 +78,7 @@ RStudio and update all packages in RStudio. See
 ## Getting Started
 
 ``` r
+
 library("RosyREDCap")
 #run shiny app!
 run_RosyREDCap() # will work with multiple REDCap projects!

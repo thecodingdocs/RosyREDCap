@@ -8,6 +8,7 @@ See the page on [storing
 tokens](https://thecodingdocs.github.io/REDCapSync/articles/Tokens.html "REDCapSync Tokens").
 
 ``` r
+
 library(REDCapSync)
 library(RosyREDCap)
 ```
@@ -15,6 +16,7 @@ library(RosyREDCap)
 Launch the shiny app in your browser with …
 
 ``` r
+
  # by default will launch in your browser
 run_RosyREDCap()
 # launch in pop out RStudio window
@@ -30,6 +32,7 @@ RStudio.
 
 ``` r
 
+
 TEST_CLASSIC <- load_project("TEST_CLASSIC")
 #> ! No cached projects... use `setup_project(...)`
 #> ✔ Loaded TEST project TEST_CLASSIC!
@@ -38,6 +41,7 @@ TEST_CLASSIC |> REDCap_diagram()
 ```
 
 ``` r
+
 
 load_project("TEST_REDCAPR_LONGITUDINAL") |> 
   REDCap_diagram(duplicate_forms = FALSE,

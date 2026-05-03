@@ -2,8 +2,7 @@
 % Please edit documentation in R/rmarkdown.R
 \name{rmarkdown_project}
 \alias{rmarkdown_project}
-\title{rmarkdown_project
-`r lifecycle::badge("experimental")`}
+\title{rmarkdown_project}
 \usage{
 rmarkdown_project(project, dir_other)
 }
@@ -14,6 +13,7 @@ rmarkdown_project(project, dir_other)
 saved. Default is the `output` folder within the database directory.}
 }
 \description{
+`r lifecycle::badge("experimental")`
 Generate a rmarkdown PDF from a project object
 }
 \details{

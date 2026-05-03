@@ -38,6 +38,7 @@ reference:
       - make_survival
       - make_table1
       - save_table1
+      - rmarkdown_project
 
   - title: REDCapSync Helpers
   - desc: Add ons to REDCapSync allowing more customization but too niche for CRAN for now

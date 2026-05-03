@@ -10,6 +10,5 @@
 #' @importFrom shinyWidgets updateSwitchInput
 #' @import shiny
 #' @import shinydashboard
-#' shinyWidgets
 ## usethis namespace: end
 NULL

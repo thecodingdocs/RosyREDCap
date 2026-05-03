@@ -33,6 +33,7 @@ Imports:
     plotly,
     RColorBrewer,
     REDCapSync,
+    rmarkdown,
     scales,
     shiny (>= 1.8.1.1),
     shinydashboard,
@@ -44,10 +45,10 @@ Imports:
     survival,
     survminer,
     table1,
-    visNetwork
+    visNetwork,
+    webshot2
 Suggests: 
     knitr,
-    rmarkdown,
     spelling,
     testthat (>= 3.0.0)
 VignetteBuilder: 
@@ -57,4 +58,4 @@ Remotes:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.3
+RoxygenNote: 8.0.0

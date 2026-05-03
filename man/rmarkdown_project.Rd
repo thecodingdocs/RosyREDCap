@@ -9,6 +9,9 @@ rmarkdown_project(project, dir_other)
 }
 \arguments{
 \item{project}{project object from REDCapSync package}
+
+\item{dir_other}{Character. The directory where the dataset file will be
+saved. Default is the `output` folder within the database directory.}
 }
 \description{
 Generate a rmarkdown PDF from a project object

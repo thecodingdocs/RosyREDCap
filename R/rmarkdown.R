@@ -1,6 +1,8 @@
 #' @title rmarkdown_project
 #' `r lifecycle::badge("experimental")`
 #' @inheritParams REDCap_diagram
+#' @param dir_other Character. The directory where the dataset file will be
+#' saved. Default is the `output` folder within the database directory.
 #' @description
 #' Generate a rmarkdown PDF from a project object
 #' @details

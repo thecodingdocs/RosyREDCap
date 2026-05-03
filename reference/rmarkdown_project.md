@@ -1,7 +1,6 @@
 # rmarkdown_project
 
-\`r lifecycle::badge("experimental")\` Generate a rmarkdown PDF from a
-project object
+**\[experimental\]** Generate a rmarkdown PDF from a project object
 
 ## Usage
 
@@ -18,10 +17,10 @@ rmarkdown_project(project, dir_other)
 - dir_other:
 
   Character. The directory where the dataset file will be saved. Default
-  is the \`output\` folder within the database directory.
+  is the `output` folder within the database directory.
 
 ## Details
 
-You will need the \[tinytex\] and \[reticulate\] packages. Follow errors
+You will need the `tinytex` and `reticulate` packages. Follow errors
 during your first use and afterwards it should work. Currently working
 on mac but troubleshooting windows errors with latex.

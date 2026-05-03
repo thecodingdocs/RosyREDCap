@@ -1,7 +1,7 @@
 # Generate REDCap Project Diagram
 
 Generates a diagram of the REDCap project structure based on the
-\`project\` object.
+`project` object.
 
 ## Usage
 
@@ -29,33 +29,34 @@ REDCap_diagram(
 - static:
 
   Logical (TRUE/FALSE). If TRUE, generates a static diagram with
-  \[DiagrammeR\]. If FALSE, generates an interactive diagram with
-  \[visNetwork\]. Default is \`FALSE\`.
+  [DiagrammeR](https://rich-iannone.github.io/DiagrammeR/reference/DiagrammeR.html).
+  If FALSE, generates an interactive diagram with
+  [visNetwork](https://rdrr.io/pkg/visNetwork/man/visNetwork.html).
+  Default is `FALSE`.
 
 - render:
 
-  Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is
-  \`TRUE\`.
+  Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is `TRUE`.
 
 - duplicate_forms:
 
   Logical (TRUE/FALSE). If TRUE, includes duplicate form nodes in the
-  diagram. Default is \`TRUE\`.
+  diagram. Default is `TRUE`.
 
 - clean_names:
 
   Logical (TRUE/FALSE). If TRUE, cleans the names of the forms and
-  fields in the diagram. Default is \`TRUE\`.
+  fields in the diagram. Default is `TRUE`.
 
 - include_fields:
 
   Logical (TRUE/FALSE). If TRUE, includes fields in the diagram. Default
-  is \`FALSE\`.
+  is `FALSE`.
 
 - include_choices:
 
   Logical (TRUE/FALSE). If TRUE, includes choices in the diagram.
-  Default is \`FALSE\`.
+  Default is `FALSE`.
 
 - hierarchical:
 

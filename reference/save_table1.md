@@ -12,7 +12,8 @@ save_table1(table1, filepath)
 
 - table1:
 
-  from \[make_table1\]
+  from
+  [make_table1](https://thecodingdocs.github.io/RosyREDCap/reference/make_table1.md)
 
 - filepath:
 

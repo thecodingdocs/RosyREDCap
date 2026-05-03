@@ -1271,6 +1271,14 @@ app_server <- function(input, output, session) {
   })
   observeEvent(input$ab_update_redcap, {
     # values$project <- values$project$sync() # save_datasets no
+    values$project <- tryCatch({
+      load_project(project_name = input$choose_project)$
+        sync(save_datasets = FALSE)$
+        save()$
+        .internal
+    }, error = function(e) {
+      NULL
+    })
   })
   # redcap links -----
   output$redcap_links <- renderUI({

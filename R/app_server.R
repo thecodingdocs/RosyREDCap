@@ -1342,7 +1342,10 @@ app_server <- function(input, output, session) {
   })
   output$survival <- renderPlot({
     if (is_something(input$choose_form)) {
-      DF <- values$dataset$data[[input$choose_form]]
+      DF <- values$dataset$data[[input$choose_form]]|>
+        REDCapSync:::clean_form(fields = values$dataset$metadata$fields,
+                                labelled = input$labelled,
+                                drop_blanks = TRUE)
     }
     date_fields <- get_field_names_date(values$dataset)
     if (length(date_fields) > 0L) {

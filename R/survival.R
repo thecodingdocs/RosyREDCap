@@ -47,8 +47,9 @@ make_survival <- function(DF,
                           legend.position = "top",
                           tables.height = 0.25,
                           show_stats = FALSE) {
-  if (!is.data.frame(DF))
+  if (!is.data.frame(DF)) {
     stop("DF has to be a data.frame")
+  }
   DF_ori <- DF
   if (missing(time_col)) {
     DF[["time_col"]] <- age(
@@ -77,9 +78,11 @@ make_survival <- function(DF,
     if (!is.null(strat_col)) {
       legend.title <- strat_col
       x <- attr(DF[[strat_col]], "label")
-      if (!is.null(x))
+      if (!is.null(x)) {
         legend.title <- x
+      }
       DF[["strat_col"]] <- DF[[strat_col]]
+      attr(DF[["strat_col"]], "label") <- legend.title
       fit <- survival::survfit(survival::Surv(time_col, status_col) ~ strat_col, data = DF)
       if (is.factor(DF[[strat_col]])) {
         legend.labs <- levels(DF[[strat_col]])
@@ -89,6 +92,7 @@ make_survival <- function(DF,
       }
     }
   }
+  DF <- DF |> clone_attr(DF_ori)
   if (is.null(fit)) {
     return(NULL)
   }

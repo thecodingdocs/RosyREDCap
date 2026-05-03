@@ -1,14 +1,15 @@
 #' @keywords internal
 "_PACKAGE"
 ## usethis namespace: start
-#' @import REDCapSync
 #' @import golem
-#' @importFrom checkmate test_class
-#' @importFrom shinyWidgets awesomeCheckbox
-#' @importFrom shinyWidgets actionBttn
-#' @importFrom shinyWidgets switchInput
-#' @importFrom shinyWidgets updateSwitchInput
+#' @import REDCapSync
 #' @import shiny
 #' @import shinydashboard
+#' @importFrom checkmate test_class
+#' @importFrom lifecycle deprecated
+#' @importFrom shinyWidgets actionBttn
+#' @importFrom shinyWidgets awesomeCheckbox
+#' @importFrom shinyWidgets switchInput
+#' @importFrom shinyWidgets updateSwitchInput
 ## usethis namespace: end
 NULL

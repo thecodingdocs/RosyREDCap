@@ -18,6 +18,11 @@ Useful links:
 **Maintainer**: Brandon Rose <thecodingdocs@gmail.com>
 ([ORCID](https://orcid.org/0009-0009-7813-1960))
 
+Authors:
+
+- Brandon Rose <thecodingdocs@gmail.com>
+  ([ORCID](https://orcid.org/0009-0009-7813-1960))
+
 Other contributors:
 
 - Natalie Goulett \[contributor\]

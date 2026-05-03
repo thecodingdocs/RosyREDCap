@@ -27,6 +27,8 @@ application.
   : make_table1
 - [`save_table1()`](https://thecodingdocs.github.io/RosyREDCap/reference/save_table1.md)
   : save_table1
+- [`rmarkdown_project()`](https://thecodingdocs.github.io/RosyREDCap/reference/rmarkdown_project.md)
+  : rmarkdown_project \`r lifecycle::badge("experimental")\`
 
 ## REDCapSync Helpers
 

@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/thecodingdocs/RosyREDCap/blob/v0.0.0.9005/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/thecodingdocs/RosyREDCap/blob/main/DESCRIPTION)
 
 Rose B (2026). *RosyREDCap: Standardized REDCap Shiny Application*. R
 package version 0.0.0.9005,

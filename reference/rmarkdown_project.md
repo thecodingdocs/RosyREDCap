@@ -1,6 +1,7 @@
-# rmarkdown_project \`r lifecycle::badge("experimental")\`
+# rmarkdown_project
 
-Generate a rmarkdown PDF from a project object
+\`r lifecycle::badge("experimental")\` Generate a rmarkdown PDF from a
+project object
 
 ## Usage
 
@@ -13,6 +14,11 @@ rmarkdown_project(project, dir_other)
 - project:
 
   project object from REDCapSync package
+
+- dir_other:
+
+  Character. The directory where the dataset file will be saved. Default
+  is the \`output\` folder within the database directory.
 
 ## Details
 

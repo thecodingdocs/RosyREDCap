@@ -21,23 +21,23 @@ REDCap_diagram(
 \item{project}{project object from REDCapSync package}
 
 \item{static}{Logical (TRUE/FALSE). If TRUE, generates a static diagram with
-[DiagrammeR]. If FALSE, generates an interactive diagram with [visNetwork].
-Default is `FALSE`.}
+\link[DiagrammeR:DiagrammeR]{DiagrammeR}. If FALSE, generates an interactive diagram with \link[visNetwork:visNetwork]{visNetwork}.
+Default is \code{FALSE}.}
 
 \item{render}{Logical (TRUE/FALSE). If TRUE, renders the diagram. Default is
-`TRUE`.}
+\code{TRUE}.}
 
 \item{duplicate_forms}{Logical (TRUE/FALSE). If TRUE, includes duplicate
-form nodes in the diagram. Default is `TRUE`.}
+form nodes in the diagram. Default is \code{TRUE}.}
 
 \item{clean_names}{Logical (TRUE/FALSE). If TRUE, cleans the names of the
-forms and fields in the diagram. Default is `TRUE`.}
+forms and fields in the diagram. Default is \code{TRUE}.}
 
 \item{include_fields}{Logical (TRUE/FALSE). If TRUE, includes fields in the
-diagram. Default is `FALSE`.}
+diagram. Default is \code{FALSE}.}
 
 \item{include_choices}{Logical (TRUE/FALSE). If TRUE, includes choices in
-the diagram. Default is `FALSE`.}
+the diagram. Default is \code{FALSE}.}
 
 \item{hierarchical}{: Boolean. Default to false. When true, the layout engine positions the nodes in a hierarchical fashion using default settings. For customization you can use  \link[visNetwork]{visHierarchicalLayout}}
 
@@ -49,7 +49,7 @@ the diagram. Default is `FALSE`.}
 A diagram object representing the REDCap project structure.
 }
 \description{
-Generates a diagram of the REDCap project structure based on the `project` object.
+Generates a diagram of the REDCap project structure based on the \code{project} object.
 }
 \details{
 This function generates a visual diagram of the REDCap project structure,

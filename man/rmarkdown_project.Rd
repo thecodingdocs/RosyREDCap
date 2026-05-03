@@ -10,14 +10,14 @@ rmarkdown_project(project, dir_other)
 \item{project}{project object from REDCapSync package}
 
 \item{dir_other}{Character. The directory where the dataset file will be
-saved. Default is the `output` folder within the database directory.}
+saved. Default is the \code{output} folder within the database directory.}
 }
 \description{
-`r lifecycle::badge("experimental")`
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Generate a rmarkdown PDF from a project object
 }
 \details{
-You will need the [tinytex] and [reticulate] packages. Follow errors during
+You will need the \code{tinytex} and \code{reticulate} packages. Follow errors during
 your first use and afterwards it should work. Currently working on mac but
 troubleshooting windows errors with latex.
 }

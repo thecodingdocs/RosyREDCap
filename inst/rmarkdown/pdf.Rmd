@@ -150,5 +150,5 @@ Together, these tools allow clinical teams to build reproducible data pipelines 
 -   Follow us on Twitter/X [x.com/TheCodingDocs](https://x.com/TheCodingDocs/ "TheCodingDocs Twitter")
 -   Follow me on Twitter/X [x.com/BRoseMDMPH](https://x.com/BRoseMDMPH/ "BRoseMDMPH Twitter")
 
-[![TheCodingDocs.com](`r system.file("rmarkdown", "TCD.png", package = "RosyREDCap")`){ width=210px }](http://www.thecodingdocs.com) [![TheCodingDocs.com](`r system.file("rmarkdown", "REDCapSync.png", package = "RosyREDCap")`){ width=150px }](https://github.com/thecodingdocs/REDCapSync)[![TheCodingDocs.com](`r system.file("rmarkdown", "logo.png", package = "RosyREDCap")`){ width=150px }](https://github.com/thecodingdocs/RosyREDCap)
+[![TheCodingDocs.com](`r system.file("rmarkdown", "TCD.png", package = "RosyREDCap")`){ width=210px }](http://www.thecodingdocs.com) [![REDCapSync](`r system.file("rmarkdown", "REDCapSync.png", package = "RosyREDCap")`){ width=150px }](https://github.com/thecodingdocs/REDCapSync)[![RosyREDCap](`r system.file("rmarkdown", "logo.png", package = "RosyREDCap")`){ width=150px }](https://github.com/thecodingdocs/RosyREDCap)
 

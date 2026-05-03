@@ -7,7 +7,7 @@
 save_table1(table1, filepath)
 }
 \arguments{
-\item{table1}{from [make_table1]}
+\item{table1}{from \link{make_table1}}
 
 \item{filepath}{filepath to save}
 }

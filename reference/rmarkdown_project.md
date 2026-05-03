@@ -23,4 +23,5 @@ rmarkdown_project(project, dir_other)
 ## Details
 
 You will need the \[tinytex\] and \[reticulate\] packages. Follow errors
-during your first use and afterwards it should work
+during your first use and afterwards it should work. Currently working
+on mac but troubleshooting windows errors with latex.

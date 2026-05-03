@@ -6,7 +6,9 @@
 #' `r lifecycle::badge("experimental")`
 #' Generate a rmarkdown PDF from a project object
 #' @details
-#' You will need the [tinytex] and [reticulate] packages. Follow errors during your first use and afterwards it should work
+#' You will need the [tinytex] and [reticulate] packages. Follow errors during
+#' your first use and afterwards it should work. Currently working on mac but
+#' troubleshooting windows errors with latex.
 #' @export
 rmarkdown_project <- function(project, dir_other) {
   dataset <- project$load_dataset("REDCapSync")
@@ -15,9 +17,9 @@ rmarkdown_project <- function(project, dir_other) {
     if (!file.exists(project$dir_path)) {
       stop("project$dir_path does not exist")
     }
-    dir <- project$dir_path |> file.path("output")
+    dir_other <- project$dir_path |> file.path("output")
   }
-  if (!file.exists(dir)) {
+  if (!file.exists(dir_other)) {
     stop("dir does not exist")
   }
   filename <- paste0(project$project_name,
@@ -25,7 +27,7 @@ rmarkdown_project <- function(project, dir_other) {
                      gsub("-", "_", Sys.Date()),
                      ".pdf")
   temp_dir <- tempdir()
-  final_file <- file.path(dir, filename)
+  final_file <- file.path(dir_other, filename)
   final_file_temp <- file.path(temp_dir, filename)
   project |> REDCap_diagram() |> visNetwork::visSave(file = file.path(temp_dir, "redcap_diagram.html"))
   webshot2::webshot(

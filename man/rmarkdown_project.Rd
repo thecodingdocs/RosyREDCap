@@ -17,5 +17,7 @@ saved. Default is the `output` folder within the database directory.}
 Generate a rmarkdown PDF from a project object
 }
 \details{
-You will need the [tinytex] and [reticulate] packages. Follow errors during your first use and afterwards it should work
+You will need the [tinytex] and [reticulate] packages. Follow errors during
+your first use and afterwards it should work. Currently working on mac but
+troubleshooting windows errors with latex.
 }

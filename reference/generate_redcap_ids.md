@@ -1,11 +1,18 @@
 # generate_redcap_ids
 
-generate_redcap_ids
+**\[experimental\]** generate redcap record ids
 
 ## Usage
 
 ``` r
-generate_redcap_ids(project, needed, prefix = "", chosen_length = 6L)
+generate_redcap_ids(
+  project,
+  needed,
+  random = TRUE,
+  prefix = "",
+  chosen_length = 6L,
+  start_n = 1L
+)
 ```
 
 ## Arguments
@@ -18,6 +25,10 @@ generate_redcap_ids(project, needed, prefix = "", chosen_length = 6L)
 
   integer length of new IDs needed
 
+- random:
+
+  T/F for random
+
 - prefix:
 
   character string of ID prefix such as "ID" for "ID001"
@@ -25,6 +36,10 @@ generate_redcap_ids(project, needed, prefix = "", chosen_length = 6L)
 - chosen_length:
 
   integer length of padding for IDs
+
+- start_n:
+
+  integer 0 or 1
 
 ## Value
 

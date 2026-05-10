@@ -33,4 +33,4 @@ application.
 ## REDCapSync Helpers
 
 - [`generate_redcap_ids()`](https://thecodingdocs.github.io/RosyREDCap/reference/generate_redcap_ids.md)
-  : generate_redcap_ids
+  **\[experimental\]** : generate_redcap_ids

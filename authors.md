@@ -13,13 +13,12 @@ Source:
 [`DESCRIPTION`](https://github.com/thecodingdocs/RosyREDCap/blob/main/DESCRIPTION)
 
 Rose B (2026). *RosyREDCap: Standardized REDCap Shiny Application*. R
-package version 0.0.0.9005,
-<https://github.com/thecodingdocs/RosyREDCap>.
+package version 0.1.0, <https://github.com/thecodingdocs/RosyREDCap>.
 
     @Manual{,
       title = {RosyREDCap: Standardized REDCap Shiny Application},
       author = {Brandon Rose},
       year = {2026},
-      note = {R package version 0.0.0.9005},
+      note = {R package version 0.1.0},
       url = {https://github.com/thecodingdocs/RosyREDCap},
     }

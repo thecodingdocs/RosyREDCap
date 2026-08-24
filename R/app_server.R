@@ -512,8 +512,7 @@ app_server <- function(input, output, session) {
   })
   observeEvent(values$project, {
     message_dev("values$project changed!")
-    if (is_something(values$project) &&
-        is_something(input$transformation_switch)) {
+    if (is_something(values$project)) {
       values$selected_form <- NULL
       values$selected_field <- NULL
       values$selected_instance <- NULL
@@ -540,7 +539,9 @@ app_server <- function(input, output, session) {
       values$dataset <- REDCapSync:::generate_project_dataset(
         project = values$project,
         dataset_name = "RosyREDCap",
-        transformation_type = input$transformation_switch,
+        transformation_type = ifelse(is.null(input$transformation_switch),
+                                     "default",
+                                     input$transformation_switch),
         labelled = input$labelled,
         exclude_identifiers = input$deidentify_switch,
         exclude_free_text = input$exclude_free_text_switch,

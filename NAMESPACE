@@ -15,13 +15,17 @@ import(golem)
 import(shiny)
 import(shinydashboard)
 importFrom(checkmate,test_class)
-importFrom(golem,activate_js)
-importFrom(golem,add_resource_path)
-importFrom(golem,bundle_resources)
-importFrom(golem,favicon)
-importFrom(golem,with_golem_options)
+importFrom(golem,
+  activate_js,
+  add_resource_path,
+  bundle_resources,
+  favicon,
+  with_golem_options
+)
 importFrom(shiny,shinyApp)
-importFrom(shinyWidgets,actionBttn)
-importFrom(shinyWidgets,awesomeCheckbox)
-importFrom(shinyWidgets,switchInput)
-importFrom(shinyWidgets,updateSwitchInput)
+importFrom(shinyWidgets,
+  actionBttn,
+  awesomeCheckbox,
+  switchInput,
+  updateSwitchInput
+)

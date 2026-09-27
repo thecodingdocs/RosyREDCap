@@ -360,7 +360,9 @@ app_server <- function(input, output, session) {
       choices = c(
         Default = "default",
         None = "none",
-        "Merge-Non-Repeating" = "merge_non_repeating"
+        "Merged Simple" = "merged_simple",
+        "Wide Firsts" = "wide_firsts",
+        "Wide All" = "wide_all"
       )
     )
   })
